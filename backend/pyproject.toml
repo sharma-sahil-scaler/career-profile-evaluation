@@ -1,0 +1,22 @@
+[project]
+name = "free-profile-evaluation-backend"
+version = "2.0.0"
+description = "Free Profile Evaluation API - Refactored with Clean Architecture"
+readme = "README.md"
+requires-python = ">=3.13"
+dependencies = [
+    "fastapi>=0.115.5",
+    "openai>=1.109.1",
+    "pydantic>=2.11.9",
+    "pydantic-settings>=2.0.0",
+    "python-dotenv>=1.1.1",
+    "psycopg2-binary>=2.9.9",
+    "uvicorn[standard]>=0.32.0",
+]
+
+[project.optional-dependencies]
+dev = [
+    "black>=23.7.0",
+    "ruff>=0.0.285",
+    "mypy>=1.5.0",
+]
