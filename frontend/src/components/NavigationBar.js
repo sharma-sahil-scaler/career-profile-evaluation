@@ -1,10 +1,10 @@
-import React, { useState, useEffect } from 'react';
-import { Link, useLocation, useNavigate } from 'react-router-dom';
-import styled from 'styled-components';
-import { DownloadSimple, Phone } from 'phosphor-react';
-import { ReactComponent as ScalerLogo } from '../assets/scaler-logo.svg';
-import { useProfile } from '../context/ProfileContext';
-import { useRequestCallback } from '../app/context/RequestCallbackContext';
+import React, { useState, useEffect } from "react";
+import { Link, useLocation, useNavigate } from "react-router-dom";
+import styled from "styled-components";
+import { DownloadSimple, Phone } from "phosphor-react";
+import { ReactComponent as ScalerLogo } from "../assets/scaler-logo.svg";
+import { useProfile } from "../context/ProfileContext";
+import { useRequestCallback } from "../app/context/RequestCallbackContext";
 
 const NavContainer = styled.nav`
   background: white;
@@ -12,11 +12,11 @@ const NavContainer = styled.nav`
   position: relative;
   transition: transform 0.3s ease;
   /* Match CSAT banner height: 41.5px */
-  transform: translateY(${props => props.showCSATBanner ? '0' : '-41.5px'});
+  transform: translateY(${(props) => (props.showCSATBanner ? "0" : "-41.5px")});
 
   @media (max-width: 768px) {
     /* Mobile CSAT: 8px + 8px padding + column layout (~2 lines) = ~60px */
-    transform: translateY(${props => props.showCSATBanner ? '0' : '-60px'});
+    transform: translateY(${(props) => (props.showCSATBanner ? "0" : "-60px")});
   }
 
   @media print {
@@ -64,7 +64,7 @@ const NavActions = styled.div`
 `;
 
 const CTAButton = styled.button`
-  background: #B30158;
+  background: #b30158;
   color: white;
   border: none;
   padding: 10px 20px;
@@ -77,7 +77,7 @@ const CTAButton = styled.button`
   letter-spacing: 1px;
 
   &:hover {
-    background: #8A0145;
+    background: #8a0145;
   }
 
   @media (max-width: 768px) {
@@ -87,8 +87,8 @@ const CTAButton = styled.button`
 
 const OutlineCTAButton = styled.button`
   background: transparent;
-  color: #B30158;
-  border: 2px solid #B30158;
+  color: #b30158;
+  border: 2px solid #b30158;
   padding: 8px 18px;
   border-radius: 0;
   font-weight: 600;
@@ -102,7 +102,7 @@ const OutlineCTAButton = styled.button`
   justify-content: center;
 
   &:hover {
-    background: #B30158;
+    background: #b30158;
     color: white;
   }
 
@@ -113,8 +113,8 @@ const OutlineCTAButton = styled.button`
 
 const IconButton = styled.button`
   background: transparent;
-  color: #B30158;
-  border: 2px solid #B30158;
+  color: #b30158;
+  border: 2px solid #b30158;
   padding: 8px;
   border-radius: 0;
   cursor: pointer;
@@ -122,7 +122,7 @@ const IconButton = styled.button`
   display: none;
 
   &:hover {
-    background: #B30158;
+    background: #b30158;
     color: white;
   }
 
@@ -166,20 +166,21 @@ const SegmentedControl = styled.div`
 `;
 
 const SegmentButton = styled.button`
-  background: ${props => props.active ? '#FFFFFF' : 'transparent'};
-  color: ${props => props.active ? '#1e293b' : '#64748b'};
+  background: ${(props) => (props.active ? "#FFFFFF" : "transparent")};
+  color: ${(props) => (props.active ? "#1e293b" : "#64748b")};
   border: none;
   padding: 6px 14px;
   border-radius: 4px;
-  font-weight: ${props => props.active ? '600' : '500'};
+  font-weight: ${(props) => (props.active ? "600" : "500")};
   font-size: 0.75rem;
   cursor: pointer;
   transition: all 0.2s ease;
   white-space: nowrap;
-  box-shadow: ${props => props.active ? '0 1px 3px rgba(0, 0, 0, 0.1)' : 'none'};
+  box-shadow: ${(props) =>
+    props.active ? "0 1px 3px rgba(0, 0, 0, 0.1)" : "none"};
 
   &:hover {
-    background: ${props => props.active ? '#FFFFFF' : '#e2e8f0'};
+    background: ${(props) => (props.active ? "#FFFFFF" : "#e2e8f0")};
   }
 `;
 
@@ -192,9 +193,9 @@ const ProgressBarContainer = styled.div`
 
 const ProgressBarFill = styled.div`
   height: 100%;
-  background: #0041CA;
+  background: #0041ca;
   transition: width 0.3s ease;
-  width: ${props => props.width}%;
+  width: ${(props) => props.width}%;
 `;
 
 const StickyWrapper = styled.div`
@@ -220,7 +221,7 @@ const CSATBanner = styled.button`
   border: none;
   width: 100%;
   transition: transform 0.3s ease, background 0.2s ease;
-  transform: translateY(${props => props.isVisible ? '0' : '-100%'});
+  transform: translateY(${(props) => (props.isVisible ? "0" : "-100%")});
 
   &:hover {
     background: #5a2e8a;
@@ -257,9 +258,9 @@ const CSATContent = styled.div`
 
 const CSATText = styled.span`
   font-size: 0.875rem;
-  color: #FFFFFF;
+  color: #ffffff;
   font-weight: 500;
-  font-family: 'Plus Jakarta Sans', sans-serif;
+  font-family: "Plus Jakarta Sans", sans-serif;
 
   @media (max-width: 768px) {
     font-size: 0.8125rem;
@@ -268,17 +269,21 @@ const CSATText = styled.span`
 
 const CSATLink = styled.span`
   font-size: 0.875rem;
-  color: #FFFFFF;
+  color: #ffffff;
   font-weight: 600;
   text-decoration: underline;
-  font-family: 'Plus Jakarta Sans', sans-serif;
+  font-family: "Plus Jakarta Sans", sans-serif;
 
   @media (max-width: 768px) {
     font-size: 0.8125rem;
   }
 `;
 
-const NavigationBar = ({ progress = 0, quizMode = 'grouped', onQuizModeChange }) => {
+const NavigationBar = ({
+  progress = 0,
+  quizMode = "grouped",
+  onQuizModeChange,
+}) => {
   const location = useLocation();
   const navigate = useNavigate();
   const { resetProfile, evaluationResults } = useProfile();
@@ -287,11 +292,12 @@ const NavigationBar = ({ progress = 0, quizMode = 'grouped', onQuizModeChange })
   const [showCSATBanner, setShowCSATBanner] = useState(true);
   const [lastScrollY, setLastScrollY] = useState(0);
 
-  const showProgress = location.pathname === '/quiz' || location.pathname === '/goals';
-  const showModeToggle = location.pathname === '/quiz';
-  const isResultsPage = location.pathname === '/results' || location.pathname === '/reports';
+  const showProgress =
+    location.pathname === "/quiz" || location.pathname === "/goals";
+  const showModeToggle = location.pathname === "/quiz";
+  const isResultsPage =
+    location.pathname === "/results" || location.pathname === "/reports";
 
-  // Scroll direction detection for CSAT banner
   useEffect(() => {
     if (!isResultsPage) return;
 
@@ -299,26 +305,23 @@ const NavigationBar = ({ progress = 0, quizMode = 'grouped', onQuizModeChange })
       const currentScrollY = window.scrollY;
 
       if (currentScrollY < 10) {
-        // Always show at top of page
         setShowCSATBanner(true);
       } else if (currentScrollY < lastScrollY) {
-        // Scrolling up - show banner
         setShowCSATBanner(true);
       } else if (currentScrollY > lastScrollY) {
-        // Scrolling down - hide banner
         setShowCSATBanner(false);
       }
 
       setLastScrollY(currentScrollY);
     };
 
-    window.addEventListener('scroll', handleScroll, { passive: true });
-    return () => window.removeEventListener('scroll', handleScroll);
+    window.addEventListener("scroll", handleScroll, { passive: true });
+    return () => window.removeEventListener("scroll", handleScroll);
   }, [lastScrollY, isResultsPage]);
 
   const handleReEvaluate = () => {
     resetProfile();
-    navigate('/quiz');
+    navigate("/quiz");
   };
 
   const handleDownloadReport = () => {
@@ -345,65 +348,67 @@ const NavigationBar = ({ progress = 0, quizMode = 'grouped', onQuizModeChange })
       )}
       <NavContainer showCSATBanner={isResultsPage && showCSATBanner}>
         <NavContent>
-        <Link to="/" style={{ textDecoration: 'none' }}>
-          <Logo>
-            <LogoGraphic aria-label="Scaler" />
-          </Logo>
-        </Link>
-        {showModeToggle && (
-          <SegmentedControl>
-            <SegmentButton
-              active={quizMode === 'single'}
-              onClick={() => onQuizModeChange?.('single')}
-            >
-              Single Question
-            </SegmentButton>
-            <SegmentButton
-              active={quizMode === 'grouped'}
-              onClick={() => onQuizModeChange?.('grouped')}
-            >
-              Grouped Questions
-            </SegmentButton>
-            <SegmentButton
-              active={quizMode === 'split'}
-              onClick={() => onQuizModeChange?.('split')}
-            >
-              Split View
-            </SegmentButton>
-            <SegmentButton
-              active={quizMode === 'split-view2'}
-              onClick={() => onQuizModeChange?.('split-view2')}
-            >
-              Split View 2
-            </SegmentButton>
-            <SegmentButton
-              active={quizMode === 'final'}
-              onClick={() => onQuizModeChange?.('final')}
-            >
-              Final Mode
-            </SegmentButton>
-          </SegmentedControl>
-        )}
-        <NavActions>
-          {isResultsPage && evaluationResults && (
-            <>
-              <TextCTAButton onClick={handleReEvaluate}>Re-evaluate</TextCTAButton>
-              {/* Desktop: Full button with text */}
-              <OutlineCTAButton onClick={handleDownloadReport}>Download Report</OutlineCTAButton>
-              {/* Mobile: Icon only */}
-              <IconButton onClick={handleDownloadReport}>
-                <DownloadSimple size={20} weight="bold" />
-              </IconButton>
-            </>
+          <Link to="/" style={{ textDecoration: "none" }}>
+            <Logo>
+              <LogoGraphic aria-label="Scaler" />
+            </Logo>
+          </Link>
+          {showModeToggle && (
+            <SegmentedControl>
+              <SegmentButton
+                active={quizMode === "single"}
+                onClick={() => onQuizModeChange?.("single")}
+              >
+                Single Question
+              </SegmentButton>
+              <SegmentButton
+                active={quizMode === "grouped"}
+                onClick={() => onQuizModeChange?.("grouped")}
+              >
+                Grouped Questions
+              </SegmentButton>
+              <SegmentButton
+                active={quizMode === "split"}
+                onClick={() => onQuizModeChange?.("split")}
+              >
+                Split View
+              </SegmentButton>
+              <SegmentButton
+                active={quizMode === "split-view2"}
+                onClick={() => onQuizModeChange?.("split-view2")}
+              >
+                Split View 2
+              </SegmentButton>
+              <SegmentButton
+                active={quizMode === "final"}
+                onClick={() => onQuizModeChange?.("final")}
+              >
+                Final Mode
+              </SegmentButton>
+            </SegmentedControl>
           )}
-          <CTAButton onClick={openCallbackModal}>Request Call Back</CTAButton>
-        </NavActions>
-      </NavContent>
-      {showProgress && (
-        <ProgressBarContainer>
-          <ProgressBarFill width={progress} />
-        </ProgressBarContainer>
-      )}
+          <NavActions>
+            {isResultsPage && evaluationResults && (
+              <>
+                <TextCTAButton onClick={handleReEvaluate}>
+                  Re-evaluate
+                </TextCTAButton>
+                <OutlineCTAButton onClick={handleDownloadReport}>
+                  Download Report
+                </OutlineCTAButton>
+                <IconButton onClick={handleDownloadReport}>
+                  <DownloadSimple size={20} weight="bold" />
+                </IconButton>
+              </>
+            )}
+            <CTAButton onClick={openCallbackModal}>Request Call Back</CTAButton>
+          </NavActions>
+        </NavContent>
+        {showProgress && (
+          <ProgressBarContainer>
+            <ProgressBarFill width={progress} />
+          </ProgressBarContainer>
+        )}
       </NavContainer>
     </StickyWrapper>
   );

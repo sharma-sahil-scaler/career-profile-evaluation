@@ -127,14 +127,12 @@ function QuizPage({ onProgressChange, quizMode = 'final' }) {
     evaluationResults
   } = useProfile();
 
-  // Redirect to results if evaluation already exists (prevent direct URL access)
   useEffect(() => {
     if (evaluationResults) {
       navigate('/results', { replace: true });
     }
   }, [evaluationResults, navigate]);
 
-  // Always render final mode (other modes removed)
   return <FinalModeQuiz onProgressChange={onProgressChange} />;
 }
 

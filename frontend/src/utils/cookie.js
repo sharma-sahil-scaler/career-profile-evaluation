@@ -8,7 +8,7 @@ export const getCookie = (cookieName) => {
   const gtmCookieValue = gtmCookie?.split("=").slice(1).join("=");
   return gtmCookieValue ? decodeURIComponent(gtmCookieValue) : undefined;
 };
-export const setCookie = (name,value,options) => {
+export const setCookie = (name, value, options) => {
   const cookieOptions = {
     path: "/",
   };

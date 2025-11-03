@@ -21,7 +21,6 @@ export function lazyLoadGtm() {
     event: "gtm.js",
   });
 
-  // Create and inject GTM script
   const script = document.createElement("script");
   script.async = true;
   script.src = `https://www.googletagmanager.com/gtm.js?id=${GTM_ID}`;
@@ -32,9 +31,6 @@ export function lazyLoadGtm() {
   }
 }
 
-/**
- * Pushes server-side events from cookie to dataLayer
- */
 export function pushServerEvents() {
   if (typeof window === "undefined") return;
 

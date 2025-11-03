@@ -235,7 +235,6 @@ const ResultsPage = () => {
     { icon: <Sparkle size={28} weight="bold" />, text: 'Finalizing your report...', subtext: 'Preparing your results' }
   ];
 
-  // Loading progress animation
   useEffect(() => {
     if (isLoading) {
       setLoadingProgress(0);
@@ -268,7 +267,6 @@ const ResultsPage = () => {
     }
   }, [isLoading]);
 
-  // Redirect if no quiz data exists
   useEffect(() => {
     if (!quizResponses || !goals || !background) {
       navigate('/', { replace: true });
@@ -277,16 +275,14 @@ const ResultsPage = () => {
   }, [quizResponses, goals, background, navigate]);
 
   useEffect(() => {
-    // If evaluation results already exist (e.g., from localStorage), skip API call
     if (evaluationResults) {
       return;
     }
 
-    // BACKEND API MODE - Using real backend API
     let isMounted = true;
     const controller = new AbortController();
     const startTime = Date.now();
-    const MINIMUM_LOADING_TIME = 10000; // 10 seconds minimum
+    const MINIMUM_LOADING_TIME = 10000;
 
     const fetchEvaluation = async () => {
       setIsLoading(true);
@@ -302,11 +298,9 @@ const ResultsPage = () => {
 
         if (isMounted) {
           if (results && typeof results === 'object' && Object.keys(results).length > 0) {
-            // Calculate elapsed time
             const elapsedTime = Date.now() - startTime;
             const remainingTime = Math.max(0, MINIMUM_LOADING_TIME - elapsedTime);
 
-            // Wait for minimum loading time if needed
             setTimeout(() => {
               if (isMounted) {
                 setEvaluationResults(results);
@@ -322,7 +316,6 @@ const ResultsPage = () => {
           return;
         }
         if (isMounted) {
-          // Calculate elapsed time for error case too
           const elapsedTime = Date.now() - startTime;
           const remainingTime = Math.max(0, MINIMUM_LOADING_TIME - elapsedTime);
 
@@ -345,7 +338,6 @@ const ResultsPage = () => {
   }, [quizResponses, goals, background, setEvaluationResults, retryCount, evaluationResults]);
 
   const handleReEvaluate = () => {
-    // Clear evaluation results and navigate back to quiz start
     setEvaluationResults(null);
     navigate('/');
   };

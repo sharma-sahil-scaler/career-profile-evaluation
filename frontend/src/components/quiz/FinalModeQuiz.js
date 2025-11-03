@@ -683,20 +683,17 @@ const FinalModeQuiz = ({ onProgressChange }) => {
     evaluationResults
   } = useProfile();
 
-  // Redirect to results if evaluation already exists (prevent direct URL access)
   useEffect(() => {
     if (evaluationResults) {
       navigate('/results', { replace: true });
     }
   }, [evaluationResults, navigate]);
 
-  // Start from step 0 with background selection
   const [currentStep, setCurrentStep] = useState(0);
   const [chatText, setChatText] = useState("Let's get started with your profile");
   const [isMobile, setIsMobile] = useState(window.innerWidth <= 768);
   const [showMobileWelcome, setShowMobileWelcome] = useState(true);
 
-  // Listen for window resize
   useEffect(() => {
     const handleResize = () => {
       setIsMobile(window.innerWidth <= 768);
@@ -705,14 +702,13 @@ const FinalModeQuiz = ({ onProgressChange }) => {
     return () => window.removeEventListener('resize', handleResize);
   }, []);
 
-  // Select the appropriate quiz screens based on background
   const getQuizScreens = () => {
     if (background === 'tech') {
       return TECH_QUIZ_SCREENS;
     } else if (background === 'non-tech') {
       return NON_TECH_QUIZ_SCREENS;
     }
-    return NON_TECH_QUIZ_SCREENS; // Default to non-tech if not set
+    return NON_TECH_QUIZ_SCREENS;
   };
 
   const quizScreens = getQuizScreens();
@@ -725,17 +721,14 @@ const FinalModeQuiz = ({ onProgressChange }) => {
 
   const handleBackgroundSelect = (selectedBackground) => {
     setBackground(selectedBackground);
-    // Move to next step after selection
     setTimeout(() => {
       handleNext();
     }, 1000);
   };
 
   const handleQuizResponse = (questionId, option) => {
-    // Store the value (for backend logic)
     setQuizResponse(questionId, option.value);
 
-    // Also store label for display-only fields
     const labelFields = ['currentRole', 'targetRole', 'targetCompany'];
     if (labelFields.includes(questionId)) {
       setQuizResponse(`${questionId}Label`, option.label);
@@ -758,7 +751,6 @@ const FinalModeQuiz = ({ onProgressChange }) => {
     }
 
     if (currentStep === 1) {
-      // Going back from first quiz screen to background selection
       clearQuizResponses();
       setBackground(null);
       setCurrentStep(0);
@@ -778,15 +770,13 @@ const FinalModeQuiz = ({ onProgressChange }) => {
     if (screenIndex >= 0 && screenIndex < quizScreens.length) {
       const screen = quizScreens[screenIndex];
 
-      // Check if all questions on current screen are answered
       const allQuestionsAnswered = screen.questions.every((q) => {
         if (q.optional) {
           return true;
         }
-        // Skip conditional questions if their condition is not met
         if (q.conditional && q.showIf) {
           if (!q.showIf(quizResponses)) {
-            return true; // Consider it "answered" if it doesn't need to be shown
+            return true;
           }
         }
         return quizResponses[q.id] !== undefined && quizResponses[q.id] !== null;
@@ -799,7 +789,6 @@ const FinalModeQuiz = ({ onProgressChange }) => {
   };
 
   const renderContent = () => {
-    // Step 0: Background selection
     if (currentStep === 0) {
       return (
         <BackgroundSelectionSplit2
@@ -811,15 +800,12 @@ const FinalModeQuiz = ({ onProgressChange }) => {
       );
     }
 
-    // Steps 1+: Quiz screens
     const screenIndex = currentStep - 1;
     if (screenIndex >= 0 && screenIndex < quizScreens.length) {
       const screen = quizScreens[screenIndex];
 
-      // Process questions to handle dynamic options and conditional logic
       const processedQuestions = screen.questions
         .filter(question => {
-          // Filter out conditional questions if their condition is not met
           if (question.conditional && question.showIf) {
             return question.showIf(quizResponses);
           }
@@ -827,9 +813,7 @@ const FinalModeQuiz = ({ onProgressChange }) => {
         })
         .map(question => {
           if (question.dynamicOptions && question.optionsByRole) {
-            // Get the currentRole from responses
             const currentRole = quizResponses.currentRole;
-            // Get options for the selected role, or use default options
             const options = question.optionsByRole[currentRole] || question.optionsByRole['swe-product'] || [];
             return {
               ...question,
@@ -839,8 +823,7 @@ const FinalModeQuiz = ({ onProgressChange }) => {
           return question;
         });
 
-      // Calculate question start index based on previous screens
-      let questionStartIndex = 2; // Start from 2 (after background question)
+      let questionStartIndex = 2;
       for (let i = 0; i < screenIndex; i++) {
         questionStartIndex += quizScreens[i].questions.length;
       }
@@ -863,7 +846,6 @@ const FinalModeQuiz = ({ onProgressChange }) => {
     return null;
   };
 
-  // Update chat text when screen changes
   useEffect(() => {
     if (currentStep === 0) {
       setChatText("Let's get started with your profile");
@@ -888,7 +870,6 @@ const FinalModeQuiz = ({ onProgressChange }) => {
   ];
 
   const renderLeftPanel = () => {
-    // Always show logo at top
     const logoSection = (
       <LogoContainer>
         <Logo>
@@ -897,13 +878,11 @@ const FinalModeQuiz = ({ onProgressChange }) => {
       </LogoContainer>
     );
 
-    // Trust badge ticker (shown at bottom for all steps)
     const trustBadgeSection = (
       <TrustBadgeSection>
         <TrustBadgeTitle>Trusted by our alumni, who are working at</TrustBadgeTitle>
         <LogoTicker>
           <LogoTrack>
-            {/* First set of logos */}
             {companies.map((company, index) => (
               <CompanyLogo
                 key={`logo-${index}`}
@@ -911,7 +890,6 @@ const FinalModeQuiz = ({ onProgressChange }) => {
                 alt={company.name}
               />
             ))}
-            {/* Duplicate set for seamless loop */}
             {companies.map((company, index) => (
               <CompanyLogo
                 key={`logo-duplicate-${index}`}
@@ -924,7 +902,6 @@ const FinalModeQuiz = ({ onProgressChange }) => {
       </TrustBadgeSection>
     );
 
-    // Show welcome content on step 0 (background selection)
     if (currentStep === 0) {
       return (
         <>
@@ -962,7 +939,6 @@ const FinalModeQuiz = ({ onProgressChange }) => {
       );
     }
 
-    // Show chatbot with current question text for other steps
     return (
       <>
         <div>
@@ -998,7 +974,6 @@ const FinalModeQuiz = ({ onProgressChange }) => {
     setShowMobileWelcome(false);
   };
 
-  // Show mobile welcome screen
   if (isMobile && showMobileWelcome && currentStep === 0) {
     return (
       <MobileWelcomeScreen>
@@ -1037,7 +1012,6 @@ const FinalModeQuiz = ({ onProgressChange }) => {
             </FeaturesList>
           </WelcomeContent>
 
-          {/* Trust Badge Ticker for Mobile */}
           <TrustBadgeSection>
             <TrustBadgeTitle>Trusted by our alumni, who are working at</TrustBadgeTitle>
             <LogoTicker>
@@ -1069,7 +1043,6 @@ const FinalModeQuiz = ({ onProgressChange }) => {
 
   return (
     <QuizContainer>
-      {/* Mobile progress bar */}
       <ProgressBarContainer>
         <ProgressBarFill progress={progress} />
       </ProgressBarContainer>
@@ -1108,7 +1081,6 @@ const FinalModeQuiz = ({ onProgressChange }) => {
           </TopNavigationWrapper>
         )}
 
-        {/* Mobile chatbot section - shown above questions */}
         {isMobile && (
           <MobileChatbotSection>
             <MobileChatbotAvatar>
@@ -1125,7 +1097,6 @@ const FinalModeQuiz = ({ onProgressChange }) => {
         </QuizContent>
       </RightPanel>
 
-      {/* Mobile bottom navigation */}
       {isMobile && (
         <BottomNavigation isLastStep={isLastStep}>
           {!isLastStep ? (

@@ -3,7 +3,9 @@ import { isNullOrUndefined } from "./type.js";
 import { getURLWithUTMParams } from "./url.js";
 
 export function searchParams(params, transformArray = false) {
-  const entries = Object.entries(params).filter(([, v]) => !isNullOrUndefined(v));
+  const entries = Object.entries(params).filter(
+    ([, v]) => !isNullOrUndefined(v)
+  );
   return entries
     .map(([key, value]) => {
       if (transformArray && Array.isArray(value)) {

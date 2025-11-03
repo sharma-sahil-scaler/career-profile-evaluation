@@ -6,7 +6,6 @@ export const GTMEventType = {
   FORM_SUBMIT_STATUS: "form_submit_status",
 };
 
-
 function isUndefined(v) {
   return typeof v === "undefined";
 }
@@ -16,9 +15,7 @@ function isObject(v) {
 }
 
 function deepMerge(target, source) {
-  const out = Array.isArray(target)
-    ? { ...(target) }
-    : { ...target };
+  const out = Array.isArray(target) ? { ...target } : { ...target };
   Object.keys(source || {}).forEach((key) => {
     const sVal = source[key];
     const tVal = out[key];
@@ -43,12 +40,10 @@ function removeEmptyKeys(obj) {
   return out;
 }
 
-
 const DEFAULT_CONFIG = {
   isEnabled: true,
   attributes: {},
 };
-
 
 class Tracker {
   constructor(config = {}) {
