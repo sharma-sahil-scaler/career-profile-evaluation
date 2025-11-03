@@ -189,6 +189,7 @@ export const evaluateProfile = async (
       {
         attributions: {
           ...attribution.getAttribution(),
+          program: "software_development",
           product: "scaler",
           sub_product: "career_profile_tool",
           element: "cpe_evaluated_btn",
