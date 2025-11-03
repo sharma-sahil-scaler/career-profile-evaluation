@@ -9,7 +9,6 @@ README.md
 DOCKER_SETUP.md
 LICENSE
 
-# Environment
 .env
 .env.*
 !.env.example
@@ -66,3 +65,7 @@ tests
 *.db
 *.sqlite
 *.sqlite3
+# Elastic Beanstalk Files
+.elasticbeanstalk/*
+.git
+.gitignore
