@@ -119,11 +119,7 @@ const ValidationWarning = styled.div`
 function QuizPage({ onProgressChange, quizMode = 'final' }) {
   const navigate = useNavigate();
   const {
-    background,
-    setBackground,
-    setQuizResponse,
-    quizResponses,
-    clearQuizResponses,
+
     evaluationResults
   } = useProfile();
 

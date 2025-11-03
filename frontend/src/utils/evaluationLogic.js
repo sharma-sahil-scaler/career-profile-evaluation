@@ -1,6 +1,8 @@
 import { PROGRAM_OPTION_VALUES } from "../constants/programOption";
 import { apiRequest } from "./api";
 import attribution from "./attribution";
+import { getURLWithUTMParams } from "./url";
+import { generateJWT } from "./api";
 
 const deriveCurrentCompany = (currentRole) => {
   const roleToCompanyMap = {
@@ -176,16 +178,34 @@ export const evaluateProfile = async (
     );
   }
 
-  attribution.setAttribution("cpe_evaluated");
+  try {
+    attribution.setAttribution("cpe_evaluated");
+    const jwt = await generateJWT();
+    const refererUrl = getURLWithUTMParams()
+  
+    await apiRequest(
+      "POST", 
+      "/api/v3/analytics/attributions/", 
+      {
+        attributions: {
+          ...attribution.getAttribution(),
+          product: "scaler",
+          sub_product: "career_profile_tool",
+          element: "cpe_evaluated_btn",
+        },
+      },
+      {
+        headers: {
+          "X-user-token": jwt,
+          "X-REFERER": refererUrl.toString(),
+        },
+      }
+    );
 
-  await apiRequest("POST", "/api/v3/analytics/attributions/", {
-    attributions: {
-      ...attribution.getAttribution(),
-      product: "scaler",
-      sub_product: "career_profile_tool",
-      element: "cpe_evaluated_btn",
-    },
-  });
+  } catch(e) {
+
+  }
+
   return data.profile_evaluation;
 };
 
