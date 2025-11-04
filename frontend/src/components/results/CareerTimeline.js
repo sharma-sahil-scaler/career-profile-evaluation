@@ -1,6 +1,6 @@
+import { ArrowRight, CheckCircle, Clock, Target, TrendUp } from 'phosphor-react';
 import React from 'react';
 import styled from 'styled-components';
-import { Clock, Target, TrendUp, CheckCircle, ArrowRight } from 'phosphor-react';
 
 const TimelineContainer = styled.div`
   background: white;

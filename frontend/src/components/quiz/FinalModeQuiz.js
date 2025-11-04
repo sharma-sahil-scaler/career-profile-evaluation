@@ -1,13 +1,27 @@
-import React, { useState, useEffect } from 'react';
-import { useNavigate } from 'react-router-dom';
-import { useProfile } from '../../context/ProfileContext';
-import styled, { keyframes } from 'styled-components';
-import BackgroundSelectionSplit2 from './BackgroundSelectionSplit2';
-import GroupedQuestionScreen from './GroupedQuestionScreen';
-import { TECH_QUIZ_SCREENS, NON_TECH_QUIZ_SCREENS, isScreenComplete } from './ChattyQuizScreens';
-import { ReactComponent as ScalerLogo } from '../../assets/scaler-logo.svg';
-import { CaretLeft, CaretRight, Check, ChartLine, Target, ChatCircleDots, Books, UsersThree } from 'phosphor-react';
-import chatBot from '../../assets/ChatBot.png';
+import {
+  Books,
+  CaretLeft,
+  CaretRight,
+  ChartLine,
+  ChatCircleDots,
+  Check,
+  Target,
+  UsersThree,
+} from "phosphor-react";
+import React, { useCallback, useEffect, useState } from "react";
+import { useNavigate } from "react-router-dom";
+import styled, { keyframes } from "styled-components";
+import chatBot from "../../assets/ChatBot.png";
+import { ReactComponent as ScalerLogo } from "../../assets/scaler-logo.svg";
+import { useProfile } from "../../context/ProfileContext";
+import tracker from "../../utils/tracker";
+import BackgroundSelectionSplit2 from "./BackgroundSelectionSplit2";
+import {
+  NON_TECH_QUIZ_SCREENS,
+  TECH_QUIZ_SCREENS,
+  isScreenComplete,
+} from "./ChattyQuizScreens";
+import GroupedQuestionScreen from "./GroupedQuestionScreen";
 
 const fadeIn = keyframes`
   0% {
@@ -88,7 +102,7 @@ const LogoTicker = styled.div`
   width: 100%;
 
   &::before {
-    content: '';
+    content: "";
     position: absolute;
     left: 0;
     top: 0;
@@ -104,7 +118,7 @@ const LogoTicker = styled.div`
   }
 
   &::after {
-    content: '';
+    content: "";
     position: absolute;
     right: 0;
     top: 0;
@@ -154,7 +168,7 @@ const CompanyLogo = styled.img`
 
 const RightPanel = styled.div`
   width: 60%;
-  background: #FFFFFF;
+  background: #ffffff;
   padding: 32px;
   min-height: 100vh;
   border-left: 1px solid #e2e8f0;
@@ -277,9 +291,9 @@ const ProgressBarContainer = styled.div`
 
 const ProgressBarFill = styled.div`
   height: 100%;
-  background: #0041CA;
+  background: #0041ca;
   transition: width 0.3s ease;
-  width: ${props => props.progress}%;
+  width: ${(props) => props.progress}%;
 `;
 
 const ChatbotContainer = styled.div`
@@ -340,7 +354,7 @@ const ChatMessage = styled.div`
   animation: ${slideInFromLeft} 0.6s ease-out;
 
   &::before {
-    content: '';
+    content: "";
     position: absolute;
     left: -14px;
     top: 20px;
@@ -352,7 +366,7 @@ const ChatMessage = styled.div`
   }
 
   &::after {
-    content: '';
+    content: "";
     position: absolute;
     left: -10px;
     top: 20px;
@@ -462,18 +476,17 @@ const CarouselDotsContainer = styled.div`
 `;
 
 const Dot = styled.div`
-  width: ${props => props.active ? '24px' : '8px'};
+  width: ${(props) => (props.active ? "24px" : "8px")};
   height: 8px;
   border-radius: 0;
-  background: ${props => props.active ? '#64748b' : '#cbd5e1'};
+  background: ${(props) => (props.active ? "#64748b" : "#cbd5e1")};
   transition: all 0.3s ease;
-  cursor: ${props => props.active ? 'default' : 'pointer'};
+  cursor: ${(props) => (props.active ? "default" : "pointer")};
 
   &:hover {
-    background: ${props => props.active ? '#64748b' : '#94a3b8'};
+    background: ${(props) => (props.active ? "#64748b" : "#94a3b8")};
   }
 `;
-
 
 const MobileChatbotSection = styled.div`
   display: none;
@@ -516,7 +529,7 @@ const MobileChatBubble = styled.div`
   width: 100%;
 
   &::before {
-    content: '';
+    content: "";
     position: absolute;
     top: -12px;
     left: 20px;
@@ -528,7 +541,7 @@ const MobileChatBubble = styled.div`
   }
 
   &::after {
-    content: '';
+    content: "";
     position: absolute;
     top: -8px;
     left: 22px;
@@ -561,7 +574,8 @@ const BottomNavigation = styled.div`
 
   @media (max-width: 768px) {
     display: flex;
-    justify-content: ${props => props.isLastStep ? 'space-between' : 'space-between'};
+    justify-content: ${(props) =>
+      props.isLastStep ? "space-between" : "space-between"};
     align-items: center;
     gap: 12px;
   }
@@ -597,7 +611,7 @@ const StickyMobileCTA = styled.button`
   bottom: 20px;
   left: 20px;
   right: 20px;
-  background: #D80566;
+  background: #d80566;
   color: white;
   border: none;
   padding: 18px 32px;
@@ -615,27 +629,32 @@ const StickyMobileCTA = styled.button`
 `;
 
 const LastStepNavButton = styled.button`
-  background: ${props => props.variant === 'primary' ? '#D70666' : 'white'};
-  color: ${props => props.variant === 'primary' ? 'white' : '#1e293b'};
-  border: 2px solid ${props => props.variant === 'primary' ? '#D70666' : '#e2e8f0'};
-  padding: ${props => props.variant === 'primary' ? '14px 24px' : '14px 16px'};
+  background: ${(props) => (props.variant === "primary" ? "#D70666" : "white")};
+  color: ${(props) => (props.variant === "primary" ? "white" : "#1e293b")};
+  border: 2px solid
+    ${(props) => (props.variant === "primary" ? "#D70666" : "#e2e8f0")};
+  padding: ${(props) =>
+    props.variant === "primary" ? "14px 24px" : "14px 16px"};
   border-radius: 0;
   font-weight: 700;
   font-size: 0.9rem;
-  letter-spacing: ${props => props.variant === 'primary' ? '1px' : '0'};
-  text-transform: ${props => props.variant === 'primary' ? 'uppercase' : 'none'};
+  letter-spacing: ${(props) => (props.variant === "primary" ? "1px" : "0")};
+  text-transform: ${(props) =>
+    props.variant === "primary" ? "uppercase" : "none"};
   cursor: pointer;
   transition: all 0.2s ease;
-  flex: ${props => props.variant === 'primary' ? '1' : 'none'};
-  width: ${props => props.variant === 'primary' ? 'auto' : '60px'};
+  flex: ${(props) => (props.variant === "primary" ? "1" : "none")};
+  width: ${(props) => (props.variant === "primary" ? "auto" : "60px")};
   display: flex;
   align-items: center;
   justify-content: center;
   gap: 6px;
 
   &:hover {
-    background: ${props => props.variant === 'primary' ? '#b8044d' : '#f8fafc'};
-    border-color: ${props => props.variant === 'primary' ? '#b8044d' : '#cbd5e1'};
+    background: ${(props) =>
+      props.variant === "primary" ? "#b8044d" : "#f8fafc"};
+    border-color: ${(props) =>
+      props.variant === "primary" ? "#b8044d" : "#cbd5e1"};
   }
 
   &:disabled {
@@ -680,17 +699,19 @@ const FinalModeQuiz = ({ onProgressChange }) => {
     setQuizResponse,
     clearQuizResponses,
     goals,
-    evaluationResults
+    evaluationResults,
   } = useProfile();
 
   useEffect(() => {
     if (evaluationResults) {
-      navigate('/results', { replace: true });
+      navigate("/results", { replace: true });
     }
   }, [evaluationResults, navigate]);
 
   const [currentStep, setCurrentStep] = useState(0);
-  const [chatText, setChatText] = useState("Let's get started with your profile");
+  const [chatText, setChatText] = useState(
+    "Let's get started with your profile"
+  );
   const [isMobile, setIsMobile] = useState(window.innerWidth <= 768);
   const [showMobileWelcome, setShowMobileWelcome] = useState(true);
 
@@ -698,14 +719,14 @@ const FinalModeQuiz = ({ onProgressChange }) => {
     const handleResize = () => {
       setIsMobile(window.innerWidth <= 768);
     };
-    window.addEventListener('resize', handleResize);
-    return () => window.removeEventListener('resize', handleResize);
+    window.addEventListener("resize", handleResize);
+    return () => window.removeEventListener("resize", handleResize);
   }, []);
 
   const getQuizScreens = () => {
-    if (background === 'tech') {
+    if (background === "tech") {
       return TECH_QUIZ_SCREENS;
-    } else if (background === 'non-tech') {
+    } else if (background === "non-tech") {
       return NON_TECH_QUIZ_SCREENS;
     }
     return NON_TECH_QUIZ_SCREENS;
@@ -729,24 +750,37 @@ const FinalModeQuiz = ({ onProgressChange }) => {
   const handleQuizResponse = (questionId, option) => {
     setQuizResponse(questionId, option.value);
 
-    const labelFields = ['currentRole', 'targetRole', 'targetCompany'];
+    const labelFields = ["currentRole", "targetRole", "targetCompany"];
     if (labelFields.includes(questionId)) {
       setQuizResponse(`${questionId}Label`, option.label);
     }
   };
 
-  const handleNext = () => {
+  const handleNext = useCallback(() => {
+    tracker.click({
+      click_type: "quiz_next_button_clicked",
+      custom: {
+        source: "final_mode_quiz",
+      },
+    });
     if (currentStep < totalSteps - 1) {
       setCurrentStep(currentStep + 1);
-      window.scrollTo({ top: 0, behavior: 'smooth' });
+      window.scrollTo({ top: 0, behavior: "smooth" });
     } else {
-      navigate('/results');
+      navigate("/results");
     }
-  };
+  }, [currentStep, totalSteps, navigate]);
 
-  const handlePrevious = () => {
+  const handlePrevious = useCallback(() => {
+    tracker.click({
+      click_type: "quiz_previous_step_clicked",
+      custom: {
+        source: "final_mode_quiz",
+      },
+    });
+
     if (currentStep === 0) {
-      navigate('/');
+      navigate("/");
       return;
     }
 
@@ -758,10 +792,10 @@ const FinalModeQuiz = ({ onProgressChange }) => {
     }
 
     setCurrentStep(currentStep - 1);
-    window.scrollTo({ top: 0, behavior: 'smooth' });
-  };
+    window.scrollTo({ top: 0, behavior: "smooth" });
+  }, [currentStep, clearQuizResponses, setBackground, navigate]);
 
-  const canProceed = () => {
+  const canProceed = useCallback(() => {
     if (currentStep === 0) {
       return !!background;
     }
@@ -779,14 +813,16 @@ const FinalModeQuiz = ({ onProgressChange }) => {
             return true;
           }
         }
-        return quizResponses[q.id] !== undefined && quizResponses[q.id] !== null;
+        return (
+          quizResponses[q.id] !== undefined && quizResponses[q.id] !== null
+        );
       });
 
       return allQuestionsAnswered;
     }
 
     return false;
-  };
+  }, [currentStep, quizScreens, quizResponses]);
 
   const renderContent = () => {
     if (currentStep === 0) {
@@ -805,19 +841,22 @@ const FinalModeQuiz = ({ onProgressChange }) => {
       const screen = quizScreens[screenIndex];
 
       const processedQuestions = screen.questions
-        .filter(question => {
+        .filter((question) => {
           if (question.conditional && question.showIf) {
             return question.showIf(quizResponses);
           }
           return true;
         })
-        .map(question => {
+        .map((question) => {
           if (question.dynamicOptions && question.optionsByRole) {
             const currentRole = quizResponses.currentRole;
-            const options = question.optionsByRole[currentRole] || question.optionsByRole['swe-product'] || [];
+            const options =
+              question.optionsByRole[currentRole] ||
+              question.optionsByRole["swe-product"] ||
+              [];
             return {
               ...question,
-              options
+              options,
             };
           }
           return question;
@@ -859,14 +898,29 @@ const FinalModeQuiz = ({ onProgressChange }) => {
   }, [currentStep, quizScreens]);
 
   const companies = [
-    { name: 'Razorpay', logo: 'https://cdn.brandfetch.io/razorpay.com/w/400/h/400' },
-    { name: 'Swiggy', logo: 'https://cdn.brandfetch.io/swiggy.com/w/400/h/400' },
-    { name: 'CRED', logo: 'https://cdn.brandfetch.io/cred.club/w/400/h/400' },
-    { name: 'Unacademy', logo: 'https://cdn.brandfetch.io/unacademy.com/w/400/h/400' },
-    { name: 'Zoho', logo: 'https://cdn.brandfetch.io/zoho.com/w/400/h/400' },
-    { name: 'Paytm', logo: 'https://cdn.brandfetch.io/paytm.com/w/400/h/400' },
-    { name: 'PhonePe', logo: 'https://cdn.brandfetch.io/phonepe.com/w/400/h/400' },
-    { name: 'Zomato', logo: 'https://cdn.brandfetch.io/zomato.com/w/400/h/400' }
+    {
+      name: "Razorpay",
+      logo: "https://cdn.brandfetch.io/razorpay.com/w/400/h/400",
+    },
+    {
+      name: "Swiggy",
+      logo: "https://cdn.brandfetch.io/swiggy.com/w/400/h/400",
+    },
+    { name: "CRED", logo: "https://cdn.brandfetch.io/cred.club/w/400/h/400" },
+    {
+      name: "Unacademy",
+      logo: "https://cdn.brandfetch.io/unacademy.com/w/400/h/400",
+    },
+    { name: "Zoho", logo: "https://cdn.brandfetch.io/zoho.com/w/400/h/400" },
+    { name: "Paytm", logo: "https://cdn.brandfetch.io/paytm.com/w/400/h/400" },
+    {
+      name: "PhonePe",
+      logo: "https://cdn.brandfetch.io/phonepe.com/w/400/h/400",
+    },
+    {
+      name: "Zomato",
+      logo: "https://cdn.brandfetch.io/zomato.com/w/400/h/400",
+    },
   ];
 
   const renderLeftPanel = () => {
@@ -880,7 +934,9 @@ const FinalModeQuiz = ({ onProgressChange }) => {
 
     const trustBadgeSection = (
       <TrustBadgeSection>
-        <TrustBadgeTitle>Trusted by our alumni, who are working at</TrustBadgeTitle>
+        <TrustBadgeTitle>
+          Trusted by our alumni, who are working at
+        </TrustBadgeTitle>
         <LogoTicker>
           <LogoTrack>
             {companies.map((company, index) => (
@@ -917,19 +973,27 @@ const FinalModeQuiz = ({ onProgressChange }) => {
 
             <FeaturesList>
               <Feature>
-                <IconContainer><ChartLine size={18} weight="regular" /></IconContainer>
+                <IconContainer>
+                  <ChartLine size={18} weight="regular" />
+                </IconContainer>
                 Profile Strength Analysis
               </Feature>
               <Feature>
-                <IconContainer><Target size={18} weight="regular" /></IconContainer>
+                <IconContainer>
+                  <Target size={18} weight="regular" />
+                </IconContainer>
                 Skill Gap Assessment
               </Feature>
               <Feature>
-                <IconContainer><ChatCircleDots size={18} weight="regular" /></IconContainer>
+                <IconContainer>
+                  <ChatCircleDots size={18} weight="regular" />
+                </IconContainer>
                 Career Readiness Timeline
               </Feature>
               <Feature>
-                <IconContainer><UsersThree size={18} weight="regular" /></IconContainer>
+                <IconContainer>
+                  <UsersThree size={18} weight="regular" />
+                </IconContainer>
                 Peer Comparison
               </Feature>
             </FeaturesList>
@@ -948,9 +1012,7 @@ const FinalModeQuiz = ({ onProgressChange }) => {
               <ChatbotAvatar>
                 <BotImage src={chatBot} alt="Scaler Bot" />
               </ChatbotAvatar>
-              <ChatMessage key={chatText}>
-                {chatText}
-              </ChatMessage>
+              <ChatMessage key={chatText}>{chatText}</ChatMessage>
             </ChatbotWrapper>
           </ChatbotContainer>
         </div>
@@ -962,7 +1024,7 @@ const FinalModeQuiz = ({ onProgressChange }) => {
   const handleDotClick = (index) => {
     if (index < currentStep && index >= 0) {
       setCurrentStep(index);
-      window.scrollTo({ top: 0, behavior: 'smooth' });
+      window.scrollTo({ top: 0, behavior: "smooth" });
     }
   };
 
@@ -994,26 +1056,36 @@ const FinalModeQuiz = ({ onProgressChange }) => {
 
             <FeaturesList>
               <Feature>
-                <IconContainer><ChartLine size={18} weight="regular" /></IconContainer>
+                <IconContainer>
+                  <ChartLine size={18} weight="regular" />
+                </IconContainer>
                 Profile Strength Analysis
               </Feature>
               <Feature>
-                <IconContainer><Target size={18} weight="regular" /></IconContainer>
+                <IconContainer>
+                  <Target size={18} weight="regular" />
+                </IconContainer>
                 Skill Gap Assessment
               </Feature>
               <Feature>
-                <IconContainer><ChatCircleDots size={18} weight="regular" /></IconContainer>
+                <IconContainer>
+                  <ChatCircleDots size={18} weight="regular" />
+                </IconContainer>
                 Career Readiness Timeline
               </Feature>
               <Feature>
-                <IconContainer><UsersThree size={18} weight="regular" /></IconContainer>
+                <IconContainer>
+                  <UsersThree size={18} weight="regular" />
+                </IconContainer>
                 Peer Comparison
               </Feature>
             </FeaturesList>
           </WelcomeContent>
 
           <TrustBadgeSection>
-            <TrustBadgeTitle>Trusted by our alumni, who are working at</TrustBadgeTitle>
+            <TrustBadgeTitle>
+              Trusted by our alumni, who are working at
+            </TrustBadgeTitle>
             <LogoTicker>
               <LogoTrack>
                 {companies.map((company, index) => (
@@ -1047,9 +1119,7 @@ const FinalModeQuiz = ({ onProgressChange }) => {
         <ProgressBarFill progress={progress} />
       </ProgressBarContainer>
 
-      <LeftPanel>
-        {renderLeftPanel()}
-      </LeftPanel>
+      <LeftPanel>{renderLeftPanel()}</LeftPanel>
 
       <RightPanel>
         {!isMobile && (
@@ -1063,7 +1133,11 @@ const FinalModeQuiz = ({ onProgressChange }) => {
                   <CaretRight size={20} weight="regular" />
                 </NextButton>
               ) : (
-                <LastStepNavButton variant="primary" onClick={handleNext} disabled={!canProceed()}>
+                <LastStepNavButton
+                  variant="primary"
+                  onClick={handleNext}
+                  disabled={!canProceed()}
+                >
                   Evaluate my Profile
                 </LastStepNavButton>
               )}
@@ -1092,9 +1166,7 @@ const FinalModeQuiz = ({ onProgressChange }) => {
           </MobileChatbotSection>
         )}
 
-        <QuizContent key={currentStep}>
-          {renderContent()}
-        </QuizContent>
+        <QuizContent key={currentStep}>{renderContent()}</QuizContent>
       </RightPanel>
 
       {isMobile && (
@@ -1113,7 +1185,11 @@ const FinalModeQuiz = ({ onProgressChange }) => {
               <LastStepNavButton onClick={handlePrevious}>
                 <CaretLeft size={20} weight="regular" />
               </LastStepNavButton>
-              <LastStepNavButton variant="primary" onClick={handleNext} disabled={!canProceed()}>
+              <LastStepNavButton
+                variant="primary"
+                onClick={handleNext}
+                disabled={!canProceed()}
+              >
                 Evaluate my Profile
               </LastStepNavButton>
             </>

@@ -1,11 +1,11 @@
+import { BriefcaseMetal, ChartLine, CheckCircle, MagnifyingGlass, Phone, Sparkle, Target } from 'phosphor-react';
 import React, { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
+import styled, { createGlobalStyle, keyframes } from 'styled-components';
+import { useRequestCallback } from '../app/context/RequestCallbackContext';
 import { useProfile } from '../context/ProfileContext';
 import { evaluateProfile } from '../utils/evaluationLogic';
-import styled, { createGlobalStyle, keyframes } from 'styled-components';
-import { CheckCircle, Sparkle, BriefcaseMetal, ChartLine, MagnifyingGlass, Target, Phone } from 'phosphor-react';
 import ProfileMatchHeroV2 from './results/ProfileMatchHeroV2';
-import { useRequestCallback } from '../app/context/RequestCallbackContext';
 
 const PrintStyles = createGlobalStyle`
   @media print {

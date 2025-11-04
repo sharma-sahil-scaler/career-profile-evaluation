@@ -1,6 +1,6 @@
+import { ChartBar, CheckCircle, Desktop, Handshake, Target } from 'phosphor-react';
 import React from 'react';
 import styled from 'styled-components';
-import { CheckCircle, Target, Desktop, Handshake, ChartBar } from 'phosphor-react';
 
 const Card = styled.div`
   background: white;

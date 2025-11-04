@@ -1,13 +1,25 @@
-import React, { useEffect, useMemo, useState } from 'react';
+import {
+  Bluetooth,
+  Brain,
+  ChartBar,
+  Cloud,
+  CreditCard,
+  Cube,
+  CurrencyBtc,
+  DeviceMobile,
+  FirstAid,
+  GameController,
+  Globe,
+  GraduationCap,
+  Robot,
+  ShieldCheck,
+  ShoppingCart
+} from 'phosphor-react';
+import React, { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { useProfile } from '../context/ProfileContext';
 import styled, { keyframes } from 'styled-components';
 import scalerBot from '../assets/scaler-bot.png';
-import {
-  Brain, Globe, DeviceMobile, ChartBar, ShieldCheck,
-  Cloud, CurrencyBtc, GameController, Bluetooth, Cube,
-  CreditCard, FirstAid, GraduationCap, ShoppingCart, Robot
-} from 'phosphor-react';
+import { useProfile } from '../context/ProfileContext';
 
 const fadeIn = keyframes`
   0% {

@@ -1,7 +1,7 @@
+import { Check } from 'phosphor-react';
 import React from 'react';
 import { useNavigate } from 'react-router-dom';
 import styled from 'styled-components';
-import { Check } from 'phosphor-react';
 import { useProfile } from '../context/ProfileContext';
 
 const LandingContainer = styled.div`

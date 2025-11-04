@@ -1,8 +1,8 @@
+import { ArrowsClockwise, Desktop } from 'phosphor-react';
 import React, { useState } from 'react';
 import styled, { keyframes } from 'styled-components';
-import { ArrowsClockwise, Desktop, Check } from 'phosphor-react';
-import tracker from '../../utils/tracker';
 import chatBot from '../../assets/ChatBot.png';
+import tracker from '../../utils/tracker';
 
 const slideInFromLeft = keyframes`
   from {

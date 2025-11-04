@@ -1,7 +1,7 @@
 import React, { useState, useEffect, useCallback } from "react";
 import { Link, useLocation, useNavigate } from "react-router-dom";
 import styled from "styled-components";
-import { DownloadSimple, Phone } from "phosphor-react";
+import { DownloadSimple } from "phosphor-react";
 import { ReactComponent as ScalerLogo } from "../assets/scaler-logo.svg";
 import { useProfile } from "../context/ProfileContext";
 import { useRequestCallback } from "../app/context/RequestCallbackContext";

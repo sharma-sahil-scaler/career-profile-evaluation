@@ -1,6 +1,6 @@
 import React from 'react';
 import styled from 'styled-components';
-import { Lightning, ArrowRight, Wrench } from 'phosphor-react';
+import { ArrowRight } from 'phosphor-react';
 
 const Card = styled.div`
   background: white;

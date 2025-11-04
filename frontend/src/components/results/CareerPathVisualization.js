@@ -1,7 +1,7 @@
+import { ArrowBendUpRight, ArrowRight, ArrowsLeftRight, Star } from 'phosphor-react';
 import React, { useEffect, useState } from 'react';
-import styled from 'styled-components';
 import Xarrow from 'react-xarrows';
-import { ArrowRight, Star, ArrowsLeftRight, ArrowBendUpRight } from 'phosphor-react';
+import styled from 'styled-components';
 
 const Container = styled.div`
   background: white;

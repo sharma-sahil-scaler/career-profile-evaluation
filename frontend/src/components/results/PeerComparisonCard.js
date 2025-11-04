@@ -2,7 +2,6 @@ import React from 'react';
 import styled from 'styled-components';
 import { Users, LinkedinLogo } from 'phosphor-react';
 
-// Wrapper for the entire section (title + card)
 const SectionWrapper = styled.div`
   margin-bottom: 64px;
 
