@@ -1432,6 +1432,16 @@ const ProfileMatchHeroV2 = ({ score, notes, badges, evaluationResults, backgroun
     return greeting + profileAnalysis + goalStatement + keyActions;
   };
 
+  const handleRCBClick = useCallback(() => {
+    tracker.click({
+      click_type: "rcb_btn_clicked",
+      custom: {
+        source: "profile_match_hero_v2",
+      },
+    });
+    openCallbackModal?.();
+  }, []);
+
   return (
     <HeroContainer ref={heroRef}>
       {/* Left Panel - Sticky or Horizontal */}
@@ -1847,7 +1857,7 @@ const ProfileMatchHeroV2 = ({ score, notes, badges, evaluationResults, backgroun
                 <CTATitle>Ready to take the next step?</CTATitle>
                 <CTAText>Get personalized guidance from our career advisors</CTAText>
               </CTAContent>
-              <CTAButton onClick={openCallbackModal}>
+              <CTAButton onClick={handleRCBClick}>
                 Request Callback
               </CTAButton>
             </CTASection>

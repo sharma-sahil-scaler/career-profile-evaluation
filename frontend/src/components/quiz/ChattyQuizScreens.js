@@ -242,9 +242,7 @@ export const TECH_QUIZ_SCREENS = [
   }
 ];
 
-// Non-Tech / Career Switcher Path - Questions for users who selected 'non-tech' background
 export const NON_TECH_QUIZ_SCREENS = [
-  // Screen 1: WHO YOU ARE
   {
     id: 'who-you-are',
     initialChatText: "Welcome! Let me understand your background so I can create a personalized roadmap for your tech transition.",

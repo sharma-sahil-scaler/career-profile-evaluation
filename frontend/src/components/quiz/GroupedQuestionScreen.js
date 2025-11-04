@@ -37,6 +37,7 @@ import {
   ChartBar
 } from 'phosphor-react';
 import scalerBot from '../../assets/scaler-bot.png';
+import tracker from '../../utils/tracker';
 
 const fadeIn = keyframes`
   from {
@@ -356,18 +357,30 @@ const GroupedQuestionScreen = ({
   initialChatText,
   chatResponseMap,
   questionStartIndex = 1,
-  totalQuestions = 11,
   onAutoAdvance,
   onChatTextChange,
   hideChat = false
 }) => {
   const [chatText, setChatText] = useState(initialChatText);
 
-  const handleOptionSelect = (questionId, option, questionIndex) => {
+  const handleOptionSelect = (question, option, questionIndex) => {
+    const questionId = question.id;
+
     // Don't do anything if this option is already selected
     if (responses[questionId] === option.value) {
       return;
     }
+
+    tracker.click({
+      click_type: 'question_clicked',
+      custom: {
+        question_number: questionStartIndex + questionIndex,
+        question_id: questionId,
+        question_text: question.question,
+        option_selected: option.value,
+        option_label: option.label ?? option.value,
+      },
+    });
 
     onResponse(questionId, option);
 
@@ -382,14 +395,11 @@ const GroupedQuestionScreen = ({
     const isLastQuestion = questionIndex === questions.length - 1;
     const isSingleQuestion = questions.length === 1;
 
-    // Only update chat bubble if NOT (single question OR last question on screen)
-    // This prevents jarring chat text changes right before auto-advance
     if (!isSingleQuestion && !isLastQuestion) {
       if (chatResponseMap && chatResponseMap[questionId] && chatResponseMap[questionId][option.value]) {
         const newChatText = chatResponseMap[questionId][option.value];
         setChatText(newChatText);
 
-        // Call the parent callback to update chat in left panel
         if (onChatTextChange) {
           onChatTextChange(newChatText);
         }
@@ -440,7 +450,7 @@ const GroupedQuestionScreen = ({
                   <OptionPill
                     key={option.value}
                     selected={isSelected}
-                    onClick={() => handleOptionSelect(question.id, option, questionIndex)}
+                    onClick={() => handleOptionSelect(question, option, questionIndex)}
                   >
                     <OptionIconWrapper selected={isSelected}>
                       {option.icon || getOptionIcon(option.value)}

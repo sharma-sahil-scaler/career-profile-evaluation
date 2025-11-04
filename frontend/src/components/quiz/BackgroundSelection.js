@@ -1,7 +1,8 @@
-import React from 'react';
+import React, { useCallback } from 'react';
 import styled from 'styled-components';
 import { ArrowsClockwise, Desktop } from 'phosphor-react';
 import scalerBot from '../../assets/scaler-bot.png';
+import tracker from '../../utils/tracker';
 
 const Container = styled.div`
   display: flex;
@@ -161,9 +162,18 @@ const OptionDescription = styled.div`
 `;
 
 const BackgroundSelection = ({ onSelect }) => {
-  const handleBackgroundSelect = (background) => {
+  
+  const handleBackgroundSelect = useCallback((background) => {
     onSelect(background);
-  };
+    tracker.click({
+      click_type: 'question_clicked',
+      custom: {
+        question_number: 1,
+        question_text: "What's your current background?",
+        option_selected: background,
+      },
+    });
+  }, [onSelect]);
 
   return (
     <Container>

@@ -342,6 +342,16 @@ const ResultsPage = () => {
     navigate('/');
   };
 
+  const handleRCBClick = useCallback(() => {
+    tracker.click({
+      click_type: "rcb_btn_clicked",
+      custom: {
+        source: "results_page",
+      },
+    });
+    openCallbackModal?.();
+  }, []);
+
   if (isLoading) {
     const currentStep = loadingSteps[loadingStep];
     return (
@@ -406,7 +416,7 @@ const ResultsPage = () => {
           goals={goals}
         />
       </Container>
-      <FloatingCTA onClick={openCallbackModal}>
+      <FloatingCTA onClick={handleRCBClick}>
         <Phone size={20} weight="bold" />
         Request Callback
       </FloatingCTA>

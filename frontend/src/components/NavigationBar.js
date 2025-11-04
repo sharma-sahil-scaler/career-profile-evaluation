@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useCallback } from "react";
 import { Link, useLocation, useNavigate } from "react-router-dom";
 import styled from "styled-components";
 import { DownloadSimple, Phone } from "phosphor-react";
@@ -298,6 +298,16 @@ const NavigationBar = ({
   const isResultsPage =
     location.pathname === "/results" || location.pathname === "/reports";
 
+  const handleRCBClick = useCallback(() => {
+    tracker.click({
+      click_type: "rcb_btn_clicked",
+      custom: {
+        source: "navbar",
+      },
+    });
+    openCallbackModal?.();
+  }, []);
+
   useEffect(() => {
     if (!isResultsPage) return;
 
@@ -319,18 +329,29 @@ const NavigationBar = ({
     return () => window.removeEventListener("scroll", handleScroll);
   }, [lastScrollY, isResultsPage]);
 
-  const handleReEvaluate = () => {
-    resetProfile();
-    navigate("/quiz");
-  };
+  const handleReEvaluate = useCallback(() => {
+    tracker.click({
+      click_type: "re_evaluate_btn_clicked",
+      custom: {
+        source: "navbar",
+      },
+    });
+    resetProfile?.();
+    navigate?.("/quiz");
+  }, [resetProfile, navigate]);
 
-  const handleDownloadReport = () => {
+  const handleDownloadReport = useCallback(() => {
+    tracker.click({
+      click_type: "download_report_btn_clicked",
+      custom: {
+        source: "navbar",
+      },
+    });
     window.print();
-  };
+  }, []);
 
   return (
     <StickyWrapper>
-      {/* CSAT Banner - Only show on results page */}
       {isResultsPage && (
         <CSATBanner
           isVisible={showCSATBanner}
@@ -401,7 +422,7 @@ const NavigationBar = ({
                 </IconButton>
               </>
             )}
-            <CTAButton onClick={openCallbackModal}>Request Call Back</CTAButton>
+            <CTAButton onClick={handleRCBClick}>Request Call Back</CTAButton>
           </NavActions>
         </NavContent>
         {showProgress && (

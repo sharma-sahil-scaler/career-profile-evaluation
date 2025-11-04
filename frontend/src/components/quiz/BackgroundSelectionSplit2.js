@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import styled, { keyframes } from 'styled-components';
 import { ArrowsClockwise, Desktop, Check } from 'phosphor-react';
+import tracker from '../../utils/tracker';
 import chatBot from '../../assets/ChatBot.png';
 
 const slideInFromLeft = keyframes`
@@ -192,6 +193,15 @@ const BackgroundSelectionSplit2 = ({ onSelect, onAutoAdvance, hideChat = false, 
     // Don't update chat text to prevent jarring transition before auto-advance
     // Just trigger the selection and advance
     onSelect(background);
+
+    tracker.click({
+      click_type: 'question_clicked',
+      custom: {
+        question_number: 1,
+        question_text: "What's your current background?",
+        option_selected: background,
+      },
+    });
 
     // Auto-advance after selection
     if (onAutoAdvance) {
