@@ -199,7 +199,7 @@ const getChatMessage = (score) => {
   if (score >= 80) {
     return "Outstanding! Your profile shows exceptional readiness. You have strong fundamentals across all areas. Keep this momentum going and you'll be interview-ready very soon.";
   } else if (score >= 70) {
-    return "Your profile shows solid fundamentals with room for growth. You have a strong foundation in problem-solving and demonstrate good technical awareness. Focus on building more practical projects and deepening your system design knowledge to reach the next level.";
+    return 'Your profile shows solid fundamentals with room for growth. You have a strong foundation in problem-solving and demonstrate good technical awareness. Focus on building more practical projects and deepening your system design knowledge to reach the next level.';
   } else if (score >= 60) {
     return "Good foundation! You're on the right track with decent technical skills. Focus on consistent practice, building portfolio projects, and strengthening your interview preparation to improve your readiness.";
   } else if (score >= 50) {

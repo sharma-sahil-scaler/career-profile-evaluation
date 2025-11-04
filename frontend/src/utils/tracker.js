@@ -1,17 +1,17 @@
 export const GTMEventType = {
-  PAGE_VIEW: "we_page_load",
-  SECTION_VIEW: "gtm_section_view",
-  CLICK: "gtm_custom_click",
-  HOVER: "hover",
-  FORM_SUBMIT_STATUS: "form_submit_status",
+  PAGE_VIEW: 'we_page_load',
+  SECTION_VIEW: 'gtm_section_view',
+  CLICK: 'gtm_custom_click',
+  HOVER: 'hover',
+  FORM_SUBMIT_STATUS: 'form_submit_status'
 };
 
 function isUndefined(v) {
-  return typeof v === "undefined";
+  return typeof v === 'undefined';
 }
 
 function isObject(v) {
-  return v !== null && typeof v === "object" && !Array.isArray(v);
+  return v !== null && typeof v === 'object' && !Array.isArray(v);
 }
 
 function deepMerge(target, source) {
@@ -33,7 +33,7 @@ function removeEmptyKeys(obj) {
   const out = {};
   Object.keys(obj).forEach((k) => {
     const v = obj[k];
-    if (!isUndefined(v) && v !== null && v !== "") {
+    if (!isUndefined(v) && v !== null && v !== '') {
       out[k] = isObject(v) ? removeEmptyKeys(v) : v;
     }
   });
@@ -42,13 +42,13 @@ function removeEmptyKeys(obj) {
 
 const DEFAULT_CONFIG = {
   isEnabled: true,
-  attributes: {},
+  attributes: {}
 };
 
 class Tracker {
   constructor(config = {}) {
     const finalConfig = { ...DEFAULT_CONFIG, ...config };
-    this._platform = "web";
+    this._platform = 'web';
     this._isLoggedIn = false;
     this._isEnabled = Boolean(finalConfig.isEnabled);
     this._shouldTrack = true;
@@ -60,7 +60,7 @@ class Tracker {
   }
 
   _isWindowUndefined() {
-    return typeof window === "undefined";
+    return typeof window === 'undefined';
   }
 
   _initialiseDataLayer() {
@@ -108,7 +108,7 @@ class Tracker {
     const { custom: customAttributes, ...attributes } = _attributes;
     const {
       custom: customSuperAttributes = {},
-      attributes: superAttributes = {},
+      attributes: superAttributes = {}
     } = this.superAttributes;
 
     return {
@@ -116,19 +116,19 @@ class Tracker {
       attributes: {
         is_logged_in: this._isLoggedIn,
         ...superAttributes,
-        ...attributes,
+        ...attributes
       },
       custom_attributes: {
         ...customSuperAttributes,
-        ...(customAttributes || {}),
-      },
+        ...(customAttributes || {})
+      }
     };
   }
 
   _pushToDataLayer(payload) {
     window.dataLayer.push({
       _clear: true,
-      ...payload,
+      ...payload
     });
   }
 
@@ -168,7 +168,7 @@ class Tracker {
       page_path: url.pathname,
       page_url: url.href,
       query_params: Object.fromEntries(url.searchParams),
-      ...attributes,
+      ...attributes
     };
   }
 

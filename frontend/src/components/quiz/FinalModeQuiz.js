@@ -6,22 +6,22 @@ import {
   ChatCircleDots,
   Check,
   Target,
-  UsersThree,
-} from "phosphor-react";
-import React, { useCallback, useEffect, useState } from "react";
-import { useNavigate } from "react-router-dom";
-import styled, { keyframes } from "styled-components";
-import chatBot from "../../assets/ChatBot.png";
-import { ReactComponent as ScalerLogo } from "../../assets/scaler-logo.svg";
-import { useProfile } from "../../context/ProfileContext";
-import tracker from "../../utils/tracker";
-import BackgroundSelectionSplit2 from "./BackgroundSelectionSplit2";
+  UsersThree
+} from 'phosphor-react';
+import React, { useCallback, useEffect, useState } from 'react';
+import { useNavigate } from 'react-router-dom';
+import styled, { keyframes } from 'styled-components';
+import chatBot from '../../assets/ChatBot.png';
+import { ReactComponent as ScalerLogo } from '../../assets/scaler-logo.svg';
+import { useProfile } from '../../context/ProfileContext';
+import tracker from '../../utils/tracker';
+import BackgroundSelectionSplit2 from './BackgroundSelectionSplit2';
 import {
   NON_TECH_QUIZ_SCREENS,
   TECH_QUIZ_SCREENS,
-  isScreenComplete,
-} from "./ChattyQuizScreens";
-import GroupedQuestionScreen from "./GroupedQuestionScreen";
+  isScreenComplete
+} from './ChattyQuizScreens';
+import GroupedQuestionScreen from './GroupedQuestionScreen';
 
 const fadeIn = keyframes`
   0% {
@@ -476,15 +476,15 @@ const CarouselDotsContainer = styled.div`
 `;
 
 const Dot = styled.div`
-  width: ${(props) => (props.active ? "24px" : "8px")};
+  width: ${(props) => (props.active ? '24px' : '8px')};
   height: 8px;
   border-radius: 0;
-  background: ${(props) => (props.active ? "#64748b" : "#cbd5e1")};
+  background: ${(props) => (props.active ? '#64748b' : '#cbd5e1')};
   transition: all 0.3s ease;
-  cursor: ${(props) => (props.active ? "default" : "pointer")};
+  cursor: ${(props) => (props.active ? 'default' : 'pointer')};
 
   &:hover {
-    background: ${(props) => (props.active ? "#64748b" : "#94a3b8")};
+    background: ${(props) => (props.active ? '#64748b' : '#94a3b8')};
   }
 `;
 
@@ -575,7 +575,7 @@ const BottomNavigation = styled.div`
   @media (max-width: 768px) {
     display: flex;
     justify-content: ${(props) =>
-      props.isLastStep ? "space-between" : "space-between"};
+    props.isLastStep ? 'space-between' : 'space-between'};
     align-items: center;
     gap: 12px;
   }
@@ -629,22 +629,22 @@ const StickyMobileCTA = styled.button`
 `;
 
 const LastStepNavButton = styled.button`
-  background: ${(props) => (props.variant === "primary" ? "#D70666" : "white")};
-  color: ${(props) => (props.variant === "primary" ? "white" : "#1e293b")};
+  background: ${(props) => (props.variant === 'primary' ? '#D70666' : 'white')};
+  color: ${(props) => (props.variant === 'primary' ? 'white' : '#1e293b')};
   border: 2px solid
-    ${(props) => (props.variant === "primary" ? "#D70666" : "#e2e8f0")};
+    ${(props) => (props.variant === 'primary' ? '#D70666' : '#e2e8f0')};
   padding: ${(props) =>
-    props.variant === "primary" ? "14px 24px" : "14px 16px"};
+    props.variant === 'primary' ? '14px 24px' : '14px 16px'};
   border-radius: 0;
   font-weight: 700;
   font-size: 0.9rem;
-  letter-spacing: ${(props) => (props.variant === "primary" ? "1px" : "0")};
+  letter-spacing: ${(props) => (props.variant === 'primary' ? '1px' : '0')};
   text-transform: ${(props) =>
-    props.variant === "primary" ? "uppercase" : "none"};
+    props.variant === 'primary' ? 'uppercase' : 'none'};
   cursor: pointer;
   transition: all 0.2s ease;
-  flex: ${(props) => (props.variant === "primary" ? "1" : "none")};
-  width: ${(props) => (props.variant === "primary" ? "auto" : "60px")};
+  flex: ${(props) => (props.variant === 'primary' ? '1' : 'none')};
+  width: ${(props) => (props.variant === 'primary' ? 'auto' : '60px')};
   display: flex;
   align-items: center;
   justify-content: center;
@@ -652,9 +652,9 @@ const LastStepNavButton = styled.button`
 
   &:hover {
     background: ${(props) =>
-      props.variant === "primary" ? "#b8044d" : "#f8fafc"};
+    props.variant === 'primary' ? '#b8044d' : '#f8fafc'};
     border-color: ${(props) =>
-      props.variant === "primary" ? "#b8044d" : "#cbd5e1"};
+    props.variant === 'primary' ? '#b8044d' : '#cbd5e1'};
   }
 
   &:disabled {
@@ -699,12 +699,12 @@ const FinalModeQuiz = ({ onProgressChange }) => {
     setQuizResponse,
     clearQuizResponses,
     goals,
-    evaluationResults,
+    evaluationResults
   } = useProfile();
 
   useEffect(() => {
     if (evaluationResults) {
-      navigate("/results", { replace: true });
+      navigate('/results', { replace: true });
     }
   }, [evaluationResults, navigate]);
 
@@ -719,14 +719,14 @@ const FinalModeQuiz = ({ onProgressChange }) => {
     const handleResize = () => {
       setIsMobile(window.innerWidth <= 768);
     };
-    window.addEventListener("resize", handleResize);
-    return () => window.removeEventListener("resize", handleResize);
+    window.addEventListener('resize', handleResize);
+    return () => window.removeEventListener('resize', handleResize);
   }, []);
 
   const getQuizScreens = () => {
-    if (background === "tech") {
+    if (background === 'tech') {
       return TECH_QUIZ_SCREENS;
-    } else if (background === "non-tech") {
+    } else if (background === 'non-tech') {
       return NON_TECH_QUIZ_SCREENS;
     }
     return NON_TECH_QUIZ_SCREENS;
@@ -750,7 +750,7 @@ const FinalModeQuiz = ({ onProgressChange }) => {
   const handleQuizResponse = (questionId, option) => {
     setQuizResponse(questionId, option.value);
 
-    const labelFields = ["currentRole", "targetRole", "targetCompany"];
+    const labelFields = ['currentRole', 'targetRole', 'targetCompany'];
     if (labelFields.includes(questionId)) {
       setQuizResponse(`${questionId}Label`, option.label);
     }
@@ -758,29 +758,29 @@ const FinalModeQuiz = ({ onProgressChange }) => {
 
   const handleNext = useCallback(() => {
     tracker.click({
-      click_type: "quiz_next_button_clicked",
+      click_type: 'quiz_next_button_clicked',
       custom: {
-        source: "final_mode_quiz",
-      },
+        source: 'final_mode_quiz'
+      }
     });
     if (currentStep < totalSteps - 1) {
       setCurrentStep(currentStep + 1);
-      window.scrollTo({ top: 0, behavior: "smooth" });
+      window.scrollTo({ top: 0, behavior: 'smooth' });
     } else {
-      navigate("/results");
+      navigate('/results');
     }
   }, [currentStep, totalSteps, navigate]);
 
   const handlePrevious = useCallback(() => {
     tracker.click({
-      click_type: "quiz_previous_step_clicked",
+      click_type: 'quiz_previous_step_clicked',
       custom: {
-        source: "final_mode_quiz",
-      },
+        source: 'final_mode_quiz'
+      }
     });
 
     if (currentStep === 0) {
-      navigate("/");
+      navigate('/');
       return;
     }
 
@@ -792,7 +792,7 @@ const FinalModeQuiz = ({ onProgressChange }) => {
     }
 
     setCurrentStep(currentStep - 1);
-    window.scrollTo({ top: 0, behavior: "smooth" });
+    window.scrollTo({ top: 0, behavior: 'smooth' });
   }, [currentStep, clearQuizResponses, setBackground, navigate]);
 
   const canProceed = useCallback(() => {
@@ -852,11 +852,11 @@ const FinalModeQuiz = ({ onProgressChange }) => {
             const currentRole = quizResponses.currentRole;
             const options =
               question.optionsByRole[currentRole] ||
-              question.optionsByRole["swe-product"] ||
+              question.optionsByRole['swe-product'] ||
               [];
             return {
               ...question,
-              options,
+              options
             };
           }
           return question;
@@ -899,28 +899,28 @@ const FinalModeQuiz = ({ onProgressChange }) => {
 
   const companies = [
     {
-      name: "Razorpay",
-      logo: "https://cdn.brandfetch.io/razorpay.com/w/400/h/400",
+      name: 'Razorpay',
+      logo: 'https://cdn.brandfetch.io/razorpay.com/w/400/h/400'
     },
     {
-      name: "Swiggy",
-      logo: "https://cdn.brandfetch.io/swiggy.com/w/400/h/400",
+      name: 'Swiggy',
+      logo: 'https://cdn.brandfetch.io/swiggy.com/w/400/h/400'
     },
-    { name: "CRED", logo: "https://cdn.brandfetch.io/cred.club/w/400/h/400" },
+    { name: 'CRED', logo: 'https://cdn.brandfetch.io/cred.club/w/400/h/400' },
     {
-      name: "Unacademy",
-      logo: "https://cdn.brandfetch.io/unacademy.com/w/400/h/400",
+      name: 'Unacademy',
+      logo: 'https://cdn.brandfetch.io/unacademy.com/w/400/h/400'
     },
-    { name: "Zoho", logo: "https://cdn.brandfetch.io/zoho.com/w/400/h/400" },
-    { name: "Paytm", logo: "https://cdn.brandfetch.io/paytm.com/w/400/h/400" },
+    { name: 'Zoho', logo: 'https://cdn.brandfetch.io/zoho.com/w/400/h/400' },
+    { name: 'Paytm', logo: 'https://cdn.brandfetch.io/paytm.com/w/400/h/400' },
     {
-      name: "PhonePe",
-      logo: "https://cdn.brandfetch.io/phonepe.com/w/400/h/400",
+      name: 'PhonePe',
+      logo: 'https://cdn.brandfetch.io/phonepe.com/w/400/h/400'
     },
     {
-      name: "Zomato",
-      logo: "https://cdn.brandfetch.io/zomato.com/w/400/h/400",
-    },
+      name: 'Zomato',
+      logo: 'https://cdn.brandfetch.io/zomato.com/w/400/h/400'
+    }
   ];
 
   const renderLeftPanel = () => {
@@ -1024,7 +1024,7 @@ const FinalModeQuiz = ({ onProgressChange }) => {
   const handleDotClick = (index) => {
     if (index < currentStep && index >= 0) {
       setCurrentStep(index);
-      window.scrollTo({ top: 0, behavior: "smooth" });
+      window.scrollTo({ top: 0, behavior: 'smooth' });
     }
   };
 

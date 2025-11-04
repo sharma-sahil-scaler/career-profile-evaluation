@@ -43,17 +43,17 @@ const defaultState = {
 const persistedState = loadStateFromStorage();
 const initialState = persistedState
   ? {
-      ...defaultState,
-      ...persistedState,
-      goals: {
-        ...defaultState.goals,
-        ...(persistedState.goals || {})
-      },
-      quizResponses: {
-        ...defaultState.quizResponses,
-        ...(persistedState.quizResponses || {})
-      }
+    ...defaultState,
+    ...persistedState,
+    goals: {
+      ...defaultState.goals,
+      ...(persistedState.goals || {})
+    },
+    quizResponses: {
+      ...defaultState.quizResponses,
+      ...(persistedState.quizResponses || {})
     }
+  }
   : defaultState;
 
 const profileReducer = (state, action) => {

@@ -1,5 +1,5 @@
-import { getCookie } from "./cookie";
-import { BYPASS_UTM, UTM_MEDIUM, UTM_SOURCE } from "../constants/analytics";
+import { getCookie } from './cookie';
+import { BYPASS_UTM, UTM_MEDIUM, UTM_SOURCE } from '../constants/analytics';
 
 export function getURLWithUTMParams() {
   let pageUrl = window.location.href;

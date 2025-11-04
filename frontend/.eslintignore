@@ -1,0 +1,16 @@
+# Dependencies
+node_modules
+
+# Build output
+build/
+dist/
+
+# Testing
+coverage/
+
+# Misc
+*.min.js
+*.bundle.js
+
+# Configuration
+setupProxy.js

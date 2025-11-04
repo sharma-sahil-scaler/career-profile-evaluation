@@ -222,14 +222,14 @@ const CurrentStatusSection = ({ skillAnalysis, interviewReadiness, experienceBen
       key: 'technical',
       icon: <Desktop size={20} weight="regular" />,
       label: 'Technical Interview',
-      score: interviewReadiness.technical_interview_percent ?? 0,
+      score: interviewReadiness.technical_interview_percent ?? 0
     },
     {
       key: 'hr',
       icon: <Handshake size={20} weight="regular" />,
       label: 'HR / Behavioral',
-      score: interviewReadiness.hr_behavioral_percent ?? 0,
-    },
+      score: interviewReadiness.hr_behavioral_percent ?? 0
+    }
   ] : [];
 
   return (
@@ -251,11 +251,11 @@ const CurrentStatusSection = ({ skillAnalysis, interviewReadiness, experienceBen
           <SkillsList>
             {strengths.length > 0
               ? strengths.map((skill, index) => (
-                  <SkillTag key={index} type="strength">
-                    <CheckCircle size={16} weight="fill" color="#10b981" />
-                    {skill}
-                  </SkillTag>
-                ))
+                <SkillTag key={index} type="strength">
+                  <CheckCircle size={16} weight="fill" color="#10b981" />
+                  {skill}
+                </SkillTag>
+              ))
               : <SkillTag type="strength">We will highlight strengths once the evaluation is ready.</SkillTag>
             }
           </SkillsList>
@@ -269,11 +269,11 @@ const CurrentStatusSection = ({ skillAnalysis, interviewReadiness, experienceBen
           <SkillsList>
             {areasToDevelop.length > 0
               ? areasToDevelop.map((skill, index) => (
-                  <SkillTag key={index} type="gap">
-                    <Target size={16} weight="fill" color="#64748b" />
-                    {skill}
-                  </SkillTag>
-                ))
+                <SkillTag key={index} type="gap">
+                  <Target size={16} weight="fill" color="#64748b" />
+                  {skill}
+                </SkillTag>
+              ))
               : <SkillTag type="gap">No immediate skill gaps detected.</SkillTag>
             }
           </SkillsList>

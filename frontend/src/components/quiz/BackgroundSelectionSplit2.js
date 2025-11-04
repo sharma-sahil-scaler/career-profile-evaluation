@@ -199,8 +199,8 @@ const BackgroundSelectionSplit2 = ({ onSelect, onAutoAdvance, hideChat = false, 
       custom: {
         question_number: 1,
         question_text: "What's your current background?",
-        option_selected: background,
-      },
+        option_selected: background
+      }
     });
 
     // Auto-advance after selection

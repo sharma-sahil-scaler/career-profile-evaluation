@@ -1,6 +1,6 @@
-import { getDeviceType } from "./platform.js";
-import { isNullOrUndefined } from "./type.js";
-import { getURLWithUTMParams } from "./url.js";
+import { getDeviceType } from './platform.js';
+import { isNullOrUndefined } from './type.js';
+import { getURLWithUTMParams } from './url.js';
 
 export function searchParams(params, transformArray = false) {
   const entries = Object.entries(params).filter(
@@ -9,17 +9,17 @@ export function searchParams(params, transformArray = false) {
   return entries
     .map(([key, value]) => {
       if (transformArray && Array.isArray(value)) {
-        return value.map((v) => `${key}[]=${String(v)}`).join("&");
+        return value.map((v) => `${key}[]=${String(v)}`).join('&');
       }
       return `${key}=${String(value)}`;
     })
-    .join("&");
+    .join('&');
 }
 
 export class ApiError extends Error {
   constructor(message, response, json) {
     super(message);
-    this.name = "ApiError";
+    this.name = 'ApiError';
     this.isFromServer = true;
     this.response = response;
     this.responseJson = json;
@@ -34,12 +34,12 @@ export async function parseJsonResponse(response) {
     // ignore invalid or empty JSON
   }
 
-  if (response.headers.has("X-Flash-Messages")) {
-    const flashHeader = response.headers.get("X-Flash-Messages") || "{}";
+  if (response.headers.has('X-Flash-Messages')) {
+    const flashHeader = response.headers.get('X-Flash-Messages') || '{}';
     const { error, notice } = JSON.parse(flashHeader) || {};
     if (error || notice) {
       const flashError = error || notice;
-      if (json && typeof json === "object") {
+      if (json && typeof json === 'object') {
         Object.assign(json, { flashError });
       } else {
         json = { flashError };
@@ -47,8 +47,8 @@ export async function parseJsonResponse(response) {
 
       if (error) {
         window.GTMtracker?.pushEvent({
-          event: "gtm_custom_click",
-          data: { click_text: error, click_type: "Flash error" },
+          event: 'gtm_custom_click',
+          data: { click_text: error, click_type: 'Flash error' }
         });
       }
     }
@@ -63,20 +63,20 @@ export async function apiRequest(method, path, body = null, options = {}) {
   const csrfMeta = document.querySelector('meta[name="csrf-token"]');
 
   const defaultHeaders = {
-    Accept: "application/json",
-    "Content-Type": "application/json",
-    "X-Requested-With": "XMLHttpRequest",
-    "X-Accept-Flash": "true",
-    "App-Name": deviceType,
-    ...(csrfMeta ? { "X-CSRF-Token": csrfMeta.content } : {}),
+    Accept: 'application/json',
+    'Content-Type': 'application/json',
+    'X-Requested-With': 'XMLHttpRequest',
+    'X-Accept-Flash': 'true',
+    'App-Name': deviceType,
+    ...(csrfMeta ? { 'X-CSRF-Token': csrfMeta.content } : {})
   };
 
   const defaultOptions = { method };
 
-  if (options.dataType === "FormData") {
-    delete defaultHeaders["Content-Type"];
+  if (options.dataType === 'FormData') {
+    delete defaultHeaders['Content-Type'];
     defaultOptions.body = body;
-  } else if (body && method !== "GET") {
+  } else if (body && method !== 'GET') {
     defaultOptions.body = JSON.stringify(body);
   }
 
@@ -84,14 +84,14 @@ export async function apiRequest(method, path, body = null, options = {}) {
   const finalOptions = {
     ...defaultOptions,
     headers: { ...defaultHeaders, ...(headers || {}) },
-    credentials: "same-origin",
-    ...remainingOptions,
+    credentials: 'same-origin',
+    ...remainingOptions
   };
   finalOptions.referrer = getURLWithUTMParams();
 
   if (params) {
     path += `?${searchParams(params)}`;
-  } else if (method === "GET" && body && typeof body === "object") {
+  } else if (method === 'GET' && body && typeof body === 'object') {
     path += `?${searchParams(body, true)}`;
   }
 
@@ -104,19 +104,19 @@ export async function generateJWT() {
   let token;
   try {
     const headers = {
-      "Content-Type": "text/plain",
-      "X-Requested-With": "XMLHttpRequest",
-      ...(csrfMeta?.content ? { "X-CSRF-Token": csrfMeta.content } : {}),
+      'Content-Type': 'text/plain',
+      'X-Requested-With': 'XMLHttpRequest',
+      ...(csrfMeta?.content ? { 'X-CSRF-Token': csrfMeta.content } : {})
     };
-    const response = await fetch("/generate-jwt", {
-      method: "POST",
+    const response = await fetch('/generate-jwt', {
+      method: 'POST',
       headers,
-      body: JSON.stringify({}),
+      body: JSON.stringify({})
     });
     if (!response.ok) throw new Error(String(response.status));
     token = await response.text();
   } catch (error) {
-    console.error("Error generating JWT:", error);
+    console.error('Error generating JWT:', error);
     throw error;
   }
   return token;

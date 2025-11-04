@@ -73,10 +73,10 @@ const SkillAnalysisCard = ({ skillAnalysis }) => {
         <SkillsList>
           {strengths.length > 0
             ? strengths.map((skill, index) => (
-                <SkillTag key={index} type="strength">
-                  {skill}
-                </SkillTag>
-              ))
+              <SkillTag key={index} type="strength">
+                {skill}
+              </SkillTag>
+            ))
             : <SkillTag type="strength">We will highlight strengths once the evaluation is ready.</SkillTag>
           }
         </SkillsList>
@@ -90,10 +90,10 @@ const SkillAnalysisCard = ({ skillAnalysis }) => {
         <SkillsList>
           {areasToDevelop.length > 0
             ? areasToDevelop.map((skill, index) => (
-                <SkillTag key={index} type="gap">
-                  {skill}
-                </SkillTag>
-              ))
+              <SkillTag key={index} type="gap">
+                {skill}
+              </SkillTag>
+            ))
             : <SkillTag type="gap">No immediate skill gaps detected.</SkillTag>
           }
         </SkillsList>

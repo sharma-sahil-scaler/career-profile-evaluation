@@ -95,14 +95,14 @@ const InterviewReadinessCard = ({ interviewReadiness }) => {
       key: 'technical',
       icon: <Desktop size={20} weight="regular" />,
       label: 'Technical Interview',
-      score: interviewReadiness.technical_interview_percent ?? 0,
+      score: interviewReadiness.technical_interview_percent ?? 0
     },
     {
       key: 'hr',
       icon: <Handshake size={20} weight="regular" />,
       label: 'HR / Behavioral',
-      score: interviewReadiness.hr_behavioral_percent ?? 0,
-    },
+      score: interviewReadiness.hr_behavioral_percent ?? 0
+    }
   ];
 
   return (

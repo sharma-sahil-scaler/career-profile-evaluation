@@ -1,4 +1,9 @@
-import { ArrowBendUpRight, ArrowRight, ArrowsLeftRight, Star } from 'phosphor-react';
+import {
+  ArrowBendUpRight,
+  ArrowRight,
+  ArrowsLeftRight,
+  Star
+} from 'phosphor-react';
 import React, { useEffect, useState } from 'react';
 import Xarrow from 'react-xarrows';
 import styled from 'styled-components';
@@ -100,18 +105,21 @@ const CategoryCard = styled.div`
   width: 160px;
 
   svg {
-    color: ${props => {
-      if (props.type === 'most-common') return '#10b981';
-      if (props.type === 'similar') return '#3b82f6';
-      if (props.type === 'pivot') return '#9333ea';
-      return '#64748b';
-    }};
+    color: ${(props) => {
+    if (props.type === 'most-common') return '#10b981';
+    if (props.type === 'similar') return '#3b82f6';
+    if (props.type === 'pivot') return '#9333ea';
+    return '#64748b';
+  }};
   }
 `;
 
 const RoleCard = styled.div`
-  background: ${props => props.isPriority ? 'linear-gradient(135deg, #f0fdf4 0%, #dcfce7 100%)' : '#ffffff'};
-  border: 2px solid ${props => props.isPriority ? '#10b981' : '#e2e8f0'};
+  background: ${(props) =>
+    props.isPriority
+      ? 'linear-gradient(135deg, #f0fdf4 0%, #dcfce7 100%)'
+      : '#ffffff'};
+  border: 2px solid ${(props) => (props.isPriority ? '#10b981' : '#e2e8f0')};
   border-radius: 0;
   padding: 12px;
   display: flex;
@@ -168,12 +176,12 @@ const Salary = styled.div`
 `;
 
 const MatchBadge = styled.div`
-  background: ${props => {
+  background: ${(props) => {
     if (props.match >= 80) return '#dcfce7';
     if (props.match >= 60) return '#fef3c7';
     return '#f1f5f9';
   }};
-  color: ${props => {
+  color: ${(props) => {
     if (props.match >= 80) return '#15803d';
     if (props.match >= 60) return '#a16207';
     return '#475569';
@@ -220,7 +228,9 @@ const AlumniCTA = styled.a`
 `;
 
 const categorizeRoles = (roles) => {
-  const sorted = [...roles].sort((a, b) => (b.match_score || 0) - (a.match_score || 0));
+  const sorted = [...roles].sort(
+    (a, b) => (b.match_score || 0) - (a.match_score || 0)
+  );
 
   const categories = {
     mostLikely: [],
@@ -250,7 +260,8 @@ const getCategoryBadgeType = (category) => {
 
 const getCategoryIcon = (category) => {
   if (category === 'mostLikely') return <Star size={14} weight="fill" />;
-  if (category === 'similar') return <ArrowsLeftRight size={14} weight="regular" />;
+  if (category === 'similar')
+    return <ArrowsLeftRight size={14} weight="regular" />;
   return <ArrowBendUpRight size={14} weight="regular" />;
 };
 
@@ -272,7 +283,11 @@ const formatSalary = (salary) => {
   return `₹${salary}`;
 };
 
-const CareerPathVisualization = ({ currentRole, background, recommendedRoles = [] }) => {
+const CareerPathVisualization = ({
+  currentRole,
+  background,
+  recommendedRoles = []
+}) => {
   const [showArrows, setShowArrows] = useState(false);
 
   // Categorize roles into three groups
@@ -282,7 +297,8 @@ const CareerPathVisualization = ({ currentRole, background, recommendedRoles = [
   const avatarLetter = currentRole ? currentRole.charAt(0).toUpperCase() : 'C';
 
   // Determine background label
-  const backgroundLabel = background === 'non-tech' ? 'Non-Tech Professional' : 'Tech Professional';
+  const backgroundLabel =
+    background === 'non-tech' ? 'Non-Tech Professional' : 'Tech Professional';
 
   // Force re-render arrows after component mounts
   useEffect(() => {
@@ -294,7 +310,9 @@ const CareerPathVisualization = ({ currentRole, background, recommendedRoles = [
 
   const renderRoleCard = (role, category, globalIndex) => {
     const match = role.match_score || 0;
-    const salary = formatSalary(role.salary_range_inr || role.salary_range_usd || role.salary);
+    const salary = formatSalary(
+      role.salary_range_inr || role.salary_range_usd || role.salary
+    );
     const isPriority = category === 'mostLikely';
 
     return (
@@ -305,23 +323,15 @@ const CareerPathVisualization = ({ currentRole, background, recommendedRoles = [
       >
         <RoleContent>
           <RoleHeader>
-            <RoleTitle>
-              {role.title || role.role}
-            </RoleTitle>
+            <RoleTitle>{role.title || role.role}</RoleTitle>
             <MatchBadge match={match}>{match}% match</MatchBadge>
           </RoleHeader>
 
           {(role.reason || role.reasoning) && (
-            <RoleDescription>
-              {role.reason || role.reasoning}
-            </RoleDescription>
+            <RoleDescription>{role.reason || role.reasoning}</RoleDescription>
           )}
 
-          <RoleFooter>
-            {salary && (
-              <Salary>{salary}</Salary>
-            )}
-          </RoleFooter>
+          <RoleFooter>{salary && <Salary>{salary}</Salary>}</RoleFooter>
         </RoleContent>
       </RoleCard>
     );
@@ -330,7 +340,9 @@ const CareerPathVisualization = ({ currentRole, background, recommendedRoles = [
   return (
     <Container>
       <Title>Career Transition</Title>
-      <Subtitle>Explore potential career paths based on your profile and interests</Subtitle>
+      <Subtitle>
+        Explore potential career paths based on your profile and interests
+      </Subtitle>
 
       <PathContainer>
         {/* Column 1: Current Role */}
@@ -369,9 +381,15 @@ const CareerPathVisualization = ({ currentRole, background, recommendedRoles = [
 
         {/* Column 3: Role Cards */}
         <Column>
-          {categories.mostLikely.map((role, index) => renderRoleCard(role, 'mostLikely', index))}
-          {categories.similar.map((role, index) => renderRoleCard(role, 'similar', index))}
-          {categories.pivot.map((role, index) => renderRoleCard(role, 'pivot', index))}
+          {categories.mostLikely.map((role, index) =>
+            renderRoleCard(role, 'mostLikely', index)
+          )}
+          {categories.similar.map((role, index) =>
+            renderRoleCard(role, 'similar', index)
+          )}
+          {categories.pivot.map((role, index) =>
+            renderRoleCard(role, 'pivot', index)
+          )}
         </Column>
 
         {/* Xarrow Connections */}

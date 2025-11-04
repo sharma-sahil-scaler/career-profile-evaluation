@@ -1,16 +1,16 @@
-import { getDeviceType } from "./platform";
+import { getDeviceType } from './platform';
 
 class Attribution {
   constructor() {
-    this._platform = "mobile";
-    this._product = "homepage";
-    this._experiment = "";
+    this._platform = 'mobile';
+    this._product = 'homepage';
+    this._experiment = '';
     this._attribution = {
       experiment: this._experiment,
-      intent: "",
+      intent: '',
       platform: this._platform,
       product: this._product,
-      program: null,
+      program: null
     };
   }
 
@@ -23,7 +23,7 @@ class Attribution {
       ...this._attribution,
       intent,
       program,
-      ...data,
+      ...data
     };
   }
 
@@ -44,7 +44,7 @@ class Attribution {
       ...attributes,
       experiment: this._experiment,
       platform: this._platform,
-      product: this._product,
+      product: this._product
     };
   }
 

@@ -116,11 +116,6 @@ const Title = styled.h3`
   gap: 8px;
 `;
 
-const QuestionNumber = styled.span`
-  font-size: 0.75rem;
-  font-weight: 400;
-  color: #64748b;
-`;
 
 const Form = styled.form`
   width: 100%;

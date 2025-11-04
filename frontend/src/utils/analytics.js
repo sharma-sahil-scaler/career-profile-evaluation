@@ -9,18 +9,18 @@ import {
   SEARCH_SITE_LIST,
   UTM_MEDIUM_DEFAULT,
   UTM_SOURCE_DEFAULT,
-  VIDEO_SITE_LIST,
-} from "../constants/analytics";
-import { getCookie, setCookie } from "./cookie";
+  VIDEO_SITE_LIST
+} from '../constants/analytics';
+import { getCookie, setCookie } from './cookie';
 
 function getUtmParamsFromSearch() {
   const params = new URLSearchParams(window.location.search);
   const utmParams = {};
 
   params.forEach((value, key) => {
-    if (key.startsWith("utm_")) {
-      if (key === "utm_source") {
-        utmParams[key] = value.includes("google.com") ? GOOGLE_URL : value;
+    if (key.startsWith('utm_')) {
+      if (key === 'utm_source') {
+        utmParams[key] = value.includes('google.com') ? GOOGLE_URL : value;
       } else {
         utmParams[key] = value;
       }
@@ -33,7 +33,7 @@ function getUtmParamsFromSearch() {
 function utmParamsToQueryString(params) {
   return Object.entries(params)
     .map(([key, value]) => `${key}=${value}`)
-    .join("&");
+    .join('&');
 }
 
 function sameOrigin(url) {
@@ -43,7 +43,7 @@ function sameOrigin(url) {
 
 function findDomain(arr, url) {
   try {
-    const hostnameArr = new URL(url).hostname.split(".");
+    const hostnameArr = new URL(url).hostname.split('.');
     return arr.some((arrEle) => hostnameArr.includes(arrEle));
   } catch {
     return false;
@@ -65,7 +65,7 @@ function getUtmParamsFromReferrer() {
     }
 
     utmParams.utm_medium = utmMedium;
-    utmParams.utm_source = document.referrer.includes("google.com")
+    utmParams.utm_source = document.referrer.includes('google.com')
       ? GOOGLE_URL
       : document.referrer;
   } else {
@@ -82,7 +82,7 @@ export function initializeUtmPropagation() {
   let utmQuery = decodeURIComponent(utmParamsToQueryString(utmParams));
 
   if (!utmQuery) {
-    utmQuery = getCookie(BYPASS_UTM) || "";
+    utmQuery = getCookie(BYPASS_UTM) || '';
 
     if (!utmQuery) {
       utmParams = getUtmParamsFromReferrer();
@@ -91,7 +91,7 @@ export function initializeUtmPropagation() {
   }
 
   if (utmQuery) {
-    if (!utmQuery.includes("utm_content")) {
+    if (!utmQuery.includes('utm_content')) {
       utmQuery += `&utm_content=${window.location.pathname}`;
     }
 
@@ -106,10 +106,10 @@ export function getUTMPropagationParams() {
   const utmQuery = getCookie(BYPASS_UTM);
   const utmParams = {};
   if (utmQuery) {
-    const params = utmQuery.split("&");
+    const params = utmQuery.split('&');
     if (params) {
       params.forEach((param) => {
-        const [key, value] = param.split("=");
+        const [key, value] = param.split('=');
 
         utmParams[key] = value;
       });

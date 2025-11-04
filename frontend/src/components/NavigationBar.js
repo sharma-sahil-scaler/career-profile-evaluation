@@ -1,10 +1,11 @@
-import React, { useState, useEffect, useCallback } from "react";
-import { Link, useLocation, useNavigate } from "react-router-dom";
-import styled from "styled-components";
-import { DownloadSimple } from "phosphor-react";
-import { ReactComponent as ScalerLogo } from "../assets/scaler-logo.svg";
-import { useProfile } from "../context/ProfileContext";
-import { useRequestCallback } from "../app/context/RequestCallbackContext";
+import React, { useState, useEffect, useCallback } from 'react';
+import { Link, useLocation, useNavigate } from 'react-router-dom';
+import styled from 'styled-components';
+import { DownloadSimple } from 'phosphor-react';
+import { ReactComponent as ScalerLogo } from '../assets/scaler-logo.svg';
+import { useProfile } from '../context/ProfileContext';
+import { useRequestCallback } from '../app/context/RequestCallbackContext';
+import tracker from '../utils/tracker';
 
 const NavContainer = styled.nav`
   background: white;
@@ -12,11 +13,11 @@ const NavContainer = styled.nav`
   position: relative;
   transition: transform 0.3s ease;
   /* Match CSAT banner height: 41.5px */
-  transform: translateY(${(props) => (props.showCSATBanner ? "0" : "-41.5px")});
+  transform: translateY(${(props) => (props.showCSATBanner ? '0' : '-41.5px')});
 
   @media (max-width: 768px) {
     /* Mobile CSAT: 8px + 8px padding + column layout (~2 lines) = ~60px */
-    transform: translateY(${(props) => (props.showCSATBanner ? "0" : "-60px")});
+    transform: translateY(${(props) => (props.showCSATBanner ? '0' : '-60px')});
   }
 
   @media print {
@@ -166,21 +167,21 @@ const SegmentedControl = styled.div`
 `;
 
 const SegmentButton = styled.button`
-  background: ${(props) => (props.active ? "#FFFFFF" : "transparent")};
-  color: ${(props) => (props.active ? "#1e293b" : "#64748b")};
+  background: ${(props) => (props.active ? '#FFFFFF' : 'transparent')};
+  color: ${(props) => (props.active ? '#1e293b' : '#64748b')};
   border: none;
   padding: 6px 14px;
   border-radius: 4px;
-  font-weight: ${(props) => (props.active ? "600" : "500")};
+  font-weight: ${(props) => (props.active ? '600' : '500')};
   font-size: 0.75rem;
   cursor: pointer;
   transition: all 0.2s ease;
   white-space: nowrap;
   box-shadow: ${(props) =>
-    props.active ? "0 1px 3px rgba(0, 0, 0, 0.1)" : "none"};
+    props.active ? '0 1px 3px rgba(0, 0, 0, 0.1)' : 'none'};
 
   &:hover {
-    background: ${(props) => (props.active ? "#FFFFFF" : "#e2e8f0")};
+    background: ${(props) => (props.active ? '#FFFFFF' : '#e2e8f0')};
   }
 `;
 
@@ -221,7 +222,7 @@ const CSATBanner = styled.button`
   border: none;
   width: 100%;
   transition: transform 0.3s ease, background 0.2s ease;
-  transform: translateY(${(props) => (props.isVisible ? "0" : "-100%")});
+  transform: translateY(${(props) => (props.isVisible ? '0' : '-100%')});
 
   &:hover {
     background: #5a2e8a;
@@ -281,8 +282,8 @@ const CSATLink = styled.span`
 
 const NavigationBar = ({
   progress = 0,
-  quizMode = "grouped",
-  onQuizModeChange,
+  quizMode = 'grouped',
+  onQuizModeChange
 }) => {
   const location = useLocation();
   const navigate = useNavigate();
@@ -293,17 +294,17 @@ const NavigationBar = ({
   const [lastScrollY, setLastScrollY] = useState(0);
 
   const showProgress =
-    location.pathname === "/quiz" || location.pathname === "/goals";
-  const showModeToggle = location.pathname === "/quiz";
+    location.pathname === '/quiz' || location.pathname === '/goals';
+  const showModeToggle = location.pathname === '/quiz';
   const isResultsPage =
-    location.pathname === "/results" || location.pathname === "/reports";
+    location.pathname === '/results' || location.pathname === '/reports';
 
   const handleRCBClick = useCallback(() => {
     tracker.click({
-      click_type: "rcb_btn_clicked",
+      click_type: 'rcb_btn_clicked',
       custom: {
-        source: "navbar",
-      },
+        source: 'navbar'
+      }
     });
     openCallbackModal?.();
   }, []);
@@ -325,27 +326,27 @@ const NavigationBar = ({
       setLastScrollY(currentScrollY);
     };
 
-    window.addEventListener("scroll", handleScroll, { passive: true });
-    return () => window.removeEventListener("scroll", handleScroll);
+    window.addEventListener('scroll', handleScroll, { passive: true });
+    return () => window.removeEventListener('scroll', handleScroll);
   }, [lastScrollY, isResultsPage]);
 
   const handleReEvaluate = useCallback(() => {
     tracker.click({
-      click_type: "re_evaluate_btn_clicked",
+      click_type: 're_evaluate_btn_clicked',
       custom: {
-        source: "navbar",
-      },
+        source: 'navbar'
+      }
     });
     resetProfile?.();
-    navigate?.("/quiz");
+    navigate?.('/quiz');
   }, [resetProfile, navigate]);
 
   const handleDownloadReport = useCallback(() => {
     tracker.click({
-      click_type: "download_report_btn_clicked",
+      click_type: 'download_report_btn_clicked',
       custom: {
-        source: "navbar",
-      },
+        source: 'navbar'
+      }
     });
     window.print();
   }, []);
@@ -369,7 +370,7 @@ const NavigationBar = ({
       )}
       <NavContainer showCSATBanner={isResultsPage && showCSATBanner}>
         <NavContent>
-          <Link to="/" style={{ textDecoration: "none" }}>
+          <Link to="/" style={{ textDecoration: 'none' }}>
             <Logo>
               <LogoGraphic aria-label="Scaler" />
             </Logo>
@@ -377,32 +378,32 @@ const NavigationBar = ({
           {showModeToggle && (
             <SegmentedControl>
               <SegmentButton
-                active={quizMode === "single"}
-                onClick={() => onQuizModeChange?.("single")}
+                active={quizMode === 'single'}
+                onClick={() => onQuizModeChange?.('single')}
               >
                 Single Question
               </SegmentButton>
               <SegmentButton
-                active={quizMode === "grouped"}
-                onClick={() => onQuizModeChange?.("grouped")}
+                active={quizMode === 'grouped'}
+                onClick={() => onQuizModeChange?.('grouped')}
               >
                 Grouped Questions
               </SegmentButton>
               <SegmentButton
-                active={quizMode === "split"}
-                onClick={() => onQuizModeChange?.("split")}
+                active={quizMode === 'split'}
+                onClick={() => onQuizModeChange?.('split')}
               >
                 Split View
               </SegmentButton>
               <SegmentButton
-                active={quizMode === "split-view2"}
-                onClick={() => onQuizModeChange?.("split-view2")}
+                active={quizMode === 'split-view2'}
+                onClick={() => onQuizModeChange?.('split-view2')}
               >
                 Split View 2
               </SegmentButton>
               <SegmentButton
-                active={quizMode === "final"}
-                onClick={() => onQuizModeChange?.("final")}
+                active={quizMode === 'final'}
+                onClick={() => onQuizModeChange?.('final')}
               >
                 Final Mode
               </SegmentButton>

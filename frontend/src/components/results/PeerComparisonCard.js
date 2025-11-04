@@ -170,7 +170,7 @@ const PeerComparisonCard = ({ peerComparison }) => {
   // Ensure potential is ALWAYS higher than current (minimum 5% gap, fallback to +15)
   const rawPotential = peerComparison.potential_percentile ?? currentPercentile + 15;
   const potentialPercentile = Math.max(rawPotential, currentPercentile + 5);
-  const peerGroupDescription = peerComparison.peer_group_description ?? "Similar professionals in tech";
+  const peerGroupDescription = peerComparison.peer_group_description ?? 'Similar professionals in tech';
 
   // Donut chart calculations
   const radius = 70;

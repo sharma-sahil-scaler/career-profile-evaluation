@@ -265,86 +265,85 @@ const CheckIcon = styled.div`
 const getOptionIcon = (value) => {
   const icons = {
   // Screen 1: Profile (Non-Tech)
-  'non-tech': <UserCircle size={20} weight="duotone" />,
-  'it-services': <Briefcase size={20} weight="duotone" />,
-  'technical': <Code size={20} weight="duotone" />,
-  'fresh-graduate': <GraduationCap size={20} weight="duotone" />,
+    'non-tech': <UserCircle size={20} weight="duotone" />,
+    'it-services': <Briefcase size={20} weight="duotone" />,
+    'technical': <Code size={20} weight="duotone" />,
+    'fresh-graduate': <GraduationCap size={20} weight="duotone" />,
 
-  // Screen 1: Profile (Tech)
-  'student-freshgrad': <GraduationCap size={20} weight="duotone" />,
-  'swe-product': <Buildings size={20} weight="duotone" />,
-  'swe-service': <Briefcase size={20} weight="duotone" />,
+    // Screen 1: Profile (Tech)
+    'student-freshgrad': <GraduationCap size={20} weight="duotone" />,
+    'swe-product': <Buildings size={20} weight="duotone" />,
+    'swe-service': <Briefcase size={20} weight="duotone" />,
 
-  // Experience levels
-  '0': <GraduationCap size={20} weight="duotone" />,
-  '0-2': <Clock size={20} weight="duotone" />,
-  '3-5': <Briefcase size={20} weight="duotone" />,
-  '5+': <Trophy size={20} weight="duotone" />,
+    // Experience levels
+    '0': <GraduationCap size={20} weight="duotone" />,
+    '0-2': <Clock size={20} weight="duotone" />,
+    '3-5': <Briefcase size={20} weight="duotone" />,
+    '5+': <Trophy size={20} weight="duotone" />,
 
-  // Skills (Non-Tech)
-  'communication': <Users size={20} weight="duotone" />,
-  'analytical': <ChartLineUp size={20} weight="duotone" />,
-  'operations': <Target size={20} weight="duotone" />,
-  'self-learning': <BookOpen size={20} weight="duotone" />,
+    // Skills (Non-Tech)
+    'communication': <Users size={20} weight="duotone" />,
+    'analytical': <ChartLineUp size={20} weight="duotone" />,
+    'operations': <Target size={20} weight="duotone" />,
+    'self-learning': <BookOpen size={20} weight="duotone" />,
 
-  // Screen 2: Motivation
-  'salary-growth': <CurrencyDollar size={20} weight="duotone" />,
-  'interest': <Star size={20} weight="duotone" />,
-  'job-stability': <CheckCircle size={20} weight="duotone" />,
-  'peer-influence': <Users size={20} weight="duotone" />,
+    // Screen 2: Motivation
+    'salary-growth': <CurrencyDollar size={20} weight="duotone" />,
+    'interest': <Star size={20} weight="duotone" />,
+    'job-stability': <CheckCircle size={20} weight="duotone" />,
+    'peer-influence': <Users size={20} weight="duotone" />,
 
-  // Target Roles (Non-Tech)
-  'backend': <Code size={20} weight="duotone" />,
-  'fullstack': <Crown size={20} weight="duotone" />,
-  'data-ml': <ChartBar size={20} weight="duotone" />,
-  'data-analyst': <ChartLineUp size={20} weight="duotone" />,
-  'not-sure': <Target size={20} weight="duotone" />,
+    // Target Roles (Non-Tech)
+    'backend': <Code size={20} weight="duotone" />,
+    'fullstack': <Crown size={20} weight="duotone" />,
+    'data-ml': <ChartBar size={20} weight="duotone" />,
+    'data-analyst': <ChartLineUp size={20} weight="duotone" />,
+    'not-sure': <Target size={20} weight="duotone" />,
 
-  // Target Roles (Tech)
-  'faang-product': <Trophy size={20} weight="duotone" />,
-  'backend-fullstack': <Code size={20} weight="duotone" />,
-  'techlead-architect': <Crown size={20} weight="duotone" />,
+    // Target Roles (Tech)
+    'faang-product': <Trophy size={20} weight="duotone" />,
+    'backend-fullstack': <Code size={20} weight="duotone" />,
+    'techlead-architect': <Crown size={20} weight="duotone" />,
 
-  // Company types
-  'product': <Buildings size={20} weight="duotone" />,
-  'startup': <Rocket size={20} weight="duotone" />,
-  'service': <Briefcase size={20} weight="duotone" />,
-  'domain-specific': <Target size={20} weight="duotone" />,
+    // Company types
+    'product': <Buildings size={20} weight="duotone" />,
+    'startup': <Rocket size={20} weight="duotone" />,
+    'service': <Briefcase size={20} weight="duotone" />,
+    'domain-specific': <Target size={20} weight="duotone" />,
 
-  // Screen 3: Preparation (Non-Tech)
-  'completed-course': <GraduationCap size={20} weight="duotone" />,
-  'self-learning': <BookOpen size={20} weight="duotone" />,
-  'just-exploring': <Path size={20} weight="duotone" />,
-  'havent-tried': <PlayCircle size={20} weight="duotone" />,
-  'follow-tutorials': <BookOpen size={20} weight="duotone" />,
-  'solve-problems': <Code size={20} weight="duotone" />,
+    // Screen 3: Preparation (Non-Tech)
+    'completed-course': <GraduationCap size={20} weight="duotone" />,
+    'just-exploring': <Path size={20} weight="duotone" />,
+    'havent-tried': <PlayCircle size={20} weight="duotone" />,
+    'follow-tutorials': <BookOpen size={20} weight="duotone" />,
+    'solve-problems': <Code size={20} weight="duotone" />,
 
-  // Coding Practice (Tech)
-  '0-10': <PlayCircle size={20} weight="duotone" />,
-  '11-50': <Clock size={20} weight="duotone" />,
-  '51-100': <FireSimple size={20} weight="duotone" />,
-  '100+': <Trophy size={20} weight="duotone" />,
+    // Coding Practice (Tech)
+    '0-10': <PlayCircle size={20} weight="duotone" />,
+    '11-50': <Clock size={20} weight="duotone" />,
+    '51-100': <FireSimple size={20} weight="duotone" />,
+    '100+': <Trophy size={20} weight="duotone" />,
 
-  // System Design (Tech)
-  'led-multiple': <Crown size={20} weight="duotone" />,
-  'participated': <Users size={20} weight="duotone" />,
-  'learning': <BookOpen size={20} weight="duotone" />,
+    // System Design (Tech)
+    'led-multiple': <Crown size={20} weight="duotone" />,
+    'participated': <Users size={20} weight="duotone" />,
+    'learning': <BookOpen size={20} weight="duotone" />,
 
-  // Portfolio (Tech)
-  'active-5plus': <Trophy size={20} weight="duotone" />,
-  'limited-1to5': <CheckCircle size={20} weight="duotone" />,
-  'inactive': <Clock size={20} weight="duotone" />,
-  'no-portfolio': <Target size={20} weight="duotone" />,
+    // Portfolio (Tech)
+    'active-5plus': <Trophy size={20} weight="duotone" />,
+    'limited-1to5': <CheckCircle size={20} weight="duotone" />,
+    'inactive': <Clock size={20} weight="duotone" />,
+    'no-portfolio': <Target size={20} weight="duotone" />,
 
-  // Interview Practice (Tech)
-  'weekly': <Trophy size={20} weight="duotone" />,
-  'monthly': <CalendarCheck size={20} weight="duotone" />,
-  'rarely': <Clock size={20} weight="duotone" />,
-  'never': <Target size={20} weight="duotone" />,
+    // Interview Practice (Tech)
+    'weekly': <Trophy size={20} weight="duotone" />,
+    'monthly': <CalendarCheck size={20} weight="duotone" />,
+    'rarely': <Clock size={20} weight="duotone" />,
+    'never': <Target size={20} weight="duotone" />,
 
-  // Time investment options
-  '6-10': <Timer size={20} weight="duotone" />,
-  '10+': <FireSimple size={20} weight="duotone" />
+    // Time investment options
+    '6-10': <Timer size={20} weight="duotone" />,
+    '10+': <FireSimple size={20} weight="duotone" />
   };
 
   return icons[value] || null;
@@ -378,8 +377,8 @@ const GroupedQuestionScreen = ({
         question_id: questionId,
         question_text: question.question,
         option_selected: option.value,
-        option_label: option.label ?? option.value,
-      },
+        option_label: option.label ?? option.value
+      }
     });
 
     onResponse(questionId, option);

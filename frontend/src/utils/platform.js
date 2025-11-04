@@ -4,10 +4,10 @@ export function isMobile() {
 
 export function getDeviceType() {
   if (/tablet|iPad/i.test(navigator.userAgent)) {
-    return "tablet";
+    return 'tablet';
   }
   if (isMobile()) {
-    return "mobile";
+    return 'mobile';
   }
-  return "desktop";
+  return 'desktop';
 }

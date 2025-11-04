@@ -98,17 +98,17 @@ export const TECH_QUIZ_SCREENS = [
     ],
     chatResponseMap: {
       currentRole: {
-        'swe-product': "Great! Product companies offer amazing learning opportunities and cutting-edge tech stacks.",
+        'swe-product': 'Great! Product companies offer amazing learning opportunities and cutting-edge tech stacks.',
         'swe-service': "Got it! Many engineers successfully transition from service to product companies. Let's chart your path forward.",
-        'devops': "Awesome! DevOps and infrastructure engineers are in incredibly high demand right now.",
+        'devops': 'Awesome! DevOps and infrastructure engineers are in incredibly high demand right now.',
         'qa-support': "Perfect! Many successful engineers started in QA/support roles. Let's build your advancement path."
       },
       experience: {
-        '0-2': "Early career is the best time to build strong foundations! The investments you make now will compound for years.",
+        '0-2': 'Early career is the best time to build strong foundations! The investments you make now will compound for years.',
         '2-3': "Great timing! You're building solid experience. This is when intentional skill development pays off.",
         '3-5': "You're at a sweet spot! This is when career trajectories really diverge based on strategic choices.",
-        '5-8': "Solid experience! Time to optimize and level up to senior roles or high-growth opportunities.",
-        '8+': "Impressive journey! With 8+ years, you can target staff/principal roles or technical leadership positions."
+        '5-8': 'Solid experience! Time to optimize and level up to senior roles or high-growth opportunities.',
+        '8+': 'Impressive journey! With 8+ years, you can target staff/principal roles or technical leadership positions.'
       }
     }
   },
@@ -155,25 +155,25 @@ export const TECH_QUIZ_SCREENS = [
     ],
     chatResponseMap: {
       primaryGoal: {
-        'better-company': "Smart move! A better company can be a career multiplier - stronger teams, better learning, more opportunities.",
-        'level-up': "Love the ambition! Senior+ roles come with significant comp bumps and increased market value.",
+        'better-company': 'Smart move! A better company can be a career multiplier - stronger teams, better learning, more opportunities.',
+        'level-up': 'Love the ambition! Senior+ roles come with significant comp bumps and increased market value.',
         'higher-comp': "100% valid! Many engineers are underpaid. Let's optimize your compensation to match your skills.",
-        'switch-domain': "Exciting! Switching domains can open entirely new opportunities. Timing and preparation are key.",
-        'upskilling': "Great mindset! Strategic upskilling can lead to promotions and make you indispensable in your role."
+        'switch-domain': 'Exciting! Switching domains can open entirely new opportunities. Timing and preparation are key.',
+        'upskilling': 'Great mindset! Strategic upskilling can lead to promotions and make you indispensable in your role.'
       },
       targetRole: {
-        'senior-backend': "Great choice! Senior backend roles offer high impact, excellent compensation, and clear career growth.",
-        'senior-fullstack': "Versatile path! Senior full-stack engineers are highly sought after with strong compensation.",
-        'backend-sde': "Solid choice! Backend engineering is always in demand with great career prospects.",
-        'fullstack-sde': "Versatile! Full-stack roles offer broad learning and lots of opportunities across companies.",
-        'data-ml': "Future-focused! Data & ML roles are exploding with cutting-edge problems and high compensation.",
-        'tech-lead': "Leadership track! Staff+ roles combine technical depth with impact - gateway to principal/architect."
+        'senior-backend': 'Great choice! Senior backend roles offer high impact, excellent compensation, and clear career growth.',
+        'senior-fullstack': 'Versatile path! Senior full-stack engineers are highly sought after with strong compensation.',
+        'backend-sde': 'Solid choice! Backend engineering is always in demand with great career prospects.',
+        'fullstack-sde': 'Versatile! Full-stack roles offer broad learning and lots of opportunities across companies.',
+        'data-ml': 'Future-focused! Data & ML roles are exploding with cutting-edge problems and high compensation.',
+        'tech-lead': 'Leadership track! Staff+ roles combine technical depth with impact - gateway to principal/architect.'
       },
       targetCompany: {
-        'faang': "Top tier! FAANG offers unmatched comp and resume value. Hard to crack but worth the effort.",
-        'unicorns': "Great target! Unicorns often match FAANG comp with more impact and better work-life balance.",
+        'faang': 'Top tier! FAANG offers unmatched comp and resume value. Hard to crack but worth the effort.',
+        'unicorns': 'Great target! Unicorns often match FAANG comp with more impact and better work-life balance.',
         'startups': "High growth, high learning! Perfect if you want rapid growth and don't mind some uncertainty.",
-        'better-service': "Pragmatic! Better service companies can be stepping stones to product companies or FAANG.",
+        'better-service': 'Pragmatic! Better service companies can be stepping stones to product companies or FAANG.',
         'evaluating': "That's okay! Let's assess your profile first - clarity often comes after understanding your strengths."
       }
     }
@@ -233,10 +233,10 @@ export const TECH_QUIZ_SCREENS = [
         'not-yet': "Perfect timing! System design is very learnable. I'll guide you based on your experience level."
       },
       portfolio: {
-        'active-5+': "Fantastic! An active portfolio is your best resume. Make sure READMEs are polished and projects are well-documented.",
-        'limited-1-5': "Good start! Having a few projects shows initiative. Focus on quality over quantity - add tests and documentation.",
-        'inactive': "Time to revive it! Upload recent work or practice projects. Recruiters check GitHub - make it count.",
-        'none': "No worries! Creating a portfolio is easier than you think. Start by uploading practice code and course projects."
+        'active-5+': 'Fantastic! An active portfolio is your best resume. Make sure READMEs are polished and projects are well-documented.',
+        'limited-1-5': 'Good start! Having a few projects shows initiative. Focus on quality over quantity - add tests and documentation.',
+        'inactive': 'Time to revive it! Upload recent work or practice projects. Recruiters check GitHub - make it count.',
+        'none': 'No worries! Creating a portfolio is easier than you think. Start by uploading practice code and course projects.'
       }
     }
   }
@@ -245,7 +245,7 @@ export const TECH_QUIZ_SCREENS = [
 export const NON_TECH_QUIZ_SCREENS = [
   {
     id: 'who-you-are',
-    initialChatText: "Welcome! Let me understand your background so I can create a personalized roadmap for your tech transition.",
+    initialChatText: 'Welcome! Let me understand your background so I can create a personalized roadmap for your tech transition.',
     questions: [
       {
         id: 'currentBackground',
@@ -271,7 +271,7 @@ export const NON_TECH_QUIZ_SCREENS = [
       },
       {
         id: 'stepsTaken',
-        question: "What steps have you taken toward a tech career so far?",
+        question: 'What steps have you taken toward a tech career so far?',
         helperText: "No worries if you're just getting started!",
         options: [
           { value: 'completed-course', label: 'Completed online courses', icon: <CheckCircle size={24} weight="duotone" /> },
@@ -285,22 +285,22 @@ export const NON_TECH_QUIZ_SCREENS = [
     chatResponseMap: {
       currentBackground: {
         'sales-marketing': "Great! Your communication skills are huge advantages in tech. You'll stand out where many engineers struggle.",
-        'operations': "Perfect! Operations teaches systematic problem-solving - incredibly valuable for engineering roles.",
-        'design': "Awesome! Design thinking and user empathy are gold in tech. Frontend/product engineering are natural fits.",
-        'finance': "Nice! Analytical thinking and attention to detail transfer perfectly to programming and systems work.",
-        'other': "Welcome! Your unique background will be an advantage. Different perspectives lead to better products."
+        'operations': 'Perfect! Operations teaches systematic problem-solving - incredibly valuable for engineering roles.',
+        'design': 'Awesome! Design thinking and user empathy are gold in tech. Frontend/product engineering are natural fits.',
+        'finance': 'Nice! Analytical thinking and attention to detail transfer perfectly to programming and systems work.',
+        'other': 'Welcome! Your unique background will be an advantage. Different perspectives lead to better products.'
       },
       experience: {
-        '0': "Fresh start! Perfect time to build from the ground up with maximum flexibility in your learning path.",
-        '0-2': "Good timing! Your adaptability will help you learn fast while understanding workplace dynamics.",
-        '3-5': "Great! Your work experience is a strong foundation. Companies see career switchers as mature hires.",
-        '5+': "Impressive! Your maturity and domain knowledge are massive assets that accelerate your transition."
+        '0': 'Fresh start! Perfect time to build from the ground up with maximum flexibility in your learning path.',
+        '0-2': 'Good timing! Your adaptability will help you learn fast while understanding workplace dynamics.',
+        '3-5': 'Great! Your work experience is a strong foundation. Companies see career switchers as mature hires.',
+        '5+': 'Impressive! Your maturity and domain knowledge are massive assets that accelerate your transition.'
       },
       stepsTaken: {
         'completed-course': "Solid foundation! Now let's focus on building projects and getting interview-ready.",
         'self-learning': "Love the hustle! Let's structure your learning and fill any gaps for interviews.",
         'built-projects': "Excellent! You're ahead of most beginners. Let's polish and position these projects.",
-        'just-exploring': "Perfect place to start! With the right roadmap, people go from zero to job-ready in 6-12 months.",
+        'just-exploring': 'Perfect place to start! With the right roadmap, people go from zero to job-ready in 6-12 months.',
         'bootcamp': "Great investment! Let's build on that momentum with portfolio and interview preparation."
       }
     }
@@ -347,24 +347,24 @@ export const NON_TECH_QUIZ_SCREENS = [
     ],
     chatResponseMap: {
       targetRole: {
-        'backend': "Great choice! Backend is always in demand with clear learning paths and strong salaries.",
+        'backend': 'Great choice! Backend is always in demand with clear learning paths and strong salaries.',
         'fullstack': "Versatile! You'll learn end-to-end development with more job opportunities.",
-        'data-ml': "Future-proof! Growing fast but can be harder to break into as first role without math background.",
-        'frontend': "Creative path! Perfect if you enjoy visual feedback and UX. Tons of jobs for career switchers.",
+        'data-ml': 'Future-proof! Growing fast but can be harder to break into as first role without math background.',
+        'frontend': 'Creative path! Perfect if you enjoy visual feedback and UX. Tons of jobs for career switchers.',
         'not-sure': "That's fine! I'll help you pick based on your background and learning style."
       },
       motivation: {
-        'salary': "Smart! Tech pays 2-3x most industries. Just make sure to find some genuine interest too for the journey.",
-        'interest': "Best reason! Genuine interest makes learning easier and is what separates success from burnout.",
-        'stability': "Wise choice! Tech is recession-resistant with transferable skills - ultimate job security.",
-        'flexibility': "Great perk! Remote work is common and companies compete on work-life balance.",
+        'salary': 'Smart! Tech pays 2-3x most industries. Just make sure to find some genuine interest too for the journey.',
+        'interest': 'Best reason! Genuine interest makes learning easier and is what separates success from burnout.',
+        'stability': 'Wise choice! Tech is recession-resistant with transferable skills - ultimate job security.',
+        'flexibility': 'Great perk! Remote work is common and companies compete on work-life balance.',
         'dissatisfied': "Time for change! Just make sure you're running toward tech, not just away from current job."
       },
       targetCompany: {
-        'any-tech': "Pragmatic! For first role, experience >> brand. Get your foot in, learn, then level up.",
-        'product': "Good goal! Great for learning but competitive. Consider service company as stepping stone.",
-        'service': "Smart! Service companies hire more beginners. Spend 1-2 years, then jump to product companies.",
-        'faang-longterm': "Dream big! But FAANG as first job is very hard. Better path: any tech → better company → FAANG.",
+        'any-tech': 'Pragmatic! For first role, experience >> brand. Get your foot in, learn, then level up.',
+        'product': 'Good goal! Great for learning but competitive. Consider service company as stepping stone.',
+        'service': 'Smart! Service companies hire more beginners. Spend 1-2 years, then jump to product companies.',
+        'faang-longterm': 'Dream big! But FAANG as first job is very hard. Better path: any tech → better company → FAANG.',
         'not-sure': "No problem! Focus on ANY engineering role first. After 1-2 years, you'll have more options."
       }
     }
@@ -401,14 +401,14 @@ export const NON_TECH_QUIZ_SCREENS = [
     chatResponseMap: {
       codeComfort: {
         'confident': "Awesome! You're past the hardest part. Focus on portfolio projects and interview prep. ~3-6 months to job-ready!",
-        'learning': "Good progress! Now move from tutorials to building projects independently. ~6-9 months to job-ready.",
+        'learning': 'Good progress! Now move from tutorials to building projects independently. ~6-9 months to job-ready.',
         'beginner': "Perfect! Understanding concepts is step one. Start writing code even if it's buggy. ~9-12 months to job-ready.",
-        'complete-beginner': "No worries! Everyone starts here. Consistency over intensity. ~12-18 months to job-ready with discipline."
+        'complete-beginner': 'No worries! Everyone starts here. Consistency over intensity. ~12-18 months to job-ready with discipline.'
       },
       timePerWeek: {
-        '10+': "Wow! This commitment will get you there fast. 6-12 months to job-ready. Just pace yourself!",
-        '6-10': "Great! Sustainable pace with steady progress. 9-15 months to job-ready. Stay consistent!",
-        '3-5': "Good! Minimum viable pace. Progress will be slower at 12-24 months. Can you carve out more time?",
+        '10+': 'Wow! This commitment will get you there fast. 6-12 months to job-ready. Just pace yourself!',
+        '6-10': 'Great! Sustainable pace with steady progress. 9-15 months to job-ready. Stay consistent!',
+        '3-5': 'Good! Minimum viable pace. Progress will be slower at 12-24 months. Can you carve out more time?',
         '0-2': "Let's be honest - this isn't enough for meaningful progress. Consider starting when you can dedicate more time."
       }
     }

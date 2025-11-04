@@ -1,7 +1,7 @@
-import React, { useEffect } from "react";
-import { useNavigate } from "react-router-dom";
-import { useProfile } from "../context/ProfileContext";
-import FinalModeQuiz from "./quiz/FinalModeQuiz";
+import React, { useEffect } from 'react';
+import { useNavigate } from 'react-router-dom';
+import { useProfile } from '../context/ProfileContext';
+import FinalModeQuiz from './quiz/FinalModeQuiz';
 
 
 function QuizPage({ onProgressChange }) {
@@ -10,7 +10,7 @@ function QuizPage({ onProgressChange }) {
 
   useEffect(() => {
     if (evaluationResults) {
-      navigate("/results", { replace: true });
+      navigate('/results', { replace: true });
     }
   }, [evaluationResults, navigate]);
 

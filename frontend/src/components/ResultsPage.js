@@ -1,11 +1,14 @@
 import { BriefcaseMetal, ChartLine, CheckCircle, MagnifyingGlass, Phone, Sparkle, Target } from 'phosphor-react';
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState, useCallback
+
+} from 'react';
 import { useNavigate } from 'react-router-dom';
 import styled, { createGlobalStyle, keyframes } from 'styled-components';
 import { useRequestCallback } from '../app/context/RequestCallbackContext';
 import { useProfile } from '../context/ProfileContext';
 import { evaluateProfile } from '../utils/evaluationLogic';
 import ProfileMatchHeroV2 from './results/ProfileMatchHeroV2';
+import tracker from '../utils/tracker';
 
 const PrintStyles = createGlobalStyle`
   @media print {
@@ -344,10 +347,10 @@ const ResultsPage = () => {
 
   const handleRCBClick = useCallback(() => {
     tracker.click({
-      click_type: "rcb_btn_clicked",
+      click_type: 'rcb_btn_clicked',
       custom: {
-        source: "results_page",
-      },
+        source: 'results_page'
+      }
     });
     openCallbackModal?.();
   }, []);

@@ -1,13 +1,48 @@
 import React, { useState, useEffect, useRef, useCallback } from 'react';
 import styled, { keyframes, css } from 'styled-components';
 import Xarrow from 'react-xarrows';
-import { CheckCircle, Clock, Star, ArrowsLeftRight, ArrowBendUpRight, Target, Lightbulb, Rocket, Books, ChartLine, Code, BriefcaseMetal, GraduationCap, Users, Trophy, Medal, Globe, Compass, Laptop, CloudArrowUp, Database, GitBranch, TestTube, FileMagnifyingGlass, UsersFour, MagnifyingGlass, Brain, Wrench, SparkleIcon as Sparkle, Buildings, CalendarBlank, MapPin, CheckSquare } from 'phosphor-react';
+import {
+  CheckCircle,
+  Clock,
+  Star,
+  ArrowsLeftRight,
+  ArrowBendUpRight,
+  Target,
+  Lightbulb,
+  Rocket,
+  Books,
+  ChartLine,
+  Code,
+  BriefcaseMetal,
+  GraduationCap,
+  Users,
+  Trophy,
+  Medal,
+  Globe,
+  Compass,
+  Laptop,
+  CloudArrowUp,
+  Database,
+  GitBranch,
+  TestTube,
+  FileMagnifyingGlass,
+  UsersFour,
+  MagnifyingGlass,
+  Brain,
+  Wrench,
+  SparkleIcon as Sparkle,
+  Buildings,
+  CalendarBlank,
+  MapPin,
+  CheckSquare
+} from 'phosphor-react';
 import chatBot from '../../assets/ChatBot.png';
 import oliveBranchLeft from '../../assets/Left-Olive-Branch.png';
 import oliveBranchRight from '../../assets/Right-Olive-branch.png';
 import CareerTimeline from './CareerTimeline';
 import PeerComparisonCard from './PeerComparisonCard';
 import { useRequestCallback } from '../../app/context/RequestCallbackContext';
+import tracker from '../../utils/tracker';
 
 const HeroContainer = styled.div`
   background: white;
@@ -28,9 +63,10 @@ const HeroContainer = styled.div`
 `;
 
 const LeftPanel = styled.div`
-  background: ${props => props.score >= 50 ? '#064e3b' : '#1f2937'};
+  background: ${(props) => (props.score >= 50 ? '#064e3b' : '#1f2937')};
   color: #ffffff;
-  padding: ${props => props.score >= 60 ? '48px 120px 48px 60px' : '48px 80px 48px 40px'};
+  padding: ${(props) =>
+    props.score >= 60 ? '48px 120px 48px 60px' : '48px 80px 48px 40px'};
   display: flex;
   flex-direction: row;
   justify-content: space-between;
@@ -40,7 +76,8 @@ const LeftPanel = styled.div`
   height: auto;
   overflow-y: visible;
   border-right: none;
-  border-bottom: 2px solid ${props => props.score >= 50 ? '#065f46' : '#374151'};
+  border-bottom: 2px solid
+    ${(props) => (props.score >= 50 ? '#065f46' : '#374151')};
 
   @media (max-width: 1024px) {
     position: relative;
@@ -113,7 +150,7 @@ const ScoreSection = styled.div`
   flex-direction: column;
   align-items: center;
   text-align: center;
-  padding: ${props => props.hasOliveBranches ? '24px 0' : '12px 0'};
+  padding: ${(props) => (props.hasOliveBranches ? '24px 0' : '12px 0')};
   position: relative;
 `;
 
@@ -123,20 +160,26 @@ const OliveBranch = styled.img`
   width: auto;
   opacity: 0.8;
 
-  ${props => props.position === 'left' ? `
+  ${(props) =>
+    props.position === 'left'
+      ? `
     left: -65px;
     top: 40%;
     transform: translateY(-50%);
-  ` : `
+  `
+      : `
     right: -65px;
     top: 40%;
     transform: translateY(-50%);
   `}
 
   @media (max-width: 768px) {
-    ${props => props.position === 'left' ? `
+    ${(props) =>
+    props.position === 'left'
+      ? `
       left: 0;
-    ` : `
+    `
+      : `
       right: 0;
     `}
   }
@@ -200,17 +243,18 @@ const ChipsContainer = styled.div`
 `;
 
 const Chip = styled.div`
-  background: ${props => {
+  background: ${(props) => {
     if (props.variant === 'strength') return 'rgba(16, 185, 129, 0.2)';
     if (props.variant === 'improve') return 'rgba(148, 163, 184, 0.15)';
     return 'rgba(251, 146, 60, 0.15)';
   }};
-  border: 1.5px solid ${props => {
+  border: 1.5px solid
+    ${(props) => {
     if (props.variant === 'strength') return '#10b981';
     if (props.variant === 'improve') return '#94a3b8';
     return '#fb923c';
   }};
-  color: ${props => {
+  color: ${(props) => {
     if (props.variant === 'strength') return '#ffffff';
     if (props.variant === 'improve') return '#475569';
     return '#9a3412';
@@ -248,7 +292,7 @@ const ChatSection = styled.div`
   flex: 1;
 
   &::before {
-    content: '';
+    content: "";
     position: absolute;
     left: -14px;
     top: 20px;
@@ -269,7 +313,7 @@ const ChatSection = styled.div`
   }
 
   &::after {
-    content: '';
+    content: "";
     position: absolute;
     left: -10px;
     top: 20px;
@@ -418,7 +462,7 @@ const QuickWinItem = styled.div`
 const QuickWinIcon = styled.div`
   width: 72px;
   height: 72px;
-  background: ${props => {
+  background: ${(props) => {
     const gradients = [
       'linear-gradient(135deg, #667eea 0%, #764ba2 100%)',
       'linear-gradient(135deg, #f093fb 0%, #f5576c 100%)',
@@ -452,7 +496,7 @@ const QuickWinNumber = styled.div`
   position: relative;
 
   &::after {
-    content: '';
+    content: "";
     position: absolute;
     left: 100%;
     top: 50%;
@@ -491,7 +535,7 @@ const QuickWinCard = styled.div`
 const QuickWinIconContainer = styled.div`
   width: 48px;
   height: 48px;
-  background: ${props => props.iconColor || '#e8eaf6'};
+  background: ${(props) => props.iconColor || '#e8eaf6'};
   border-radius: 0;
   display: flex;
   align-items: center;
@@ -593,7 +637,7 @@ const MobileRoleCategory = styled.div`
   font-weight: 600;
   text-transform: uppercase;
   letter-spacing: 0.5px;
-  color: ${props => {
+  color: ${(props) => {
     if (props.type === 'target') return '#059669';
     if (props.type === 'alternate') return '#64748b';
     return '#64748b';
@@ -673,7 +717,8 @@ const CurrentRoleDetail = styled.div`
 
 const CategoryCard = styled.div`
   background: white;
-  border: 1px solid ${props => {
+  border: 1px solid
+    ${(props) => {
     if (props.type === 'target') return '#86efac';
     if (props.type === 'alternate') return '#cbd5e1';
     return '#cbd5e1';
@@ -692,11 +737,11 @@ const CategoryCard = styled.div`
   width: 180px;
 
   svg {
-    color: ${props => {
-      if (props.type === 'target') return '#059669';
-      if (props.type === 'alternate') return '#64748b';
-      return '#64748b';
-    }};
+    color: ${(props) => {
+    if (props.type === 'target') return '#059669';
+    if (props.type === 'alternate') return '#64748b';
+    return '#64748b';
+  }};
   }
 `;
 
@@ -705,7 +750,7 @@ const CategoryLabel = styled.div`
   font-weight: 600;
   text-transform: uppercase;
   letter-spacing: 0.5px;
-  color: ${props => {
+  color: ${(props) => {
     if (props.type === 'target') return '#059669';
     if (props.type === 'alternate') return '#64748b';
     return '#64748b';
@@ -725,8 +770,11 @@ const CategoryTimeline = styled.div`
 `;
 
 const RoleCard = styled.div`
-  background: ${props => props.isPriority ? 'linear-gradient(135deg, #f0fdf4 0%, #dcfce7 100%)' : '#ffffff'};
-  border: 1px solid ${props => props.isPriority ? '#86efac' : '#e2e8f0'};
+  background: ${(props) =>
+    props.isPriority
+      ? 'linear-gradient(135deg, #f0fdf4 0%, #dcfce7 100%)'
+      : '#ffffff'};
+  border: 1px solid ${(props) => (props.isPriority ? '#86efac' : '#e2e8f0')};
   border-radius: 0;
   padding: 16px;
   display: flex;
@@ -799,12 +847,12 @@ const Salary = styled.div`
 `;
 
 const MatchBadge = styled.div`
-  background: ${props => {
+  background: ${(props) => {
     if (props.match >= 80) return '#dcfce7';
     if (props.match >= 60) return '#fef3c7';
     return '#f1f5f9';
   }};
-  color: ${props => {
+  color: ${(props) => {
     if (props.match >= 80) return '#15803d';
     if (props.match >= 60) return '#a16207';
     return '#475569';
@@ -995,7 +1043,7 @@ const TableColumnTitle = styled.h5`
   font-weight: 700;
   text-transform: uppercase;
   letter-spacing: 0.5px;
-  color: ${props => props.type === 'strength' ? '#059669' : '#dc2626'};
+  color: ${(props) => (props.type === 'strength' ? '#059669' : '#dc2626')};
   margin-bottom: 8px;
 `;
 
@@ -1004,12 +1052,13 @@ const TableItem = styled.div`
   align-items: center;
   gap: 10px;
   padding: 12px 16px;
-  background: ${props => props.type === 'strength' ? '#f0fdf4' : '#fef2f2'};
-  border: 1px solid ${props => props.type === 'strength' ? '#bbf7d0' : '#fecaca'};
+  background: ${(props) => (props.type === 'strength' ? '#f0fdf4' : '#fef2f2')};
+  border: 1px solid
+    ${(props) => (props.type === 'strength' ? '#bbf7d0' : '#fecaca')};
   border-radius: 0;
   font-size: 0.875rem;
   font-weight: 500;
-  color: ${props => props.type === 'strength' ? '#166534' : '#991b1b'};
+  color: ${(props) => (props.type === 'strength' ? '#166534' : '#991b1b')};
 
   svg {
     flex-shrink: 0;
@@ -1022,7 +1071,7 @@ const categorizeRoles = (roles) => {
   const uniqueRoles = [];
   const seenTitles = new Set();
 
-  roles.forEach(role => {
+  roles.forEach((role) => {
     const title = (role.title || role.role || '').toLowerCase().trim();
     if (title && !seenTitles.has(title)) {
       seenTitles.add(title);
@@ -1031,7 +1080,9 @@ const categorizeRoles = (roles) => {
   });
 
   // Sort by match score
-  const sorted = [...uniqueRoles].sort((a, b) => (b.match_score || 0) - (a.match_score || 0));
+  const sorted = [...uniqueRoles].sort(
+    (a, b) => (b.match_score || 0) - (a.match_score || 0)
+  );
 
   const categories = {
     mostLikely: [],
@@ -1081,7 +1132,10 @@ const formatSalary = (salary) => {
   const salaryStr = salary.toString().trim();
 
   // If already in LPA format, return as is
-  if (salaryStr.toLowerCase().includes('lpa') || salaryStr.toLowerCase().includes('l pa')) {
+  if (
+    salaryStr.toLowerCase().includes('lpa') ||
+    salaryStr.toLowerCase().includes('l pa')
+  ) {
     return salaryStr.replace(/\s+/g, '').toUpperCase();
   }
 
@@ -1117,48 +1171,71 @@ const getToolLogoUrl = (toolName) => {
   const tool = toolName.toLowerCase();
 
   // Extract first word for better matching (e.g., "Excalidraw or Draw.io" → "excalidraw")
-  const firstWord = tool.split(/[\s\-\/,]+/)[0];
+  const firstWord = tool.split(/[\s\-/,]+/)[0];
 
   // Map common tools to their logo domains
   const logoMap = {
-    'react': 'https://cdn.jsdelivr.net/gh/devicons/devicon/icons/react/react-original.svg',
-    'node': 'https://cdn.jsdelivr.net/gh/devicons/devicon/icons/nodejs/nodejs-original.svg',
-    'nodejs': 'https://cdn.jsdelivr.net/gh/devicons/devicon/icons/nodejs/nodejs-original.svg',
-    'python': 'https://cdn.jsdelivr.net/gh/devicons/devicon/icons/python/python-original.svg',
-    'javascript': 'https://cdn.jsdelivr.net/gh/devicons/devicon/icons/javascript/javascript-original.svg',
-    'typescript': 'https://cdn.jsdelivr.net/gh/devicons/devicon/icons/typescript/typescript-original.svg',
-    'docker': 'https://cdn.jsdelivr.net/gh/devicons/devicon/icons/docker/docker-original.svg',
-    'kubernetes': 'https://cdn.jsdelivr.net/gh/devicons/devicon/icons/kubernetes/kubernetes-plain.svg',
-    'aws': 'https://cdn.jsdelivr.net/gh/devicons/devicon/icons/amazonwebservices/amazonwebservices-original-wordmark.svg',
-    'mongodb': 'https://cdn.jsdelivr.net/gh/devicons/devicon/icons/mongodb/mongodb-original.svg',
-    'postgresql': 'https://cdn.jsdelivr.net/gh/devicons/devicon/icons/postgresql/postgresql-original.svg',
-    'mysql': 'https://cdn.jsdelivr.net/gh/devicons/devicon/icons/mysql/mysql-original.svg',
-    'redis': 'https://cdn.jsdelivr.net/gh/devicons/devicon/icons/redis/redis-original.svg',
-    'git': 'https://cdn.jsdelivr.net/gh/devicons/devicon/icons/git/git-original.svg',
-    'github': 'https://cdn.jsdelivr.net/gh/devicons/devicon/icons/github/github-original.svg',
-    'java': 'https://cdn.jsdelivr.net/gh/devicons/devicon/icons/java/java-original.svg',
-    'spring': 'https://cdn.jsdelivr.net/gh/devicons/devicon/icons/spring/spring-original.svg',
-    'angular': 'https://cdn.jsdelivr.net/gh/devicons/devicon/icons/angularjs/angularjs-original.svg',
-    'vue': 'https://cdn.jsdelivr.net/gh/devicons/devicon/icons/vuejs/vuejs-original.svg',
-    'graphql': 'https://cdn.jsdelivr.net/gh/devicons/devicon/icons/graphql/graphql-plain.svg',
-    'firebase': 'https://cdn.jsdelivr.net/gh/devicons/devicon/icons/firebase/firebase-plain.svg',
-    'leetcode': 'https://upload.wikimedia.org/wikipedia/commons/1/19/LeetCode_logo_black.png',
-    'excalidraw': 'https://excalidraw.com/apple-touch-icon.png',
+    react:
+      'https://cdn.jsdelivr.net/gh/devicons/devicon/icons/react/react-original.svg',
+    node: 'https://cdn.jsdelivr.net/gh/devicons/devicon/icons/nodejs/nodejs-original.svg',
+    nodejs:
+      'https://cdn.jsdelivr.net/gh/devicons/devicon/icons/nodejs/nodejs-original.svg',
+    python:
+      'https://cdn.jsdelivr.net/gh/devicons/devicon/icons/python/python-original.svg',
+    javascript:
+      'https://cdn.jsdelivr.net/gh/devicons/devicon/icons/javascript/javascript-original.svg',
+    typescript:
+      'https://cdn.jsdelivr.net/gh/devicons/devicon/icons/typescript/typescript-original.svg',
+    docker:
+      'https://cdn.jsdelivr.net/gh/devicons/devicon/icons/docker/docker-original.svg',
+    kubernetes:
+      'https://cdn.jsdelivr.net/gh/devicons/devicon/icons/kubernetes/kubernetes-plain.svg',
+    aws: 'https://cdn.jsdelivr.net/gh/devicons/devicon/icons/amazonwebservices/amazonwebservices-original-wordmark.svg',
+    mongodb:
+      'https://cdn.jsdelivr.net/gh/devicons/devicon/icons/mongodb/mongodb-original.svg',
+    postgresql:
+      'https://cdn.jsdelivr.net/gh/devicons/devicon/icons/postgresql/postgresql-original.svg',
+    mysql:
+      'https://cdn.jsdelivr.net/gh/devicons/devicon/icons/mysql/mysql-original.svg',
+    redis:
+      'https://cdn.jsdelivr.net/gh/devicons/devicon/icons/redis/redis-original.svg',
+    git: 'https://cdn.jsdelivr.net/gh/devicons/devicon/icons/git/git-original.svg',
+    github:
+      'https://cdn.jsdelivr.net/gh/devicons/devicon/icons/github/github-original.svg',
+    java: 'https://cdn.jsdelivr.net/gh/devicons/devicon/icons/java/java-original.svg',
+    spring:
+      'https://cdn.jsdelivr.net/gh/devicons/devicon/icons/spring/spring-original.svg',
+    angular:
+      'https://cdn.jsdelivr.net/gh/devicons/devicon/icons/angularjs/angularjs-original.svg',
+    vue: 'https://cdn.jsdelivr.net/gh/devicons/devicon/icons/vuejs/vuejs-original.svg',
+    graphql:
+      'https://cdn.jsdelivr.net/gh/devicons/devicon/icons/graphql/graphql-plain.svg',
+    firebase:
+      'https://cdn.jsdelivr.net/gh/devicons/devicon/icons/firebase/firebase-plain.svg',
+    leetcode:
+      'https://upload.wikimedia.org/wikipedia/commons/1/19/LeetCode_logo_black.png',
+    excalidraw: 'https://excalidraw.com/apple-touch-icon.png',
     'draw.io': 'https://app.diagrams.net/images/drawlogo.svg',
-    'miro': 'https://cdn.brandfetch.io/miro.com/w/400/h/400',
-    'terraform': 'https://cdn.jsdelivr.net/gh/devicons/devicon/icons/terraform/terraform-original.svg',
-    'pulumi': 'https://www.pulumi.com/logos/brand/avatar-on-white.svg',
-    'prometheus': 'https://cdn.jsdelivr.net/gh/devicons/devicon/icons/prometheus/prometheus-original.svg',
-    'grafana': 'https://cdn.jsdelivr.net/gh/devicons/devicon/icons/grafana/grafana-original.svg',
-    'argocd': 'https://cncf-branding.netlify.app/img/projects/argo/icon/color/argo-icon-color.svg',
-    'datadog': 'https://imgix.datadoghq.com/img/about/presskit/logo-v/dd_vertical_purple.png',
-    'vault': 'https://cdn.jsdelivr.net/gh/devicons/devicon/icons/vault/vault-original.svg',
-    'pagerduty': 'https://cdn.brandfetch.io/pagerduty.com/w/400/h/400',
-    'sentry': 'https://cdn.brandfetch.io/sentry.io/w/400/h/400',
-    'postman': 'https://cdn.brandfetch.io/postman.com/w/400/h/400',
-    'replit': 'https://cdn.brandfetch.io/replit.com/w/400/h/400',
-    'dbeaver': 'https://cdn.brandfetch.io/dbeaver.io/w/400/h/400',
-    'tableplus': 'https://cdn.brandfetch.io/tableplus.com/w/400/h/400'
+    miro: 'https://cdn.brandfetch.io/miro.com/w/400/h/400',
+    terraform:
+      'https://cdn.jsdelivr.net/gh/devicons/devicon/icons/terraform/terraform-original.svg',
+    pulumi: 'https://www.pulumi.com/logos/brand/avatar-on-white.svg',
+    prometheus:
+      'https://cdn.jsdelivr.net/gh/devicons/devicon/icons/prometheus/prometheus-original.svg',
+    grafana:
+      'https://cdn.jsdelivr.net/gh/devicons/devicon/icons/grafana/grafana-original.svg',
+    argocd:
+      'https://cncf-branding.netlify.app/img/projects/argo/icon/color/argo-icon-color.svg',
+    datadog:
+      'https://imgix.datadoghq.com/img/about/presskit/logo-v/dd_vertical_purple.png',
+    vault:
+      'https://cdn.jsdelivr.net/gh/devicons/devicon/icons/vault/vault-original.svg',
+    pagerduty: 'https://cdn.brandfetch.io/pagerduty.com/w/400/h/400',
+    sentry: 'https://cdn.brandfetch.io/sentry.io/w/400/h/400',
+    postman: 'https://cdn.brandfetch.io/postman.com/w/400/h/400',
+    replit: 'https://cdn.brandfetch.io/replit.com/w/400/h/400',
+    dbeaver: 'https://cdn.brandfetch.io/dbeaver.io/w/400/h/400',
+    tableplus: 'https://cdn.brandfetch.io/tableplus.com/w/400/h/400'
   };
 
   // First try exact match with first word
@@ -1173,7 +1250,12 @@ const getToolLogoUrl = (toolName) => {
 
   // Check for partial match
   for (const [key, url] of Object.entries(logoMap)) {
-    if (tool.includes(key) || key.includes(tool) || firstWord.includes(key) || key.includes(firstWord)) {
+    if (
+      tool.includes(key) ||
+      key.includes(tool) ||
+      firstWord.includes(key) ||
+      key.includes(firstWord)
+    ) {
       return url;
     }
   }
@@ -1196,16 +1278,23 @@ const ToolItem = ({ toolName }) => {
           onError={() => setShowLogo(false)}
         />
       ) : (
-        <ToolLogoPlaceholder>
-          {initial}
-        </ToolLogoPlaceholder>
+        <ToolLogoPlaceholder>{initial}</ToolLogoPlaceholder>
       )}
       <ToolName>{toolName}</ToolName>
     </Tool>
   );
 };
 
-const ProfileMatchHeroV2 = ({ score, notes, badges, evaluationResults, background: backgroundProp, quizResponses, goals, userName = 'There' }) => {
+const ProfileMatchHeroV2 = ({
+  score,
+  notes,
+  badges,
+  evaluationResults,
+  background: backgroundProp,
+  quizResponses,
+  goals,
+  userName = 'There'
+}) => {
   const { open: openCallbackModal } = useRequestCallback();
   const [displayScore, setDisplayScore] = useState(0);
   const [hasAnimated, setHasAnimated] = useState(false);
@@ -1272,12 +1361,14 @@ const ProfileMatchHeroV2 = ({ score, notes, badges, evaluationResults, backgroun
   }, [hasAnimated, score, animateScore]);
 
   const strengths = evaluationResults?.skill_analysis?.strengths || [];
-  const areasToImprove = evaluationResults?.skill_analysis?.areas_to_develop || [];
+  const areasToImprove =
+    evaluationResults?.skill_analysis?.areas_to_develop || [];
   const quickWins = evaluationResults?.quick_wins || [];
   const tools = evaluationResults?.recommended_tools || [];
   const peerComparison = evaluationResults?.peer_comparison || {};
   const experienceBenchmark = evaluationResults?.experience_benchmark || null;
-  const recommendedRoles = evaluationResults?.recommended_roles_based_on_interests || [];
+  const recommendedRoles =
+    evaluationResults?.recommended_roles_based_on_interests || [];
   const background = backgroundProp || 'tech';
 
   const percentile = peerComparison.percentile || 68;
@@ -1286,9 +1377,14 @@ const ProfileMatchHeroV2 = ({ score, notes, badges, evaluationResults, backgroun
   const categories = categorizeRoles(recommendedRoles);
 
   // Determine background label and current role
-  const currentRoleRaw = quizResponses?.currentRole || quizResponses?.currentBackground || 'Current Role';
-  const backgroundLabel = background === 'non-tech' ? 'Non-Tech Professional' : 'Tech Professional';
-  const currentSkillFocus = quizResponses?.currentSkill || quizResponses?.stepsTaken || 'Not specified';
+  const currentRoleRaw =
+    quizResponses?.currentRole ||
+    quizResponses?.currentBackground ||
+    'Current Role';
+  const backgroundLabel =
+    background === 'non-tech' ? 'Non-Tech Professional' : 'Tech Professional';
+  const currentSkillFocus =
+    quizResponses?.currentSkill || quizResponses?.stepsTaken || 'Not specified';
   const experienceYears = quizResponses?.experience || 'Not specified';
 
   // Extract company type from currentRole for tech users
@@ -1298,7 +1394,7 @@ const ProfileMatchHeroV2 = ({ score, notes, badges, evaluationResults, backgroun
     const roleMap = {
       'swe-product': 'Product Company',
       'swe-service': 'Service Company',
-      'devops': 'Tech Company',
+      devops: 'Tech Company',
       'qa-support': 'Tech Company'
     };
 
@@ -1313,7 +1409,7 @@ const ProfileMatchHeroV2 = ({ score, notes, badges, evaluationResults, backgroun
       const roleNameMap = {
         'swe-product': 'Software Engineer',
         'swe-service': 'Software Engineer',
-        'devops': 'DevOps Engineer',
+        devops: 'DevOps Engineer',
         'qa-support': 'QA / Support Engineer'
       };
       return roleNameMap[roleValue] || roleValue;
@@ -1322,18 +1418,20 @@ const ProfileMatchHeroV2 = ({ score, notes, badges, evaluationResults, backgroun
     // Non-tech backgrounds
     const nonTechMap = {
       'sales-marketing': 'Sales / Marketing',
-      'operations': 'Operations / Consulting',
-      'design': 'Designer',
-      'finance': 'Finance Professional',
-      'other': 'Professional'
+      operations: 'Operations / Consulting',
+      design: 'Designer',
+      finance: 'Finance Professional',
+      other: 'Professional'
     };
     return nonTechMap[roleValue] || roleValue;
   };
 
   const currentRole = getRoleName(currentRoleRaw, background);
-  const currentCompanyType = background === 'tech' ? getCompanyType(currentRoleRaw) : 'Non-Tech Background';
+  const currentCompanyType =
+    background === 'tech'
+      ? getCompanyType(currentRoleRaw)
+      : 'Non-Tech Background';
 
-  // Dynamic greeting based on score
   const getGreetingText = (score) => {
     if (score >= 80) return 'Your Profile is Exceptional';
     if (score >= 65) return 'Your Profile Looks Strong';
@@ -1344,21 +1442,20 @@ const ProfileMatchHeroV2 = ({ score, notes, badges, evaluationResults, backgroun
 
   // Generate personalized, conversational summary
   const getPersonalizedSummary = () => {
-    // Extract user data
     const experience = quizResponses?.experience || '';
     const currentRole = quizResponses?.currentRole || '';
     const targetRole = quizResponses?.targetRole || '';
-    const targetCompany = goals?.targetCompany || quizResponses?.targetCompanyLabel || '';
+    const targetCompany =
+      goals?.targetCompany || quizResponses?.targetCompanyLabel || '';
     const problemSolving = quizResponses?.problemSolving || '';
     const systemDesign = quizResponses?.systemDesign || '';
     const portfolio = quizResponses?.portfolio || '';
 
-    // Map role codes to friendly names
     const getRoleFriendlyName = (role) => {
       const roleMap = {
         'swe-product': 'product companies',
         'swe-service': 'service companies',
-        'devops': 'DevOps',
+        devops: 'DevOps',
         'qa-support': 'QA/Support'
       };
       return roleMap[role] || role;
@@ -1380,7 +1477,8 @@ const ProfileMatchHeroV2 = ({ score, notes, badges, evaluationResults, backgroun
     const targetRoleName = getTargetRoleName(targetRole);
 
     // Build conversational message
-    let greeting = `Congratulations on taking the first step to evaluate your profile.\n\n`;
+    const greeting =
+      'Congratulations on taking the first step to evaluate your profile.\n\n';
 
     let profileAnalysis = '';
     if (experience && currentRole) {
@@ -1388,11 +1486,12 @@ const ProfileMatchHeroV2 = ({ score, notes, badges, evaluationResults, backgroun
 
       // Add validation based on experience
       if (experience === '0-2') {
-        profileAnalysis += `That's a great foundation to build upon! `;
+        profileAnalysis += "That's a great foundation to build upon! ";
       } else if (experience === '3-5') {
-        profileAnalysis += `That's solid experience that positions you well! `;
+        profileAnalysis += "That's solid experience that positions you well! ";
       } else if (experience === '5-8' || experience === '8+') {
-        profileAnalysis += `That's substantial experience that gives you a strong edge! `;
+        profileAnalysis +=
+          "That's substantial experience that gives you a strong edge! ";
       }
     }
 
@@ -1403,41 +1502,49 @@ const ProfileMatchHeroV2 = ({ score, notes, badges, evaluationResults, backgroun
     }
 
     // Extract quick wins or key actions from backend notes
-    let keyActions = 'Here are the 3 most impactful things you should focus on:\n';
+    let keyActions =
+      'Here are the 3 most impactful things you should focus on:\n';
 
     // Parse backend summary for key actions
     const backendNotes = notes || '';
 
     // Try to extract specific recommendations from backend
     if (problemSolving === '0-10' || problemSolving === '11-50') {
-      keyActions += `1. Strengthen your problem-solving skills (aim for 100+ problems)\n`;
+      keyActions +=
+        '1. Strengthen your problem-solving skills (aim for 100+ problems)\n';
     } else {
-      keyActions += `1. Master advanced problem-solving patterns and practice consistently\n`;
+      keyActions +=
+        '1. Master advanced problem-solving patterns and practice consistently\n';
     }
 
     if (systemDesign === 'never-done' || systemDesign === 'participated') {
-      keyActions += `2. Lead system design discussions and study real-world architectures\n`;
+      keyActions +=
+        '2. Lead system design discussions and study real-world architectures\n';
     } else {
-      keyActions += `2. Deepen your system design expertise with scalability patterns\n`;
+      keyActions +=
+        '2. Deepen your system design expertise with scalability patterns\n';
     }
 
     if (portfolio === 'none' || portfolio === '1-2') {
-      keyActions += `3. Build an active portfolio with meaningful projects on GitHub\n`;
+      keyActions +=
+        '3. Build an active portfolio with meaningful projects on GitHub\n';
     } else {
-      keyActions += `3. Showcase your technical depth through blogs or contributions\n`;
+      keyActions +=
+        '3. Showcase your technical depth through blogs or contributions\n';
     }
 
-    keyActions += `\nThe rest of the detailed insights are in your report below. Let's get you interview-ready! 🚀`;
+    keyActions +=
+      "\nThe rest of the detailed insights are in your report below. Let's get you interview-ready! 🚀";
 
     return greeting + profileAnalysis + goalStatement + keyActions;
   };
 
   const handleRCBClick = useCallback(() => {
     tracker.click({
-      click_type: "rcb_btn_clicked",
+      click_type: 'rcb_btn_clicked',
       custom: {
-        source: "profile_match_hero_v2",
-      },
+        source: 'profile_match_hero_v2'
+      }
     });
     openCallbackModal?.();
   }, []);
@@ -1448,14 +1555,21 @@ const ProfileMatchHeroV2 = ({ score, notes, badges, evaluationResults, backgroun
       <LeftPanel score={score}>
         {/* Vertical mode: Greeting on left, Score on right */}
         <GreetingSection>
-          <HeroGreeting>Hey {userName},{'\n'}{getGreetingText(score)}</HeroGreeting>
+          <HeroGreeting>
+            Hey {userName},{'\n'}
+            {getGreetingText(score)}
+          </HeroGreeting>
           <GreetingSubtext>
             Your path to 100% career readiness starts here.
           </GreetingSubtext>
         </GreetingSection>
         <ScoreSection hasOliveBranches={score >= 60}>
-          {score >= 60 && <OliveBranch src={oliveBranchLeft} alt="" position="left" />}
-          {score >= 60 && <OliveBranch src={oliveBranchRight} alt="" position="right" />}
+          {score >= 60 && (
+            <OliveBranch src={oliveBranchLeft} alt="" position="left" />
+          )}
+          {score >= 60 && (
+            <OliveBranch src={oliveBranchRight} alt="" position="right" />
+          )}
           <ScoreDisplay>{displayScore}%</ScoreDisplay>
           <ScoreLabel>Career Readiness Score</ScoreLabel>
         </ScoreSection>
@@ -1491,11 +1605,15 @@ const ProfileMatchHeroV2 = ({ score, notes, badges, evaluationResults, backgroun
         {(strengths.length > 0 || areasToImprove.length > 0) && (
           <SectionBlock>
             <SectionHeading>See Where You Stand Today</SectionHeading>
-            <SectionSubtitle>Compare your strengths and areas for improvement</SectionSubtitle>
+            <SectionSubtitle>
+              Compare your strengths and areas for improvement
+            </SectionSubtitle>
             <SectionDivider />
             <TwoColumnTable>
               <TableColumn>
-                <TableColumnTitle type="strength">Your Strengths</TableColumnTitle>
+                <TableColumnTitle type="strength">
+                  Your Strengths
+                </TableColumnTitle>
                 {strengths.length > 0 ? (
                   strengths.map((strength, index) => (
                     <TableItem key={index} type="strength">
@@ -1508,7 +1626,9 @@ const ProfileMatchHeroV2 = ({ score, notes, badges, evaluationResults, backgroun
                 )}
               </TableColumn>
               <TableColumn>
-                <TableColumnTitle type="improve">Areas to Improve</TableColumnTitle>
+                <TableColumnTitle type="improve">
+                  Areas to Improve
+                </TableColumnTitle>
                 {areasToImprove.length > 0 ? (
                   areasToImprove.map((area, index) => (
                     <TableItem key={index} type="improve">
@@ -1531,7 +1651,10 @@ const ProfileMatchHeroV2 = ({ score, notes, badges, evaluationResults, backgroun
           {recommendedRoles.length > 0 && (
             <CareerTransitionContainer>
               <CareerTransitionTitle>Career Timeline</CareerTransitionTitle>
-              <CareerTransitionSubtitle>Realistic timelines to achieve your target roles based on current skill gaps</CareerTransitionSubtitle>
+              <CareerTransitionSubtitle>
+                Realistic timelines to achieve your target roles based on
+                current skill gaps
+              </CareerTransitionSubtitle>
               <SectionDivider />
               <PathContainer>
                 {/* Column 1: Current Role */}
@@ -1555,17 +1678,25 @@ const ProfileMatchHeroV2 = ({ score, notes, badges, evaluationResults, backgroun
                 {/* Column 2: Timeline Cards */}
                 <Column>
                   {recommendedRoles.slice(0, 3).map((role, index) => {
-                    const baseTimeline = role.timeline_text || `${role.min_months || 4}-${role.max_months || 6} months`;
+                    const baseTimeline =
+                      role.timeline_text ||
+                      `${role.min_months || 4}-${role.max_months || 6} months`;
                     let displayTimeline = baseTimeline;
                     let cardType = 'target';
                     let label = 'Target Role';
 
                     if (index === 1) {
-                      displayTimeline = calculateAlternateTimeline(baseTimeline, 1);
+                      displayTimeline = calculateAlternateTimeline(
+                        baseTimeline,
+                        1
+                      );
                       cardType = 'alternate';
                       label = 'Alternate Path 1';
                     } else if (index === 2) {
-                      displayTimeline = calculateAlternateTimeline(baseTimeline, 2);
+                      displayTimeline = calculateAlternateTimeline(
+                        baseTimeline,
+                        2
+                      );
                       cardType = 'alternate';
                       label = 'Alternate Path 2';
                     } else {
@@ -1573,7 +1704,11 @@ const ProfileMatchHeroV2 = ({ score, notes, badges, evaluationResults, backgroun
                     }
 
                     return (
-                      <CategoryCard key={index} type={cardType} id={`timeline-${index}`}>
+                      <CategoryCard
+                        key={index}
+                        type={cardType}
+                        id={`timeline-${index}`}
+                      >
                         <CategoryLabel type={cardType}>{label}</CategoryLabel>
                         <CategoryTimeline>
                           <Clock size={16} weight="bold" />
@@ -1584,39 +1719,77 @@ const ProfileMatchHeroV2 = ({ score, notes, badges, evaluationResults, backgroun
                   })}
                 </Column>
 
-                {/* Column 3: Job Role Cards with Timeline Data */}
                 <Column>
                   {recommendedRoles.slice(0, 3).map((role, index) => {
                     const isPrimary = index === 0;
                     const formattedSalary = formatSalary(role.salary_range_usd);
 
-                    // Add target company to ALL role titles (not just first)
-                    // Use targetCompanyLabel from quizResponses for display (e.g., "FAANG / Big Tech")
-                    const targetCompanyLabel = quizResponses?.targetCompanyLabel || goals?.targetCompany || '';
+                    const targetCompanyLabel =
+                      quizResponses?.targetCompanyLabel ||
+                      goals?.targetCompany ||
+                      '';
                     const roleTitle = role.title || role.role;
                     const displayTitle = targetCompanyLabel
                       ? `${roleTitle} - ${targetCompanyLabel}`
                       : roleTitle;
 
                     return (
-                      <RoleCard key={index} id={`role-${index}`} isPriority={isPrimary}>
+                      <RoleCard
+                        key={index}
+                        id={`role-${index}`}
+                        isPriority={isPrimary}
+                      >
                         {formattedSalary && <Salary>{formattedSalary}</Salary>}
                         <RoleContent>
                           <RoleHeader>
                             <RoleTitle>{displayTitle}</RoleTitle>
                           </RoleHeader>
                           {role.key_gap && (
-                            <RoleDescription style={{ display: 'flex', alignItems: 'flex-start' }}>
-                              <MapPin size={16} weight="regular" color="#64748b" style={{ marginRight: '6px', marginTop: '2px', flexShrink: 0 }} />
-                              <span><strong>Key Focus:</strong> {role.key_gap}</span>
+                            <RoleDescription
+                              style={{
+                                display: 'flex',
+                                alignItems: 'flex-start'
+                              }}
+                            >
+                              <MapPin
+                                size={16}
+                                weight="regular"
+                                color="#64748b"
+                                style={{
+                                  marginRight: '6px',
+                                  marginTop: '2px',
+                                  flexShrink: 0
+                                }}
+                              />
+                              <span>
+                                <strong>Key Focus:</strong> {role.key_gap}
+                              </span>
                             </RoleDescription>
                           )}
                           {role.milestones && role.milestones.length > 0 && (
                             <>
                               {role.milestones.map((milestone, mIndex) => (
-                                <RoleDescription key={mIndex} style={{ display: 'flex', alignItems: 'flex-start' }}>
-                                  <CheckSquare size={16} weight="regular" color="#64748b" style={{ marginRight: '6px', marginTop: '2px', flexShrink: 0 }} />
-                                  <span><strong>Milestone {mIndex + 1}:</strong> {milestone}</span>
+                                <RoleDescription
+                                  key={mIndex}
+                                  style={{
+                                    display: 'flex',
+                                    alignItems: 'flex-start'
+                                  }}
+                                >
+                                  <CheckSquare
+                                    size={16}
+                                    weight="regular"
+                                    color="#64748b"
+                                    style={{
+                                      marginRight: '6px',
+                                      marginTop: '2px',
+                                      flexShrink: 0
+                                    }}
+                                  />
+                                  <span>
+                                    <strong>Milestone {mIndex + 1}:</strong>{' '}
+                                    {milestone}
+                                  </span>
                                 </RoleDescription>
                               ))}
                             </>
@@ -1627,7 +1800,6 @@ const ProfileMatchHeroV2 = ({ score, notes, badges, evaluationResults, backgroun
                   })}
                 </Column>
 
-                {/* Xarrow Connections */}
                 {showArrows && (
                   <>
                     {recommendedRoles.slice(0, 3).map((_, index) => (
@@ -1635,7 +1807,13 @@ const ProfileMatchHeroV2 = ({ score, notes, badges, evaluationResults, backgroun
                         <Xarrow
                           start="current-role"
                           end={`timeline-${index}`}
-                          color={index === 0 ? '#a7f3d0' : index === 1 ? '#bfdbfe' : '#e9d5ff'}
+                          color={
+                            index === 0
+                              ? '#a7f3d0'
+                              : index === 1
+                                ? '#bfdbfe'
+                                : '#e9d5ff'
+                          }
                           strokeWidth={6}
                           curveness={0.8}
                           headSize={0}
@@ -1645,7 +1823,13 @@ const ProfileMatchHeroV2 = ({ score, notes, badges, evaluationResults, backgroun
                         <Xarrow
                           start={`timeline-${index}`}
                           end={`role-${index}`}
-                          color={index === 0 ? '#a7f3d0' : index === 1 ? '#bfdbfe' : '#e9d5ff'}
+                          color={
+                            index === 0
+                              ? '#a7f3d0'
+                              : index === 1
+                                ? '#bfdbfe'
+                                : '#e9d5ff'
+                          }
                           strokeWidth={6}
                           curveness={0.6}
                           startAnchor="right"
@@ -1660,21 +1844,28 @@ const ProfileMatchHeroV2 = ({ score, notes, badges, evaluationResults, backgroun
                 )}
               </PathContainer>
 
-              {/* Mobile-Only Roles View */}
               <MobileRolesContainer>
                 {recommendedRoles.slice(0, 3).map((role, index) => {
                   const isPrimary = index === 0;
-                  const baseTimeline = role.timeline_text || `${role.min_months || 4}-${role.max_months || 6} months`;
+                  const baseTimeline =
+                    role.timeline_text ||
+                    `${role.min_months || 4}-${role.max_months || 6} months`;
                   let displayTimeline = baseTimeline;
                   let categoryType = 'target';
                   let label = 'Target Role';
 
                   if (index === 1) {
-                    displayTimeline = calculateAlternateTimeline(baseTimeline, 1);
+                    displayTimeline = calculateAlternateTimeline(
+                      baseTimeline,
+                      1
+                    );
                     categoryType = 'alternate';
                     label = 'Alternate Path 1';
                   } else if (index === 2) {
-                    displayTimeline = calculateAlternateTimeline(baseTimeline, 2);
+                    displayTimeline = calculateAlternateTimeline(
+                      baseTimeline,
+                      2
+                    );
                     categoryType = 'alternate';
                     label = 'Alternate Path 2';
                   } else {
@@ -1685,7 +1876,10 @@ const ProfileMatchHeroV2 = ({ score, notes, badges, evaluationResults, backgroun
 
                   // Add target company to ALL role titles (not just first)
                   // Use targetCompanyLabel from quizResponses for display (e.g., "FAANG / Big Tech")
-                  const targetCompanyLabel = quizResponses?.targetCompanyLabel || goals?.targetCompany || '';
+                  const targetCompanyLabel =
+                    quizResponses?.targetCompanyLabel ||
+                    goals?.targetCompany ||
+                    '';
                   const roleTitle = role.title || role.role;
                   const displayTitle = targetCompanyLabel
                     ? `${roleTitle} - ${targetCompanyLabel}`
@@ -1704,17 +1898,51 @@ const ProfileMatchHeroV2 = ({ score, notes, badges, evaluationResults, backgroun
                             <RoleTitle>{displayTitle}</RoleTitle>
                           </RoleHeader>
                           {role.key_gap && (
-                            <RoleDescription style={{ display: 'flex', alignItems: 'flex-start' }}>
-                              <MapPin size={16} weight="regular" color="#64748b" style={{ marginRight: '6px', marginTop: '2px', flexShrink: 0 }} />
-                              <span><strong>Key Focus:</strong> {role.key_gap}</span>
+                            <RoleDescription
+                              style={{
+                                display: 'flex',
+                                alignItems: 'flex-start'
+                              }}
+                            >
+                              <MapPin
+                                size={16}
+                                weight="regular"
+                                color="#64748b"
+                                style={{
+                                  marginRight: '6px',
+                                  marginTop: '2px',
+                                  flexShrink: 0
+                                }}
+                              />
+                              <span>
+                                <strong>Key Focus:</strong> {role.key_gap}
+                              </span>
                             </RoleDescription>
                           )}
                           {role.milestones && role.milestones.length > 0 && (
                             <>
                               {role.milestones.map((milestone, mIndex) => (
-                                <RoleDescription key={mIndex} style={{ display: 'flex', alignItems: 'flex-start' }}>
-                                  <CheckSquare size={16} weight="regular" color="#64748b" style={{ marginRight: '6px', marginTop: '2px', flexShrink: 0 }} />
-                                  <span><strong>Milestone {mIndex + 1}:</strong> {milestone}</span>
+                                <RoleDescription
+                                  key={mIndex}
+                                  style={{
+                                    display: 'flex',
+                                    alignItems: 'flex-start'
+                                  }}
+                                >
+                                  <CheckSquare
+                                    size={16}
+                                    weight="regular"
+                                    color="#64748b"
+                                    style={{
+                                      marginRight: '6px',
+                                      marginTop: '2px',
+                                      flexShrink: 0
+                                    }}
+                                  />
+                                  <span>
+                                    <strong>Milestone {mIndex + 1}:</strong>{' '}
+                                    {milestone}
+                                  </span>
                                 </RoleDescription>
                               ))}
                             </>
@@ -1728,139 +1956,164 @@ const ProfileMatchHeroV2 = ({ score, notes, badges, evaluationResults, backgroun
             </CareerTransitionContainer>
           )}
 
-          {/* CTA Section - Custom Roadmap */}
           {recommendedRoles.length > 0 && (
             <CTASection>
               <CTAContent>
                 <CTATitle>Ready to Deep Dive In?</CTATitle>
                 <CTAText>
-                  Get a custom roadmap generated based on your current profile, detailing exactly what you need to do to achieve your goal and land your target role.
+                  Get a custom roadmap generated based on your current profile,
+                  detailing exactly what you need to do to achieve your goal and
+                  land your target role.
                 </CTAText>
               </CTAContent>
-              <CTAButton onClick={() => window.open('/career-consultation', '_blank')}>
+              <CTAButton
+                onClick={() => window.open('/career-consultation', '_blank')}
+              >
                 Book Career Consultation
               </CTAButton>
             </CTASection>
           )}
 
-            {/* Quick Wins Section - Vertically Stacked */}
-            {quickWins.length > 0 && (
-              <SectionBlock>
-                <SectionHeading>Quick Wins for You</SectionHeading>
-                <SectionSubtitle>Take these actionable steps to improve your profile</SectionSubtitle>
-                <SectionDivider />
-                <QuickWinsList>
-                  {quickWins.slice(0, 4).map((win, index) => {
-                    // Icon colors array
-                    const iconColors = ['#D90065', '#D77C00', '#C32841', '#1D925B', '#0052FF', '#016DD9'];
-                    const iconColor = iconColors[index % iconColors.length];
+          {quickWins.length > 0 && (
+            <SectionBlock>
+              <SectionHeading>Quick Wins for You</SectionHeading>
+              <SectionSubtitle>
+                Take these actionable steps to improve your profile
+              </SectionSubtitle>
+              <SectionDivider />
+              <QuickWinsList>
+                {quickWins.slice(0, 4).map((win, index) => {
+                  const iconColors = [
+                    '#D90065',
+                    '#D77C00',
+                    '#C32841',
+                    '#1D925B',
+                    '#0052FF',
+                    '#016DD9'
+                  ];
+                  const iconColor = iconColors[index % iconColors.length];
 
-                    // Icon mapping from Phosphor React
-                    const iconMap = {
-                      'lightbulb': <Lightbulb size={24} weight="fill" />,
-                      'rocket': <Rocket size={24} weight="fill" />,
-                      'books': <Books size={24} weight="fill" />,
-                      'chart': <ChartLine size={24} weight="fill" />,
-                      'code': <Code size={24} weight="fill" />,
-                      'briefcase': <BriefcaseMetal size={24} weight="fill" />,
-                      'graduation': <GraduationCap size={24} weight="fill" />,
-                      'users': <Users size={24} weight="fill" />,
-                      'trophy': <Trophy size={24} weight="fill" />,
-                      'target': <Target size={24} weight="fill" />,
-                      'certificate': <Medal size={24} weight="fill" />
-                    };
+                  const iconMap = {
+                    lightbulb: <Lightbulb size={24} weight="fill" />,
+                    rocket: <Rocket size={24} weight="fill" />,
+                    books: <Books size={24} weight="fill" />,
+                    chart: <ChartLine size={24} weight="fill" />,
+                    code: <Code size={24} weight="fill" />,
+                    briefcase: <BriefcaseMetal size={24} weight="fill" />,
+                    graduation: <GraduationCap size={24} weight="fill" />,
+                    users: <Users size={24} weight="fill" />,
+                    trophy: <Trophy size={24} weight="fill" />,
+                    target: <Target size={24} weight="fill" />,
+                    certificate: <Medal size={24} weight="fill" />
+                  };
 
-                    // Get icon from win object or use default
-                    const iconName = typeof win === 'object' && win.icon ? win.icon.toLowerCase() : 'lightbulb';
-                    const IconComponent = iconMap[iconName] || iconMap['lightbulb'];
+                  const iconName =
+                    typeof win === 'object' && win.icon
+                      ? win.icon.toLowerCase()
+                      : 'lightbulb';
+                  const IconComponent =
+                    iconMap[iconName] || iconMap['lightbulb'];
 
-                    return (
-                      <QuickWinItem key={index}>
-                        <QuickWinNumber>{index + 1}</QuickWinNumber>
-                        <QuickWinSpacer />
-                        <QuickWinCard>
-                          <QuickWinIconContainer iconColor={iconColor}>
-                            {IconComponent}
-                          </QuickWinIconContainer>
-                          <QuickWinContent>
-                            {typeof win === 'string' ? (
-                              <QuickWinDescription>{win}</QuickWinDescription>
-                            ) : (
-                              <>
-                                <QuickWinTitle>{win.name || win.title}</QuickWinTitle>
-                                {win.description && <QuickWinDescription>{win.description}</QuickWinDescription>}
-                              </>
-                            )}
-                          </QuickWinContent>
-                        </QuickWinCard>
-                      </QuickWinItem>
-                    );
-                  })}
-                </QuickWinsList>
-              </SectionBlock>
-            )}
+                  return (
+                    <QuickWinItem key={index}>
+                      <QuickWinNumber>{index + 1}</QuickWinNumber>
+                      <QuickWinSpacer />
+                      <QuickWinCard>
+                        <QuickWinIconContainer iconColor={iconColor}>
+                          {IconComponent}
+                        </QuickWinIconContainer>
+                        <QuickWinContent>
+                          {typeof win === 'string' ? (
+                            <QuickWinDescription>{win}</QuickWinDescription>
+                          ) : (
+                            <>
+                              <QuickWinTitle>
+                                {win.name || win.title}
+                              </QuickWinTitle>
+                              {win.description && (
+                                <QuickWinDescription>
+                                  {win.description}
+                                </QuickWinDescription>
+                              )}
+                            </>
+                          )}
+                        </QuickWinContent>
+                      </QuickWinCard>
+                    </QuickWinItem>
+                  );
+                })}
+              </QuickWinsList>
+            </SectionBlock>
+          )}
 
-            {/* Tools & Technologies Section */}
-            {tools.length > 0 && (
-              <SectionBlock>
-                <SectionHeading>Tools & Technologies to Learn</SectionHeading>
-                <SectionSubtitle>Master these tools to enhance your skillset</SectionSubtitle>
-                <SectionDivider />
-                <ToolsGrid>
-                  {tools.slice(0, 8).map((tool, index) => {
-                    const toolName = typeof tool === 'string' ? tool : tool.name;
-                    return <ToolItem key={index} toolName={toolName} />;
-                  })}
-                </ToolsGrid>
-              </SectionBlock>
-            )}
+          {tools.length > 0 && (
+            <SectionBlock>
+              <SectionHeading>Tools & Technologies to Learn</SectionHeading>
+              <SectionSubtitle>
+                Master these tools to enhance your skillset
+              </SectionSubtitle>
+              <SectionDivider />
+              <ToolsGrid>
+                {tools.slice(0, 8).map((tool, index) => {
+                  const toolName = typeof tool === 'string' ? tool : tool.name;
+                  return <ToolItem key={index} toolName={toolName} />;
+                })}
+              </ToolsGrid>
+            </SectionBlock>
+          )}
 
+          {experienceBenchmark && (
+            <SectionBlock>
+              <SectionHeading>Experience Benchmark</SectionHeading>
+              <SectionSubtitle>
+                Compare your experience with typical requirements for your
+                target role
+              </SectionSubtitle>
+              <SectionDivider />
+              <BenchmarkContainer>
+                <BenchmarkLeftSection>
+                  <BenchmarkItem>
+                    <BenchmarkLabel>Your Experience</BenchmarkLabel>
+                    <BenchmarkValue>
+                      {experienceBenchmark.your_experience_years}
+                      {!experienceBenchmark.your_experience_years
+                        ?.toLowerCase()
+                        .includes('year') && ' years'}
+                    </BenchmarkValue>
+                  </BenchmarkItem>
+                  <BenchmarkItem>
+                    <BenchmarkLabel>Typical for Target Role</BenchmarkLabel>
+                    <BenchmarkValue>
+                      {experienceBenchmark.typical_for_target_role_years}
+                      {!experienceBenchmark.typical_for_target_role_years
+                        ?.toLowerCase()
+                        .includes('year') && ' years'}
+                    </BenchmarkValue>
+                  </BenchmarkItem>
+                </BenchmarkLeftSection>
+                {experienceBenchmark.gap_analysis && (
+                  <GapAnalysis>
+                    <strong>Gap Analysis:</strong>{' '}
+                    {experienceBenchmark.gap_analysis}
+                  </GapAnalysis>
+                )}
+              </BenchmarkContainer>
+            </SectionBlock>
+          )}
 
-            {/* Experience Benchmark Section */}
-            {experienceBenchmark && (
-              <SectionBlock>
-                <SectionHeading>Experience Benchmark</SectionHeading>
-                <SectionSubtitle>Compare your experience with typical requirements for your target role</SectionSubtitle>
-                <SectionDivider />
-                <BenchmarkContainer>
-                  <BenchmarkLeftSection>
-                    <BenchmarkItem>
-                      <BenchmarkLabel>Your Experience</BenchmarkLabel>
-                      <BenchmarkValue>
-                        {experienceBenchmark.your_experience_years}
-                        {!experienceBenchmark.your_experience_years?.toLowerCase().includes('year') && ' years'}
-                      </BenchmarkValue>
-                    </BenchmarkItem>
-                    <BenchmarkItem>
-                      <BenchmarkLabel>Typical for Target Role</BenchmarkLabel>
-                      <BenchmarkValue>
-                        {experienceBenchmark.typical_for_target_role_years}
-                        {!experienceBenchmark.typical_for_target_role_years?.toLowerCase().includes('year') && ' years'}
-                      </BenchmarkValue>
-                    </BenchmarkItem>
-                  </BenchmarkLeftSection>
-                  {experienceBenchmark.gap_analysis && (
-                    <GapAnalysis>
-                      <strong>Gap Analysis:</strong> {experienceBenchmark.gap_analysis}
-                    </GapAnalysis>
-                  )}
-                </BenchmarkContainer>
-              </SectionBlock>
-            )}
+          {peerComparison && (
+            <PeerComparisonCard peerComparison={peerComparison} />
+          )}
 
-            {/* Peer Comparison Card */}
-            {peerComparison && <PeerComparisonCard peerComparison={peerComparison} />}
-
-            {/* CTA 1 */}
-            <CTASection>
-              <CTAContent>
-                <CTATitle>Ready to take the next step?</CTATitle>
-                <CTAText>Get personalized guidance from our career advisors</CTAText>
-              </CTAContent>
-              <CTAButton onClick={handleRCBClick}>
-                Request Callback
-              </CTAButton>
-            </CTASection>
+          <CTASection>
+            <CTAContent>
+              <CTATitle>Ready to take the next step?</CTATitle>
+              <CTAText>
+                Get personalized guidance from our career advisors
+              </CTAText>
+            </CTAContent>
+            <CTAButton onClick={handleRCBClick}>Request Callback</CTAButton>
+          </CTASection>
         </>
       </RightPanel>
     </HeroContainer>
