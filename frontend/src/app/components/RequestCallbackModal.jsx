@@ -23,7 +23,8 @@ const Modal = styled.div`
   background: white;
   border: 1px solid #e2e8f0;
   border-radius: 0;
-  box-shadow: 0 1px 3px 0 rgba(0, 0, 0, 0.1), 0 20px 25px -5px rgba(0, 0, 0, 0.1);
+  box-shadow: 0 1px 3px 0 rgba(0, 0, 0, 0.1),
+    0 20px 25px -5px rgba(0, 0, 0, 0.1);
   padding: 32px;
   color: #1e293b;
   display: flex;
@@ -91,8 +92,8 @@ const Select = styled.select`
   transition: border-color 0.2s ease;
 
   &:focus {
-    border-color: #B30158;
-    box-shadow: 0 0 0 1px #B30158;
+    border-color: #b30158;
+    box-shadow: 0 0 0 1px #b30158;
   }
 
   &:hover {
@@ -135,11 +136,11 @@ const SecondaryButton = styled(Button)`
 `;
 
 const PrimaryButton = styled(Button)`
-  background: #B30158;
+  background: #b30158;
   color: white;
 
   &:hover:not(:disabled) {
-    background: #8A0145;
+    background: #8a0145;
   }
 
   &:active:not(:disabled) {
@@ -270,16 +271,13 @@ const RequestCallbackModal = ({
       <Modal role="dialog" aria-modal="true" aria-labelledby="callback-title">
         <Header>
           <Title id="callback-title">Request a callback</Title>
-          <CloseButton
-            type="button"
-            aria-label="Close"
-            onClick={onClose}
-          >
+          <CloseButton type="button" aria-label="Close" onClick={onClose}>
             ×
           </CloseButton>
         </Header>
         <Description>
-          Share a few details and we'll reach out with tailored guidance for your goals.
+          Share a few details and we'll reach out with tailored guidance for
+          your goals.
         </Description>
         {isSuccess && (
           <SuccessMessage>
@@ -316,7 +314,9 @@ const RequestCallbackModal = ({
             Job title (optional)
             <Select
               value={jobTitle}
-              onChange={(event) => onChangeField("jobTitle", event.target.value)}
+              onChange={(event) =>
+                onChangeField("jobTitle", event.target.value)
+              }
               disabled={isLoading || isSuccess}
             >
               {JOB_TITLE_OPTIONS.map((option) => (
@@ -327,10 +327,17 @@ const RequestCallbackModal = ({
             </Select>
           </Field>
           <Actions>
-            <SecondaryButton type="button" onClick={onClose} disabled={isLoading}>
+            <SecondaryButton
+              type="button"
+              onClick={onClose}
+              disabled={isLoading}
+            >
               Cancel
             </SecondaryButton>
-            <PrimaryButton type="submit" disabled={!program || isLoading || isSuccess}>
+            <PrimaryButton
+              type="submit"
+              disabled={!program || isLoading || isSuccess}
+            >
               {isLoading && <LoadingSpinner />}
               {isLoading ? "Submitting..." : "Request callback"}
             </PrimaryButton>

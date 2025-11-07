@@ -1528,11 +1528,11 @@ const ProfileMatchHeroV2 = ({
     tracker.click({
       click_type: "rcb_btn_clicked",
       custom: {
-        source: "profile_match_hero_v2",
+        source: "results_bottom_cta",
       },
     });
-    openCallbackModal?.();
-  }, []);
+    openCallbackModal?.({ source: "results_bottom_cta" });
+  }, [openCallbackModal]);
 
   return (
     <HeroContainer ref={heroRef}>

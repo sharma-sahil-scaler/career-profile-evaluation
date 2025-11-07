@@ -306,8 +306,8 @@ const NavigationBar = ({
         source: 'navbar'
       }
     });
-    openCallbackModal?.();
-  }, []);
+    openCallbackModal?.({ source: 'navbar' });
+  }, [openCallbackModal]);
 
   useEffect(() => {
     if (!isResultsPage) return;

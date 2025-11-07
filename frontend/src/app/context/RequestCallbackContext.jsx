@@ -8,6 +8,7 @@ import React, {
 
 import RequestCallbackModal from "../components/RequestCallbackModal";
 import { apiRequest } from "../../utils/api";
+import tracker from "../../utils/tracker";
 
 const RequestCallbackContext = createContext({
   open: () => {},
@@ -28,14 +29,18 @@ const SUBMISSION_STATUS = {
 export const RequestCallbackProvider = ({ children }) => {
   const [isOpen, setIsOpen] = useState(false);
   const [formState, setFormState] = useState(INITIAL_FORM_STATE);
-  const [submissionStatus, setSubmissionStatus] = useState(SUBMISSION_STATUS.IDLE);
+  const [submissionStatus, setSubmissionStatus] = useState(
+    SUBMISSION_STATUS.IDLE
+  );
   const [errorMessage, setErrorMessage] = useState("");
+  const [clickSource, setClickSource] = useState("");
 
   const open = useCallback((initialState = {}) => {
     setFormState({
       program: initialState.program || "",
       jobTitle: initialState.jobTitle || "",
     });
+    setClickSource(initialState.source || "unknown");
     setIsOpen(true);
   }, []);
 
@@ -44,6 +49,7 @@ export const RequestCallbackProvider = ({ children }) => {
     setFormState(INITIAL_FORM_STATE);
     setSubmissionStatus(SUBMISSION_STATUS.IDLE);
     setErrorMessage("");
+    setClickSource("");
   }, []);
 
   const updateField = useCallback((field, value) => {
@@ -57,6 +63,7 @@ export const RequestCallbackProvider = ({ children }) => {
     setSubmissionStatus(SUBMISSION_STATUS.LOADING);
     setErrorMessage("");
 
+    console.log("clickSource", clickSource);
     try {
       await apiRequest("POST", "/request-callback", {
         attributions: {
@@ -71,6 +78,15 @@ export const RequestCallbackProvider = ({ children }) => {
         },
       });
 
+      tracker.click({
+        click_type: "rcb_form_submitted",
+        custom: {
+          source: clickSource,
+          program: formState.program,
+          job_title: formState.jobTitle || "not_specified",
+        },
+      });
+
       setSubmissionStatus(SUBMISSION_STATUS.SUCCESS);
       setTimeout(() => {
         close();
@@ -78,16 +94,19 @@ export const RequestCallbackProvider = ({ children }) => {
     } catch (error) {
       console.error("Request callback submission failed:", error);
       setSubmissionStatus(SUBMISSION_STATUS.ERROR);
-      const errorMsg = error.responseJson?.error || error.message || "Failed to submit request. Please try again.";
+      const errorMsg =
+        error.responseJson?.error ||
+        error.message ||
+        "Failed to submit request. Please try again.";
       setErrorMessage(errorMsg);
     }
-  }, [close, formState]);
+  }, [close, formState, clickSource]);
 
   const contextValue = useMemo(
     () => ({
       open,
     }),
-    [open],
+    [open]
   );
 
   return (

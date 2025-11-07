@@ -349,11 +349,11 @@ const ResultsPage = () => {
     tracker.click({
       click_type: 'rcb_btn_clicked',
       custom: {
-        source: 'results_page'
+        source: 'results_page_floating_cta'
       }
     });
-    openCallbackModal?.();
-  }, []);
+    openCallbackModal?.({ source: 'results_page_floating_cta' });
+  }, [openCallbackModal]);
 
   if (isLoading) {
     const currentStep = loadingSteps[loadingStep];

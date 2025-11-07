@@ -36,33 +36,33 @@ function AppContent() {
     [quizProgress, quizMode]
   );
 
-  // useEffect(() => {
-  //   if (!error) {
-  //     return;
-  //   }
+  useEffect(() => {
+    if (!error) {
+      return;
+    }
 
-  //   const timeoutId = setTimeout(() => {
-  //     window.location.replace(`${window.location.origin}/users/sign_in/mobile`);
-  //   }, 2500);
+    const timeoutId = setTimeout(() => {
+      window.location.replace(`${window.location.origin}/users/sign_in/mobile`);
+    }, 2500);
 
-  //   return () => clearTimeout(timeoutId);
-  // }, [error]);
+    return () => clearTimeout(timeoutId);
+  }, [error]);
 
-  // if (loading) {
-  //   return <LoadingScreen />;
-  // }
+  if (loading) {
+    return <LoadingScreen />;
+  }
 
-  // if (error) {
-  //   return (
-  //     <LoggedOutScreen
-  //       onRetry={() => {
-  //         window.location.replace(
-  //           `${window.location.origin}/users/sign_in/mobile`
-  //         );
-  //       }}
-  //     />
-  //   );
-  // }
+  if (error) {
+    return (
+      <LoggedOutScreen
+        onRetry={() => {
+          window.location.replace(
+            `${window.location.origin}/users/sign_in/mobile`
+          );
+        }}
+      />
+    );
+  }
 
   return (
     <AppLayout showNavigation={shouldShowNav} navigationProps={navigationProps}>
