@@ -1321,6 +1321,16 @@ const ProfileMatchHeroV2 = ({
     }, duration / steps);
   }, [score]);
 
+  const handleCareerConsultationClick = useCallback(() => {
+    tracker.click({
+      click_type: "career_consultation_btn_clicked",
+      custom: {
+        source: "results_career_consultation_cta",
+      },
+    });
+    openCallbackModal?.({ source: "results_career_consultation_cta" });
+  }, [openCallbackModal]);
+
   // Animate score when it changes or component mounts
   useEffect(() => {
     if (score && score > 0 && !hasAnimated) {
@@ -1584,7 +1594,10 @@ const ProfileMatchHeroV2 = ({
 
         {/* Skills Section - Moved to top for both modes */}
         {(strengths.length > 0 || areasToImprove.length > 0) && (
-          <SectionBlock className="gtm-section-view" data-gtm-section-name="See Where You Stand Today">
+          <SectionBlock
+            className="gtm-section-view"
+            data-gtm-section-name="See Where You Stand Today"
+          >
             <SectionHeading>See Where You Stand Today</SectionHeading>
             <SectionSubtitle>
               Compare your strengths and areas for improvement
@@ -1630,7 +1643,10 @@ const ProfileMatchHeroV2 = ({
         <>
           {/* Career Transition Section - Shows realistic timelines to achieve target role */}
           {recommendedRoles.length > 0 && (
-            <CareerTransitionContainer className="gtm-section-view" data-gtm-section-name="Career Timeline">
+            <CareerTransitionContainer
+              className="gtm-section-view"
+              data-gtm-section-name="Career Timeline"
+            >
               <CareerTransitionTitle>Career Timeline</CareerTransitionTitle>
               <CareerTransitionSubtitle>
                 Realistic timelines to achieve your target roles based on
@@ -1947,16 +1963,17 @@ const ProfileMatchHeroV2 = ({
                   land your target role.
                 </CTAText>
               </CTAContent>
-              <CTAButton
-                onClick={() => window.open("/career-consultation", "_blank")}
-              >
+              <CTAButton onClick={handleCareerConsultationClick}>
                 Book Career Consultation
               </CTAButton>
             </CTASection>
           )}
 
           {quickWins.length > 0 && (
-            <SectionBlock className="gtm-section-view" data-gtm-section-name="Quick Wins for You">
+            <SectionBlock
+              className="gtm-section-view"
+              data-gtm-section-name="Quick Wins for You"
+            >
               <SectionHeading>Quick Wins for You</SectionHeading>
               <SectionSubtitle>
                 Take these actionable steps to improve your profile
@@ -2028,7 +2045,10 @@ const ProfileMatchHeroV2 = ({
           )}
 
           {tools.length > 0 && (
-            <SectionBlock className="gtm-section-view" data-gtm-section-name="Tools & Technologies to Learn">
+            <SectionBlock
+              className="gtm-section-view"
+              data-gtm-section-name="Tools & Technologies to Learn"
+            >
               <SectionHeading>Tools & Technologies to Learn</SectionHeading>
               <SectionSubtitle>
                 Master these tools to enhance your skillset
@@ -2044,7 +2064,10 @@ const ProfileMatchHeroV2 = ({
           )}
 
           {experienceBenchmark && (
-            <SectionBlock className="gtm-section-view" data-gtm-section-name="Experience Benchmark">
+            <SectionBlock
+              className="gtm-section-view"
+              data-gtm-section-name="Experience Benchmark"
+            >
               <SectionHeading>Experience Benchmark</SectionHeading>
               <SectionSubtitle>
                 Compare your experience with typical requirements for your

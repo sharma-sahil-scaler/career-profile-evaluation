@@ -309,6 +309,16 @@ const NavigationBar = ({
     openCallbackModal?.({ source: 'navbar' });
   }, [openCallbackModal]);
 
+  const handleFeedbackClick = useCallback(() => {
+    tracker.click({
+      click_type: 'feedback_btn_clicked',
+      custom: {
+        source: 'csat_banner',
+        page: 'results_page'
+      }
+    });
+  }, []);
+
   useEffect(() => {
     if (!isResultsPage) return;
 
@@ -356,6 +366,7 @@ const NavigationBar = ({
       {isResultsPage && (
         <CSATBanner
           isVisible={showCSATBanner}
+          onClick={handleFeedbackClick}
           data-tally-open="m6XrjY"
           data-tally-layout="modal"
           data-tally-width="600"
