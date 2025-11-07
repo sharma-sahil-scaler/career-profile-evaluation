@@ -1,6 +1,3 @@
-import React from 'react';
-import { GraduationCap } from 'phosphor-react';
-
 const BASE_PROGRAM_OPTIONS = [
   {
     value: 'data_science',
@@ -20,19 +17,6 @@ const BASE_PROGRAM_OPTIONS = [
   }
 ];
 
-const programIcon = React.createElement(
-  GraduationCap,
-  { size: 22, weight: 'duotone' }
-);
-
-const decorateProgramOption = (option) => ({
-  ...option,
-  icon: programIcon
-});
-
 export const PROGRAM_OPTION_VALUES = new Set(
   BASE_PROGRAM_OPTIONS.map((option) => option.value)
 );
-
-export const getProgramOptions = () =>
-  BASE_PROGRAM_OPTIONS.map(decorateProgramOption);

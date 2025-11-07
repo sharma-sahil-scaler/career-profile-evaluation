@@ -13,19 +13,3 @@ export function addMeta(name, content) {
     document.head.appendChild(metaTag);
   }
 }
-
-export function removeMeta(name) {
-  if (typeof document === 'undefined') return;
-
-  const metaTag = document.querySelector(`meta[name="${name}"]`);
-  if (metaTag) {
-    metaTag.remove();
-  }
-}
-
-export function getMetaContent(name) {
-  if (typeof document === 'undefined') return null;
-
-  const metaTag = document.querySelector(`meta[name="${name}"]`);
-  return metaTag ? metaTag.getAttribute('content') : null;
-}

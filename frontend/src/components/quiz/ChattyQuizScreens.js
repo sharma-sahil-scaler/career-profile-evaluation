@@ -415,19 +415,9 @@ export const NON_TECH_QUIZ_SCREENS = [
   }
 ];
 
-// Legacy export for backward compatibility - defaults to non-tech path
-export const CHATTY_QUIZ_SCREENS = NON_TECH_QUIZ_SCREENS;
-
-// Helper function to get all question IDs for validation
-export const getAllQuestionIds = () => {
-  return CHATTY_QUIZ_SCREENS.flatMap(screen =>
-    screen.questions.map(q => q.id)
-  );
-};
-
 // Helper to check if all questions in a screen are answered
 export const isScreenComplete = (screenId, responses) => {
-  const screen = CHATTY_QUIZ_SCREENS.find(s => s.id === screenId);
+  const screen = NON_TECH_QUIZ_SCREENS.find(s => s.id === screenId);
   if (!screen) return false;
 
   // Special handling for goals screen

@@ -1,6 +1,6 @@
-import React, { useState, useEffect, useRef, useCallback } from 'react';
-import styled, { keyframes, css } from 'styled-components';
-import Xarrow from 'react-xarrows';
+import React, { useState, useEffect, useRef, useCallback } from "react";
+import styled, { keyframes, css } from "styled-components";
+import Xarrow from "react-xarrows";
 import {
   CheckCircle,
   Clock,
@@ -34,15 +34,14 @@ import {
   Buildings,
   CalendarBlank,
   MapPin,
-  CheckSquare
-} from 'phosphor-react';
-import chatBot from '../../assets/ChatBot.png';
-import oliveBranchLeft from '../../assets/Left-Olive-Branch.png';
-import oliveBranchRight from '../../assets/Right-Olive-branch.png';
-import CareerTimeline from './CareerTimeline';
-import PeerComparisonCard from './PeerComparisonCard';
-import { useRequestCallback } from '../../app/context/RequestCallbackContext';
-import tracker from '../../utils/tracker';
+  CheckSquare,
+} from "phosphor-react";
+import chatBot from "../../assets/ChatBot.png";
+import oliveBranchLeft from "../../assets/Left-Olive-Branch.png";
+import oliveBranchRight from "../../assets/Right-Olive-branch.png";
+import PeerComparisonCard from "./PeerComparisonCard";
+import { useRequestCallback } from "../../app/context/RequestCallbackContext";
+import tracker from "../../utils/tracker";
 
 const HeroContainer = styled.div`
   background: white;
@@ -63,10 +62,10 @@ const HeroContainer = styled.div`
 `;
 
 const LeftPanel = styled.div`
-  background: ${(props) => (props.score >= 50 ? '#064e3b' : '#1f2937')};
+  background: ${(props) => (props.score >= 50 ? "#064e3b" : "#1f2937")};
   color: #ffffff;
   padding: ${(props) =>
-    props.score >= 60 ? '48px 120px 48px 60px' : '48px 80px 48px 40px'};
+    props.score >= 60 ? "48px 120px 48px 60px" : "48px 80px 48px 40px"};
   display: flex;
   flex-direction: row;
   justify-content: space-between;
@@ -77,7 +76,7 @@ const LeftPanel = styled.div`
   overflow-y: visible;
   border-right: none;
   border-bottom: 2px solid
-    ${(props) => (props.score >= 50 ? '#065f46' : '#374151')};
+    ${(props) => (props.score >= 50 ? "#065f46" : "#374151")};
 
   @media (max-width: 1024px) {
     position: relative;
@@ -150,7 +149,7 @@ const ScoreSection = styled.div`
   flex-direction: column;
   align-items: center;
   text-align: center;
-  padding: ${(props) => (props.hasOliveBranches ? '24px 0' : '12px 0')};
+  padding: ${(props) => (props.hasOliveBranches ? "24px 0" : "12px 0")};
   position: relative;
 `;
 
@@ -161,7 +160,7 @@ const OliveBranch = styled.img`
   opacity: 0.8;
 
   ${(props) =>
-    props.position === 'left'
+    props.position === "left"
       ? `
     left: -65px;
     top: 40%;
@@ -175,11 +174,11 @@ const OliveBranch = styled.img`
 
   @media (max-width: 768px) {
     ${(props) =>
-    props.position === 'left'
-      ? `
+      props.position === "left"
+        ? `
       left: 0;
     `
-      : `
+        : `
       right: 0;
     `}
   }
@@ -244,20 +243,20 @@ const ChipsContainer = styled.div`
 
 const Chip = styled.div`
   background: ${(props) => {
-    if (props.variant === 'strength') return 'rgba(16, 185, 129, 0.2)';
-    if (props.variant === 'improve') return 'rgba(148, 163, 184, 0.15)';
-    return 'rgba(251, 146, 60, 0.15)';
+    if (props.variant === "strength") return "rgba(16, 185, 129, 0.2)";
+    if (props.variant === "improve") return "rgba(148, 163, 184, 0.15)";
+    return "rgba(251, 146, 60, 0.15)";
   }};
   border: 1.5px solid
     ${(props) => {
-    if (props.variant === 'strength') return '#10b981';
-    if (props.variant === 'improve') return '#94a3b8';
-    return '#fb923c';
-  }};
+      if (props.variant === "strength") return "#10b981";
+      if (props.variant === "improve") return "#94a3b8";
+      return "#fb923c";
+    }};
   color: ${(props) => {
-    if (props.variant === 'strength') return '#ffffff';
-    if (props.variant === 'improve') return '#475569';
-    return '#9a3412';
+    if (props.variant === "strength") return "#ffffff";
+    if (props.variant === "improve") return "#475569";
+    return "#9a3412";
   }};
   padding: 6px 12px;
   border-radius: 0;
@@ -464,10 +463,10 @@ const QuickWinIcon = styled.div`
   height: 72px;
   background: ${(props) => {
     const gradients = [
-      'linear-gradient(135deg, #667eea 0%, #764ba2 100%)',
-      'linear-gradient(135deg, #f093fb 0%, #f5576c 100%)',
-      'linear-gradient(135deg, #4facfe 0%, #00f2fe 100%)',
-      'linear-gradient(135deg, #43e97b 0%, #38f9d7 100%)'
+      "linear-gradient(135deg, #667eea 0%, #764ba2 100%)",
+      "linear-gradient(135deg, #f093fb 0%, #f5576c 100%)",
+      "linear-gradient(135deg, #4facfe 0%, #00f2fe 100%)",
+      "linear-gradient(135deg, #43e97b 0%, #38f9d7 100%)",
     ];
     return gradients[props.index % 4];
   }};
@@ -535,7 +534,7 @@ const QuickWinCard = styled.div`
 const QuickWinIconContainer = styled.div`
   width: 48px;
   height: 48px;
-  background: ${(props) => props.iconColor || '#e8eaf6'};
+  background: ${(props) => props.iconColor || "#e8eaf6"};
   border-radius: 0;
   display: flex;
   align-items: center;
@@ -638,9 +637,9 @@ const MobileRoleCategory = styled.div`
   text-transform: uppercase;
   letter-spacing: 0.5px;
   color: ${(props) => {
-    if (props.type === 'target') return '#059669';
-    if (props.type === 'alternate') return '#64748b';
-    return '#64748b';
+    if (props.type === "target") return "#059669";
+    if (props.type === "alternate") return "#64748b";
+    return "#64748b";
   }};
   margin-bottom: 8px;
   display: flex;
@@ -719,10 +718,10 @@ const CategoryCard = styled.div`
   background: white;
   border: 1px solid
     ${(props) => {
-    if (props.type === 'target') return '#86efac';
-    if (props.type === 'alternate') return '#cbd5e1';
-    return '#cbd5e1';
-  }};
+      if (props.type === "target") return "#86efac";
+      if (props.type === "alternate") return "#cbd5e1";
+      return "#cbd5e1";
+    }};
   border-radius: 0;
   padding: 12px 16px;
   display: flex;
@@ -738,10 +737,10 @@ const CategoryCard = styled.div`
 
   svg {
     color: ${(props) => {
-    if (props.type === 'target') return '#059669';
-    if (props.type === 'alternate') return '#64748b';
-    return '#64748b';
-  }};
+      if (props.type === "target") return "#059669";
+      if (props.type === "alternate") return "#64748b";
+      return "#64748b";
+    }};
   }
 `;
 
@@ -751,9 +750,9 @@ const CategoryLabel = styled.div`
   text-transform: uppercase;
   letter-spacing: 0.5px;
   color: ${(props) => {
-    if (props.type === 'target') return '#059669';
-    if (props.type === 'alternate') return '#64748b';
-    return '#64748b';
+    if (props.type === "target") return "#059669";
+    if (props.type === "alternate") return "#64748b";
+    return "#64748b";
   }};
   text-align: left;
   width: 100%;
@@ -772,9 +771,9 @@ const CategoryTimeline = styled.div`
 const RoleCard = styled.div`
   background: ${(props) =>
     props.isPriority
-      ? 'linear-gradient(135deg, #f0fdf4 0%, #dcfce7 100%)'
-      : '#ffffff'};
-  border: 1px solid ${(props) => (props.isPriority ? '#86efac' : '#e2e8f0')};
+      ? "linear-gradient(135deg, #f0fdf4 0%, #dcfce7 100%)"
+      : "#ffffff"};
+  border: 1px solid ${(props) => (props.isPriority ? "#86efac" : "#e2e8f0")};
   border-radius: 0;
   padding: 16px;
   display: flex;
@@ -848,14 +847,14 @@ const Salary = styled.div`
 
 const MatchBadge = styled.div`
   background: ${(props) => {
-    if (props.match >= 80) return '#dcfce7';
-    if (props.match >= 60) return '#fef3c7';
-    return '#f1f5f9';
+    if (props.match >= 80) return "#dcfce7";
+    if (props.match >= 60) return "#fef3c7";
+    return "#f1f5f9";
   }};
   color: ${(props) => {
-    if (props.match >= 80) return '#15803d';
-    if (props.match >= 60) return '#a16207';
-    return '#475569';
+    if (props.match >= 80) return "#15803d";
+    if (props.match >= 60) return "#a16207";
+    return "#475569";
   }};
   padding: 3px 8px;
   border-radius: 0;
@@ -1043,7 +1042,7 @@ const TableColumnTitle = styled.h5`
   font-weight: 700;
   text-transform: uppercase;
   letter-spacing: 0.5px;
-  color: ${(props) => (props.type === 'strength' ? '#059669' : '#dc2626')};
+  color: ${(props) => (props.type === "strength" ? "#059669" : "#dc2626")};
   margin-bottom: 8px;
 `;
 
@@ -1052,13 +1051,13 @@ const TableItem = styled.div`
   align-items: center;
   gap: 10px;
   padding: 12px 16px;
-  background: ${(props) => (props.type === 'strength' ? '#f0fdf4' : '#fef2f2')};
+  background: ${(props) => (props.type === "strength" ? "#f0fdf4" : "#fef2f2")};
   border: 1px solid
-    ${(props) => (props.type === 'strength' ? '#bbf7d0' : '#fecaca')};
+    ${(props) => (props.type === "strength" ? "#bbf7d0" : "#fecaca")};
   border-radius: 0;
   font-size: 0.875rem;
   font-weight: 500;
-  color: ${(props) => (props.type === 'strength' ? '#166534' : '#991b1b')};
+  color: ${(props) => (props.type === "strength" ? "#166534" : "#991b1b")};
 
   svg {
     flex-shrink: 0;
@@ -1072,7 +1071,7 @@ const categorizeRoles = (roles) => {
   const seenTitles = new Set();
 
   roles.forEach((role) => {
-    const title = (role.title || role.role || '').toLowerCase().trim();
+    const title = (role.title || role.role || "").toLowerCase().trim();
     if (title && !seenTitles.has(title)) {
       seenTitles.add(title);
       uniqueRoles.push(role);
@@ -1087,7 +1086,7 @@ const categorizeRoles = (roles) => {
   const categories = {
     mostLikely: [],
     similar: [],
-    pivot: []
+    pivot: [],
   };
 
   // Take top 3 unique roles
@@ -1105,19 +1104,19 @@ const categorizeRoles = (roles) => {
       // First role always goes to Most Likely with at least 75% match
       categories.mostLikely.push({
         ...role,
-        match_score: Math.max(match, 75)
+        match_score: Math.max(match, 75),
       });
     } else if (index === 1) {
       // Second role goes to Similar with at least 60% match
       categories.similar.push({
         ...role,
-        match_score: Math.max(match, 60)
+        match_score: Math.max(match, 60),
       });
     } else if (index === 2) {
       // Third role goes to Pivot with at least 55% match
       categories.pivot.push({
         ...role,
-        match_score: Math.max(match, 55)
+        match_score: Math.max(match, 55),
       });
     }
   });
@@ -1133,10 +1132,10 @@ const formatSalary = (salary) => {
 
   // If already in LPA format, return as is
   if (
-    salaryStr.toLowerCase().includes('lpa') ||
-    salaryStr.toLowerCase().includes('l pa')
+    salaryStr.toLowerCase().includes("lpa") ||
+    salaryStr.toLowerCase().includes("l pa")
   ) {
-    return salaryStr.replace(/\s+/g, '').toUpperCase();
+    return salaryStr.replace(/\s+/g, "").toUpperCase();
   }
 
   // Extract numbers from salary range (e.g., "$80k-$100k" or "80-100k")
@@ -1151,7 +1150,7 @@ const formatSalary = (salary) => {
 };
 
 const capitalizeFirstLetter = (str) => {
-  if (!str) return '';
+  if (!str) return "";
   return str.charAt(0).toUpperCase() + str.slice(1).toLowerCase();
 };
 
@@ -1176,66 +1175,66 @@ const getToolLogoUrl = (toolName) => {
   // Map common tools to their logo domains
   const logoMap = {
     react:
-      'https://cdn.jsdelivr.net/gh/devicons/devicon/icons/react/react-original.svg',
-    node: 'https://cdn.jsdelivr.net/gh/devicons/devicon/icons/nodejs/nodejs-original.svg',
+      "https://cdn.jsdelivr.net/gh/devicons/devicon/icons/react/react-original.svg",
+    node: "https://cdn.jsdelivr.net/gh/devicons/devicon/icons/nodejs/nodejs-original.svg",
     nodejs:
-      'https://cdn.jsdelivr.net/gh/devicons/devicon/icons/nodejs/nodejs-original.svg',
+      "https://cdn.jsdelivr.net/gh/devicons/devicon/icons/nodejs/nodejs-original.svg",
     python:
-      'https://cdn.jsdelivr.net/gh/devicons/devicon/icons/python/python-original.svg',
+      "https://cdn.jsdelivr.net/gh/devicons/devicon/icons/python/python-original.svg",
     javascript:
-      'https://cdn.jsdelivr.net/gh/devicons/devicon/icons/javascript/javascript-original.svg',
+      "https://cdn.jsdelivr.net/gh/devicons/devicon/icons/javascript/javascript-original.svg",
     typescript:
-      'https://cdn.jsdelivr.net/gh/devicons/devicon/icons/typescript/typescript-original.svg',
+      "https://cdn.jsdelivr.net/gh/devicons/devicon/icons/typescript/typescript-original.svg",
     docker:
-      'https://cdn.jsdelivr.net/gh/devicons/devicon/icons/docker/docker-original.svg',
+      "https://cdn.jsdelivr.net/gh/devicons/devicon/icons/docker/docker-original.svg",
     kubernetes:
-      'https://cdn.jsdelivr.net/gh/devicons/devicon/icons/kubernetes/kubernetes-plain.svg',
-    aws: 'https://cdn.jsdelivr.net/gh/devicons/devicon/icons/amazonwebservices/amazonwebservices-original-wordmark.svg',
+      "https://cdn.jsdelivr.net/gh/devicons/devicon/icons/kubernetes/kubernetes-plain.svg",
+    aws: "https://cdn.jsdelivr.net/gh/devicons/devicon/icons/amazonwebservices/amazonwebservices-original-wordmark.svg",
     mongodb:
-      'https://cdn.jsdelivr.net/gh/devicons/devicon/icons/mongodb/mongodb-original.svg',
+      "https://cdn.jsdelivr.net/gh/devicons/devicon/icons/mongodb/mongodb-original.svg",
     postgresql:
-      'https://cdn.jsdelivr.net/gh/devicons/devicon/icons/postgresql/postgresql-original.svg',
+      "https://cdn.jsdelivr.net/gh/devicons/devicon/icons/postgresql/postgresql-original.svg",
     mysql:
-      'https://cdn.jsdelivr.net/gh/devicons/devicon/icons/mysql/mysql-original.svg',
+      "https://cdn.jsdelivr.net/gh/devicons/devicon/icons/mysql/mysql-original.svg",
     redis:
-      'https://cdn.jsdelivr.net/gh/devicons/devicon/icons/redis/redis-original.svg',
-    git: 'https://cdn.jsdelivr.net/gh/devicons/devicon/icons/git/git-original.svg',
+      "https://cdn.jsdelivr.net/gh/devicons/devicon/icons/redis/redis-original.svg",
+    git: "https://cdn.jsdelivr.net/gh/devicons/devicon/icons/git/git-original.svg",
     github:
-      'https://cdn.jsdelivr.net/gh/devicons/devicon/icons/github/github-original.svg',
-    java: 'https://cdn.jsdelivr.net/gh/devicons/devicon/icons/java/java-original.svg',
+      "https://cdn.jsdelivr.net/gh/devicons/devicon/icons/github/github-original.svg",
+    java: "https://cdn.jsdelivr.net/gh/devicons/devicon/icons/java/java-original.svg",
     spring:
-      'https://cdn.jsdelivr.net/gh/devicons/devicon/icons/spring/spring-original.svg',
+      "https://cdn.jsdelivr.net/gh/devicons/devicon/icons/spring/spring-original.svg",
     angular:
-      'https://cdn.jsdelivr.net/gh/devicons/devicon/icons/angularjs/angularjs-original.svg',
-    vue: 'https://cdn.jsdelivr.net/gh/devicons/devicon/icons/vuejs/vuejs-original.svg',
+      "https://cdn.jsdelivr.net/gh/devicons/devicon/icons/angularjs/angularjs-original.svg",
+    vue: "https://cdn.jsdelivr.net/gh/devicons/devicon/icons/vuejs/vuejs-original.svg",
     graphql:
-      'https://cdn.jsdelivr.net/gh/devicons/devicon/icons/graphql/graphql-plain.svg',
+      "https://cdn.jsdelivr.net/gh/devicons/devicon/icons/graphql/graphql-plain.svg",
     firebase:
-      'https://cdn.jsdelivr.net/gh/devicons/devicon/icons/firebase/firebase-plain.svg',
+      "https://cdn.jsdelivr.net/gh/devicons/devicon/icons/firebase/firebase-plain.svg",
     leetcode:
-      'https://upload.wikimedia.org/wikipedia/commons/1/19/LeetCode_logo_black.png',
-    excalidraw: 'https://excalidraw.com/apple-touch-icon.png',
-    'draw.io': 'https://app.diagrams.net/images/drawlogo.svg',
-    miro: 'https://cdn.brandfetch.io/miro.com/w/400/h/400',
+      "https://upload.wikimedia.org/wikipedia/commons/1/19/LeetCode_logo_black.png",
+    excalidraw: "https://excalidraw.com/apple-touch-icon.png",
+    "draw.io": "https://app.diagrams.net/images/drawlogo.svg",
+    miro: "https://cdn.brandfetch.io/miro.com/w/400/h/400",
     terraform:
-      'https://cdn.jsdelivr.net/gh/devicons/devicon/icons/terraform/terraform-original.svg',
-    pulumi: 'https://www.pulumi.com/logos/brand/avatar-on-white.svg',
+      "https://cdn.jsdelivr.net/gh/devicons/devicon/icons/terraform/terraform-original.svg",
+    pulumi: "https://www.pulumi.com/logos/brand/avatar-on-white.svg",
     prometheus:
-      'https://cdn.jsdelivr.net/gh/devicons/devicon/icons/prometheus/prometheus-original.svg',
+      "https://cdn.jsdelivr.net/gh/devicons/devicon/icons/prometheus/prometheus-original.svg",
     grafana:
-      'https://cdn.jsdelivr.net/gh/devicons/devicon/icons/grafana/grafana-original.svg',
+      "https://cdn.jsdelivr.net/gh/devicons/devicon/icons/grafana/grafana-original.svg",
     argocd:
-      'https://cncf-branding.netlify.app/img/projects/argo/icon/color/argo-icon-color.svg',
+      "https://cncf-branding.netlify.app/img/projects/argo/icon/color/argo-icon-color.svg",
     datadog:
-      'https://imgix.datadoghq.com/img/about/presskit/logo-v/dd_vertical_purple.png',
+      "https://imgix.datadoghq.com/img/about/presskit/logo-v/dd_vertical_purple.png",
     vault:
-      'https://cdn.jsdelivr.net/gh/devicons/devicon/icons/vault/vault-original.svg',
-    pagerduty: 'https://cdn.brandfetch.io/pagerduty.com/w/400/h/400',
-    sentry: 'https://cdn.brandfetch.io/sentry.io/w/400/h/400',
-    postman: 'https://cdn.brandfetch.io/postman.com/w/400/h/400',
-    replit: 'https://cdn.brandfetch.io/replit.com/w/400/h/400',
-    dbeaver: 'https://cdn.brandfetch.io/dbeaver.io/w/400/h/400',
-    tableplus: 'https://cdn.brandfetch.io/tableplus.com/w/400/h/400'
+      "https://cdn.jsdelivr.net/gh/devicons/devicon/icons/vault/vault-original.svg",
+    pagerduty: "https://cdn.brandfetch.io/pagerduty.com/w/400/h/400",
+    sentry: "https://cdn.brandfetch.io/sentry.io/w/400/h/400",
+    postman: "https://cdn.brandfetch.io/postman.com/w/400/h/400",
+    replit: "https://cdn.brandfetch.io/replit.com/w/400/h/400",
+    dbeaver: "https://cdn.brandfetch.io/dbeaver.io/w/400/h/400",
+    tableplus: "https://cdn.brandfetch.io/tableplus.com/w/400/h/400",
   };
 
   // First try exact match with first word
@@ -1293,7 +1292,7 @@ const ProfileMatchHeroV2 = ({
   background: backgroundProp,
   quizResponses,
   goals,
-  userName = 'There'
+  userName = "There",
 }) => {
   const { open: openCallbackModal } = useRequestCallback();
   const [displayScore, setDisplayScore] = useState(0);
@@ -1369,7 +1368,7 @@ const ProfileMatchHeroV2 = ({
   const experienceBenchmark = evaluationResults?.experience_benchmark || null;
   const recommendedRoles =
     evaluationResults?.recommended_roles_based_on_interests || [];
-  const background = backgroundProp || 'tech';
+  const background = backgroundProp || "tech";
 
   const percentile = peerComparison.percentile || 68;
 
@@ -1380,95 +1379,95 @@ const ProfileMatchHeroV2 = ({
   const currentRoleRaw =
     quizResponses?.currentRole ||
     quizResponses?.currentBackground ||
-    'Current Role';
+    "Current Role";
   const backgroundLabel =
-    background === 'non-tech' ? 'Non-Tech Professional' : 'Tech Professional';
+    background === "non-tech" ? "Non-Tech Professional" : "Tech Professional";
   const currentSkillFocus =
-    quizResponses?.currentSkill || quizResponses?.stepsTaken || 'Not specified';
-  const experienceYears = quizResponses?.experience || 'Not specified';
+    quizResponses?.currentSkill || quizResponses?.stepsTaken || "Not specified";
+  const experienceYears = quizResponses?.experience || "Not specified";
 
   // Extract company type from currentRole for tech users
   const getCompanyType = (roleValue) => {
-    if (!roleValue) return 'Not specified';
+    if (!roleValue) return "Not specified";
 
     const roleMap = {
-      'swe-product': 'Product Company',
-      'swe-service': 'Service Company',
-      devops: 'Tech Company',
-      'qa-support': 'Tech Company'
+      "swe-product": "Product Company",
+      "swe-service": "Service Company",
+      devops: "Tech Company",
+      "qa-support": "Tech Company",
     };
 
-    return roleMap[roleValue] || 'Tech Company';
+    return roleMap[roleValue] || "Tech Company";
   };
 
   // Extract clean role name without company type
   const getRoleName = (roleValue, backgroundValue) => {
-    if (!roleValue) return 'Current Role';
+    if (!roleValue) return "Current Role";
 
-    if (backgroundValue === 'tech') {
+    if (backgroundValue === "tech") {
       const roleNameMap = {
-        'swe-product': 'Software Engineer',
-        'swe-service': 'Software Engineer',
-        devops: 'DevOps Engineer',
-        'qa-support': 'QA / Support Engineer'
+        "swe-product": "Software Engineer",
+        "swe-service": "Software Engineer",
+        devops: "DevOps Engineer",
+        "qa-support": "QA / Support Engineer",
       };
       return roleNameMap[roleValue] || roleValue;
     }
 
     // Non-tech backgrounds
     const nonTechMap = {
-      'sales-marketing': 'Sales / Marketing',
-      operations: 'Operations / Consulting',
-      design: 'Designer',
-      finance: 'Finance Professional',
-      other: 'Professional'
+      "sales-marketing": "Sales / Marketing",
+      operations: "Operations / Consulting",
+      design: "Designer",
+      finance: "Finance Professional",
+      other: "Professional",
     };
     return nonTechMap[roleValue] || roleValue;
   };
 
   const currentRole = getRoleName(currentRoleRaw, background);
   const currentCompanyType =
-    background === 'tech'
+    background === "tech"
       ? getCompanyType(currentRoleRaw)
-      : 'Non-Tech Background';
+      : "Non-Tech Background";
 
   const getGreetingText = (score) => {
-    if (score >= 80) return 'Your Profile is Exceptional';
-    if (score >= 65) return 'Your Profile Looks Strong';
-    if (score >= 50) return 'Your Profile Looks Promising';
-    if (score >= 35) return 'Your Profile Has Potential';
-    return 'Your Profile Needs Work';
+    if (score >= 80) return "Your Profile is Exceptional";
+    if (score >= 65) return "Your Profile Looks Strong";
+    if (score >= 50) return "Your Profile Looks Promising";
+    if (score >= 35) return "Your Profile Has Potential";
+    return "Your Profile Needs Work";
   };
 
   // Generate personalized, conversational summary
   const getPersonalizedSummary = () => {
-    const experience = quizResponses?.experience || '';
-    const currentRole = quizResponses?.currentRole || '';
-    const targetRole = quizResponses?.targetRole || '';
+    const experience = quizResponses?.experience || "";
+    const currentRole = quizResponses?.currentRole || "";
+    const targetRole = quizResponses?.targetRole || "";
     const targetCompany =
-      goals?.targetCompany || quizResponses?.targetCompanyLabel || '';
-    const problemSolving = quizResponses?.problemSolving || '';
-    const systemDesign = quizResponses?.systemDesign || '';
-    const portfolio = quizResponses?.portfolio || '';
+      goals?.targetCompany || quizResponses?.targetCompanyLabel || "";
+    const problemSolving = quizResponses?.problemSolving || "";
+    const systemDesign = quizResponses?.systemDesign || "";
+    const portfolio = quizResponses?.portfolio || "";
 
     const getRoleFriendlyName = (role) => {
       const roleMap = {
-        'swe-product': 'product companies',
-        'swe-service': 'service companies',
-        devops: 'DevOps',
-        'qa-support': 'QA/Support'
+        "swe-product": "product companies",
+        "swe-service": "service companies",
+        devops: "DevOps",
+        "qa-support": "QA/Support",
       };
       return roleMap[role] || role;
     };
 
     const getTargetRoleName = (role) => {
       const roleMap = {
-        'faang-sde': 'FAANG-level companies',
-        'startup-sde': 'high-growth startups',
-        'backend-dev': 'backend development roles',
-        'fullstack-dev': 'full-stack development roles',
-        'devops-eng': 'DevOps engineering roles',
-        'ml-engineer': 'ML engineering roles'
+        "faang-sde": "FAANG-level companies",
+        "startup-sde": "high-growth startups",
+        "backend-dev": "backend development roles",
+        "fullstack-dev": "full-stack development roles",
+        "devops-eng": "DevOps engineering roles",
+        "ml-engineer": "ML engineering roles",
       };
       return roleMap[role] || role;
     };
@@ -1478,24 +1477,24 @@ const ProfileMatchHeroV2 = ({
 
     // Build conversational message
     const greeting =
-      'Congratulations on taking the first step to evaluate your profile.\n\n';
+      "Congratulations on taking the first step to evaluate your profile.\n\n";
 
-    let profileAnalysis = '';
+    let profileAnalysis = "";
     if (experience && currentRole) {
       profileAnalysis = `Looking at your profile, I can see you have ${experience} of experience at ${currentCompanyType}. `;
 
       // Add validation based on experience
-      if (experience === '0-2') {
+      if (experience === "0-2") {
         profileAnalysis += "That's a great foundation to build upon! ";
-      } else if (experience === '3-5') {
+      } else if (experience === "3-5") {
         profileAnalysis += "That's solid experience that positions you well! ";
-      } else if (experience === '5-8' || experience === '8+') {
+      } else if (experience === "5-8" || experience === "8+") {
         profileAnalysis +=
           "That's substantial experience that gives you a strong edge! ";
       }
     }
 
-    let goalStatement = '';
+    let goalStatement = "";
     if (targetRole || targetCompany) {
       const goalTarget = targetCompany || targetRoleName;
       goalStatement = `You've expressed interest in moving to ${goalTarget}—and I have good news: that goal is absolutely reachable! 🎯\n\n`;
@@ -1503,34 +1502,34 @@ const ProfileMatchHeroV2 = ({
 
     // Extract quick wins or key actions from backend notes
     let keyActions =
-      'Here are the 3 most impactful things you should focus on:\n';
+      "Here are the 3 most impactful things you should focus on:\n";
 
     // Parse backend summary for key actions
-    const backendNotes = notes || '';
+    const backendNotes = notes || "";
 
     // Try to extract specific recommendations from backend
-    if (problemSolving === '0-10' || problemSolving === '11-50') {
+    if (problemSolving === "0-10" || problemSolving === "11-50") {
       keyActions +=
-        '1. Strengthen your problem-solving skills (aim for 100+ problems)\n';
+        "1. Strengthen your problem-solving skills (aim for 100+ problems)\n";
     } else {
       keyActions +=
-        '1. Master advanced problem-solving patterns and practice consistently\n';
+        "1. Master advanced problem-solving patterns and practice consistently\n";
     }
 
-    if (systemDesign === 'never-done' || systemDesign === 'participated') {
+    if (systemDesign === "never-done" || systemDesign === "participated") {
       keyActions +=
-        '2. Lead system design discussions and study real-world architectures\n';
+        "2. Lead system design discussions and study real-world architectures\n";
     } else {
       keyActions +=
-        '2. Deepen your system design expertise with scalability patterns\n';
+        "2. Deepen your system design expertise with scalability patterns\n";
     }
 
-    if (portfolio === 'none' || portfolio === '1-2') {
+    if (portfolio === "none" || portfolio === "1-2") {
       keyActions +=
-        '3. Build an active portfolio with meaningful projects on GitHub\n';
+        "3. Build an active portfolio with meaningful projects on GitHub\n";
     } else {
       keyActions +=
-        '3. Showcase your technical depth through blogs or contributions\n';
+        "3. Showcase your technical depth through blogs or contributions\n";
     }
 
     keyActions +=
@@ -1541,22 +1540,20 @@ const ProfileMatchHeroV2 = ({
 
   const handleRCBClick = useCallback(() => {
     tracker.click({
-      click_type: 'rcb_btn_clicked',
+      click_type: "rcb_btn_clicked",
       custom: {
-        source: 'profile_match_hero_v2'
-      }
+        source: "profile_match_hero_v2",
+      },
     });
     openCallbackModal?.();
   }, []);
 
   return (
     <HeroContainer ref={heroRef}>
-      {/* Left Panel - Sticky or Horizontal */}
       <LeftPanel score={score}>
-        {/* Vertical mode: Greeting on left, Score on right */}
         <GreetingSection>
           <HeroGreeting>
-            Hey {userName},{'\n'}
+            Hey {userName},{"\n"}
             {getGreetingText(score)}
           </HeroGreeting>
           <GreetingSubtext>
@@ -1575,15 +1572,13 @@ const ProfileMatchHeroV2 = ({
         </ScoreSection>
       </LeftPanel>
 
-      {/* Right Panel - Scrollable or Vertical */}
       <RightPanel>
-        {/* Chatbot Section */}
         <ChatBubbleWrapper>
           <BotAvatar>
             <BotImage src={chatBot} alt="Scaler Bot" />
           </BotAvatar>
           <ChatSection>
-            <ChatText style={{ whiteSpace: 'pre-line' }}>
+            <ChatText style={{ whiteSpace: "pre-line" }}>
               {getPersonalizedSummary()}
             </ChatText>
             {badges && badges.length > 0 && (
@@ -1592,7 +1587,7 @@ const ProfileMatchHeroV2 = ({
                 <AttributesList>
                   {badges.map((badge, index) => (
                     <AttributeBadge key={index}>
-                      {typeof badge === 'string' ? badge : badge.name}
+                      {typeof badge === "string" ? badge : badge.name}
                     </AttributeBadge>
                   ))}
                 </AttributesList>
@@ -1682,25 +1677,25 @@ const ProfileMatchHeroV2 = ({
                       role.timeline_text ||
                       `${role.min_months || 4}-${role.max_months || 6} months`;
                     let displayTimeline = baseTimeline;
-                    let cardType = 'target';
-                    let label = 'Target Role';
+                    let cardType = "target";
+                    let label = "Target Role";
 
                     if (index === 1) {
                       displayTimeline = calculateAlternateTimeline(
                         baseTimeline,
                         1
                       );
-                      cardType = 'alternate';
-                      label = 'Alternate Path 1';
+                      cardType = "alternate";
+                      label = "Alternate Path 1";
                     } else if (index === 2) {
                       displayTimeline = calculateAlternateTimeline(
                         baseTimeline,
                         2
                       );
-                      cardType = 'alternate';
-                      label = 'Alternate Path 2';
+                      cardType = "alternate";
+                      label = "Alternate Path 2";
                     } else {
-                      label = 'Your Target Role';
+                      label = "Your Target Role";
                     }
 
                     return (
@@ -1727,7 +1722,7 @@ const ProfileMatchHeroV2 = ({
                     const targetCompanyLabel =
                       quizResponses?.targetCompanyLabel ||
                       goals?.targetCompany ||
-                      '';
+                      "";
                     const roleTitle = role.title || role.role;
                     const displayTitle = targetCompanyLabel
                       ? `${roleTitle} - ${targetCompanyLabel}`
@@ -1747,8 +1742,8 @@ const ProfileMatchHeroV2 = ({
                           {role.key_gap && (
                             <RoleDescription
                               style={{
-                                display: 'flex',
-                                alignItems: 'flex-start'
+                                display: "flex",
+                                alignItems: "flex-start",
                               }}
                             >
                               <MapPin
@@ -1756,9 +1751,9 @@ const ProfileMatchHeroV2 = ({
                                 weight="regular"
                                 color="#64748b"
                                 style={{
-                                  marginRight: '6px',
-                                  marginTop: '2px',
-                                  flexShrink: 0
+                                  marginRight: "6px",
+                                  marginTop: "2px",
+                                  flexShrink: 0,
                                 }}
                               />
                               <span>
@@ -1772,8 +1767,8 @@ const ProfileMatchHeroV2 = ({
                                 <RoleDescription
                                   key={mIndex}
                                   style={{
-                                    display: 'flex',
-                                    alignItems: 'flex-start'
+                                    display: "flex",
+                                    alignItems: "flex-start",
                                   }}
                                 >
                                   <CheckSquare
@@ -1781,13 +1776,13 @@ const ProfileMatchHeroV2 = ({
                                     weight="regular"
                                     color="#64748b"
                                     style={{
-                                      marginRight: '6px',
-                                      marginTop: '2px',
-                                      flexShrink: 0
+                                      marginRight: "6px",
+                                      marginTop: "2px",
+                                      flexShrink: 0,
                                     }}
                                   />
                                   <span>
-                                    <strong>Milestone {mIndex + 1}:</strong>{' '}
+                                    <strong>Milestone {mIndex + 1}:</strong>{" "}
                                     {milestone}
                                   </span>
                                 </RoleDescription>
@@ -1809,10 +1804,10 @@ const ProfileMatchHeroV2 = ({
                           end={`timeline-${index}`}
                           color={
                             index === 0
-                              ? '#a7f3d0'
+                              ? "#a7f3d0"
                               : index === 1
-                                ? '#bfdbfe'
-                                : '#e9d5ff'
+                              ? "#bfdbfe"
+                              : "#e9d5ff"
                           }
                           strokeWidth={6}
                           curveness={0.8}
@@ -1825,10 +1820,10 @@ const ProfileMatchHeroV2 = ({
                           end={`role-${index}`}
                           color={
                             index === 0
-                              ? '#a7f3d0'
+                              ? "#a7f3d0"
                               : index === 1
-                                ? '#bfdbfe'
-                                : '#e9d5ff'
+                              ? "#bfdbfe"
+                              : "#e9d5ff"
                           }
                           strokeWidth={6}
                           curveness={0.6}
@@ -1851,25 +1846,25 @@ const ProfileMatchHeroV2 = ({
                     role.timeline_text ||
                     `${role.min_months || 4}-${role.max_months || 6} months`;
                   let displayTimeline = baseTimeline;
-                  let categoryType = 'target';
-                  let label = 'Target Role';
+                  let categoryType = "target";
+                  let label = "Target Role";
 
                   if (index === 1) {
                     displayTimeline = calculateAlternateTimeline(
                       baseTimeline,
                       1
                     );
-                    categoryType = 'alternate';
-                    label = 'Alternate Path 1';
+                    categoryType = "alternate";
+                    label = "Alternate Path 1";
                   } else if (index === 2) {
                     displayTimeline = calculateAlternateTimeline(
                       baseTimeline,
                       2
                     );
-                    categoryType = 'alternate';
-                    label = 'Alternate Path 2';
+                    categoryType = "alternate";
+                    label = "Alternate Path 2";
                   } else {
-                    label = 'Your Target Role';
+                    label = "Your Target Role";
                   }
 
                   const formattedSalary = formatSalary(role.salary_range_usd);
@@ -1879,7 +1874,7 @@ const ProfileMatchHeroV2 = ({
                   const targetCompanyLabel =
                     quizResponses?.targetCompanyLabel ||
                     goals?.targetCompany ||
-                    '';
+                    "";
                   const roleTitle = role.title || role.role;
                   const displayTitle = targetCompanyLabel
                     ? `${roleTitle} - ${targetCompanyLabel}`
@@ -1900,8 +1895,8 @@ const ProfileMatchHeroV2 = ({
                           {role.key_gap && (
                             <RoleDescription
                               style={{
-                                display: 'flex',
-                                alignItems: 'flex-start'
+                                display: "flex",
+                                alignItems: "flex-start",
                               }}
                             >
                               <MapPin
@@ -1909,9 +1904,9 @@ const ProfileMatchHeroV2 = ({
                                 weight="regular"
                                 color="#64748b"
                                 style={{
-                                  marginRight: '6px',
-                                  marginTop: '2px',
-                                  flexShrink: 0
+                                  marginRight: "6px",
+                                  marginTop: "2px",
+                                  flexShrink: 0,
                                 }}
                               />
                               <span>
@@ -1925,8 +1920,8 @@ const ProfileMatchHeroV2 = ({
                                 <RoleDescription
                                   key={mIndex}
                                   style={{
-                                    display: 'flex',
-                                    alignItems: 'flex-start'
+                                    display: "flex",
+                                    alignItems: "flex-start",
                                   }}
                                 >
                                   <CheckSquare
@@ -1934,13 +1929,13 @@ const ProfileMatchHeroV2 = ({
                                     weight="regular"
                                     color="#64748b"
                                     style={{
-                                      marginRight: '6px',
-                                      marginTop: '2px',
-                                      flexShrink: 0
+                                      marginRight: "6px",
+                                      marginTop: "2px",
+                                      flexShrink: 0,
                                     }}
                                   />
                                   <span>
-                                    <strong>Milestone {mIndex + 1}:</strong>{' '}
+                                    <strong>Milestone {mIndex + 1}:</strong>{" "}
                                     {milestone}
                                   </span>
                                 </RoleDescription>
@@ -1967,7 +1962,7 @@ const ProfileMatchHeroV2 = ({
                 </CTAText>
               </CTAContent>
               <CTAButton
-                onClick={() => window.open('/career-consultation', '_blank')}
+                onClick={() => window.open("/career-consultation", "_blank")}
               >
                 Book Career Consultation
               </CTAButton>
@@ -1984,12 +1979,12 @@ const ProfileMatchHeroV2 = ({
               <QuickWinsList>
                 {quickWins.slice(0, 4).map((win, index) => {
                   const iconColors = [
-                    '#D90065',
-                    '#D77C00',
-                    '#C32841',
-                    '#1D925B',
-                    '#0052FF',
-                    '#016DD9'
+                    "#D90065",
+                    "#D77C00",
+                    "#C32841",
+                    "#1D925B",
+                    "#0052FF",
+                    "#016DD9",
                   ];
                   const iconColor = iconColors[index % iconColors.length];
 
@@ -2004,15 +1999,15 @@ const ProfileMatchHeroV2 = ({
                     users: <Users size={24} weight="fill" />,
                     trophy: <Trophy size={24} weight="fill" />,
                     target: <Target size={24} weight="fill" />,
-                    certificate: <Medal size={24} weight="fill" />
+                    certificate: <Medal size={24} weight="fill" />,
                   };
 
                   const iconName =
-                    typeof win === 'object' && win.icon
+                    typeof win === "object" && win.icon
                       ? win.icon.toLowerCase()
-                      : 'lightbulb';
+                      : "lightbulb";
                   const IconComponent =
-                    iconMap[iconName] || iconMap['lightbulb'];
+                    iconMap[iconName] || iconMap["lightbulb"];
 
                   return (
                     <QuickWinItem key={index}>
@@ -2023,7 +2018,7 @@ const ProfileMatchHeroV2 = ({
                           {IconComponent}
                         </QuickWinIconContainer>
                         <QuickWinContent>
-                          {typeof win === 'string' ? (
+                          {typeof win === "string" ? (
                             <QuickWinDescription>{win}</QuickWinDescription>
                           ) : (
                             <>
@@ -2055,7 +2050,7 @@ const ProfileMatchHeroV2 = ({
               <SectionDivider />
               <ToolsGrid>
                 {tools.slice(0, 8).map((tool, index) => {
-                  const toolName = typeof tool === 'string' ? tool : tool.name;
+                  const toolName = typeof tool === "string" ? tool : tool.name;
                   return <ToolItem key={index} toolName={toolName} />;
                 })}
               </ToolsGrid>
@@ -2078,7 +2073,7 @@ const ProfileMatchHeroV2 = ({
                       {experienceBenchmark.your_experience_years}
                       {!experienceBenchmark.your_experience_years
                         ?.toLowerCase()
-                        .includes('year') && ' years'}
+                        .includes("year") && " years"}
                     </BenchmarkValue>
                   </BenchmarkItem>
                   <BenchmarkItem>
@@ -2087,13 +2082,13 @@ const ProfileMatchHeroV2 = ({
                       {experienceBenchmark.typical_for_target_role_years}
                       {!experienceBenchmark.typical_for_target_role_years
                         ?.toLowerCase()
-                        .includes('year') && ' years'}
+                        .includes("year") && " years"}
                     </BenchmarkValue>
                   </BenchmarkItem>
                 </BenchmarkLeftSection>
                 {experienceBenchmark.gap_analysis && (
                   <GapAnalysis>
-                    <strong>Gap Analysis:</strong>{' '}
+                    <strong>Gap Analysis:</strong>{" "}
                     {experienceBenchmark.gap_analysis}
                   </GapAnalysis>
                 )}
