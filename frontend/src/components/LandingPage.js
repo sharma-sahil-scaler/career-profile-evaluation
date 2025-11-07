@@ -1,8 +1,8 @@
-import { Check } from 'phosphor-react';
-import React from 'react';
-import { useNavigate } from 'react-router-dom';
-import styled from 'styled-components';
-import { useProfile } from '../context/ProfileContext';
+import { Check } from "phosphor-react";
+import React, { useCallback, useEffect } from "react";
+import { useNavigate } from "react-router-dom";
+import styled from "styled-components";
+import { useProfile } from "../context/ProfileContext";
 
 const LandingContainer = styled.div`
   min-height: calc(100vh - 70px);
@@ -19,7 +19,8 @@ const Content = styled.div`
   background: white;
   border-radius: 0;
   padding: 60px 40px;
-  box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+  box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1),
+    0 2px 4px -1px rgba(0, 0, 0, 0.06);
   border: 1px solid #e2e8f0;
 `;
 
@@ -119,9 +120,8 @@ const LandingPage = () => {
   const { resetProfile } = useProfile();
 
   const handleStart = () => {
-    // Clear all previous data before starting new evaluation
     resetProfile();
-    navigate('/quiz');
+    navigate("/quiz");
   };
 
   return (
@@ -130,34 +130,46 @@ const LandingPage = () => {
         <Title>Free Profile Evaluation</Title>
         <Subtitle>Assess Your Tech Career Readiness in Just 2 Mins</Subtitle>
         <Description>
-          Get a comprehensive evaluation of your profile for tech roles. 
-          Discover your strengths, identify gaps, and receive personalized 
+          Get a comprehensive evaluation of your profile for tech roles.
+          Discover your strengths, identify gaps, and receive personalized
           recommendations to accelerate your career growth.
         </Description>
-        
+
         <FeaturesList>
           <Feature>
-            <CheckIcon><Check size={20} weight="regular" /></CheckIcon>
+            <CheckIcon>
+              <Check size={20} weight="regular" />
+            </CheckIcon>
             Profile Strength Analysis
           </Feature>
           <Feature>
-            <CheckIcon><Check size={20} weight="regular" /></CheckIcon>
+            <CheckIcon>
+              <Check size={20} weight="regular" />
+            </CheckIcon>
             Skill Gap Assessment
           </Feature>
           <Feature>
-            <CheckIcon><Check size={20} weight="regular" /></CheckIcon>
+            <CheckIcon>
+              <Check size={20} weight="regular" />
+            </CheckIcon>
             Salary Readiness Check
           </Feature>
           <Feature>
-            <CheckIcon><Check size={20} weight="regular" /></CheckIcon>
+            <CheckIcon>
+              <Check size={20} weight="regular" />
+            </CheckIcon>
             Interview Preparation Tips
           </Feature>
           <Feature>
-            <CheckIcon><Check size={20} weight="regular" /></CheckIcon>
+            <CheckIcon>
+              <Check size={20} weight="regular" />
+            </CheckIcon>
             Personalized Resources
           </Feature>
           <Feature>
-            <CheckIcon><Check size={20} weight="regular" /></CheckIcon>
+            <CheckIcon>
+              <Check size={20} weight="regular" />
+            </CheckIcon>
             Peer Comparison
           </Feature>
         </FeaturesList>

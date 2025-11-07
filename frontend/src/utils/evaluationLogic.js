@@ -193,7 +193,11 @@ export const evaluateProfile = async (
           product: 'scaler',
           sub_product: 'career_profile_tool',
           element: 'cpe_evaluated_btn'
-        }
+        },
+        owner: {
+          id: 1,
+          type: 'CareerProfileEvaluation',
+        },
       },
       {
         headers: {
