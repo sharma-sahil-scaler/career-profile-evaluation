@@ -192,7 +192,7 @@ export const evaluateProfile = async (
           program: 'software_development',
           product: 'scaler',
           sub_product: 'career_profile_tool',
-          element: 'cpe_evaluated_btn'
+          element: 'cpe_evaluate_btn'
         },
         owner: {
           id: 1,
