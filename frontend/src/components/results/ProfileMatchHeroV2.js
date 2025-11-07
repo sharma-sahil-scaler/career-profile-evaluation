@@ -1368,25 +1368,15 @@ const ProfileMatchHeroV2 = ({
   const experienceBenchmark = evaluationResults?.experience_benchmark || null;
   const recommendedRoles =
     evaluationResults?.recommended_roles_based_on_interests || [];
+  const experienceYears = quizResponses?.experience || "Not specified";
+
   const background = backgroundProp || "tech";
 
-  const percentile = peerComparison.percentile || 68;
-
-  // Categorize roles for career transition
-  const categories = categorizeRoles(recommendedRoles);
-
-  // Determine background label and current role
   const currentRoleRaw =
     quizResponses?.currentRole ||
     quizResponses?.currentBackground ||
     "Current Role";
-  const backgroundLabel =
-    background === "non-tech" ? "Non-Tech Professional" : "Tech Professional";
-  const currentSkillFocus =
-    quizResponses?.currentSkill || quizResponses?.stepsTaken || "Not specified";
-  const experienceYears = quizResponses?.experience || "Not specified";
 
-  // Extract company type from currentRole for tech users
   const getCompanyType = (roleValue) => {
     if (!roleValue) return "Not specified";
 
@@ -1504,10 +1494,6 @@ const ProfileMatchHeroV2 = ({
     let keyActions =
       "Here are the 3 most impactful things you should focus on:\n";
 
-    // Parse backend summary for key actions
-    const backendNotes = notes || "";
-
-    // Try to extract specific recommendations from backend
     if (problemSolving === "0-10" || problemSolving === "11-50") {
       keyActions +=
         "1. Strengthen your problem-solving skills (aim for 100+ problems)\n";
@@ -1598,7 +1584,7 @@ const ProfileMatchHeroV2 = ({
 
         {/* Skills Section - Moved to top for both modes */}
         {(strengths.length > 0 || areasToImprove.length > 0) && (
-          <SectionBlock>
+          <SectionBlock className="gtm-section-view" data-gtm-section-name="See Where You Stand Today">
             <SectionHeading>See Where You Stand Today</SectionHeading>
             <SectionSubtitle>
               Compare your strengths and areas for improvement
@@ -1644,7 +1630,7 @@ const ProfileMatchHeroV2 = ({
         <>
           {/* Career Transition Section - Shows realistic timelines to achieve target role */}
           {recommendedRoles.length > 0 && (
-            <CareerTransitionContainer>
+            <CareerTransitionContainer className="gtm-section-view" data-gtm-section-name="Career Timeline">
               <CareerTransitionTitle>Career Timeline</CareerTransitionTitle>
               <CareerTransitionSubtitle>
                 Realistic timelines to achieve your target roles based on
@@ -1970,7 +1956,7 @@ const ProfileMatchHeroV2 = ({
           )}
 
           {quickWins.length > 0 && (
-            <SectionBlock>
+            <SectionBlock className="gtm-section-view" data-gtm-section-name="Quick Wins for You">
               <SectionHeading>Quick Wins for You</SectionHeading>
               <SectionSubtitle>
                 Take these actionable steps to improve your profile
@@ -2042,7 +2028,7 @@ const ProfileMatchHeroV2 = ({
           )}
 
           {tools.length > 0 && (
-            <SectionBlock>
+            <SectionBlock className="gtm-section-view" data-gtm-section-name="Tools & Technologies to Learn">
               <SectionHeading>Tools & Technologies to Learn</SectionHeading>
               <SectionSubtitle>
                 Master these tools to enhance your skillset
@@ -2058,7 +2044,7 @@ const ProfileMatchHeroV2 = ({
           )}
 
           {experienceBenchmark && (
-            <SectionBlock>
+            <SectionBlock className="gtm-section-view" data-gtm-section-name="Experience Benchmark">
               <SectionHeading>Experience Benchmark</SectionHeading>
               <SectionSubtitle>
                 Compare your experience with typical requirements for your

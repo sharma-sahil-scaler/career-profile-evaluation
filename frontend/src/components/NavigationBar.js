@@ -297,7 +297,7 @@ const NavigationBar = ({
     location.pathname === '/quiz' || location.pathname === '/goals';
   const showModeToggle = location.pathname === '/quiz';
   const isResultsPage =
-    location.pathname === '/results' || location.pathname === '/reports';
+    location.pathname === '/results';
 
   const handleRCBClick = useCallback(() => {
     tracker.click({

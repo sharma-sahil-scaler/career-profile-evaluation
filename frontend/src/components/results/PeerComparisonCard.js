@@ -185,7 +185,7 @@ const PeerComparisonCard = ({ peerComparison }) => {
   const potentialOffset = circumference - (potentialPercentile / 100) * circumference;
 
   return (
-    <SectionWrapper>
+    <SectionWrapper className="gtm-section-view" data-gtm-section-name="Peer Comparison">
       {/* Title and Subtitle - Outside the box */}
       <SectionHeading>Peer Comparison</SectionHeading>
       <SectionSubtitle>See how you compare to similar professionals in your field</SectionSubtitle>

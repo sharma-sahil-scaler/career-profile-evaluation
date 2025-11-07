@@ -20,7 +20,6 @@ const AppRoutes = ({
       }
     />
     <Route path="/results" element={<ResultsPage />} />
-    <Route path="/reports" element={<ResultsPage />} />
   </Routes>
 );
 
