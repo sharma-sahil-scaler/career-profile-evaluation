@@ -12,7 +12,7 @@ function QuizPage({ onProgressChange }) {
 
   const trackVisit = useCallback(async () => {
     try {
-      attribution.setAttribution("cpe_visited");
+      attribution.setAttribution("page_visit");
       const refererUrl = getURLWithUTMParams();
       const jwt = await generateJWT();
       if (!jwt) return;
@@ -26,7 +26,6 @@ function QuizPage({ onProgressChange }) {
             program: "software_development",
             product: "scaler",
             sub_product: "career_profile_tool",
-            element: "cpe_visited_page",
           },
           owner: {
             id: 1,
