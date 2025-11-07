@@ -26,6 +26,7 @@ function QuizPage({ onProgressChange }) {
             program: "software_development",
             product: "scaler",
             sub_product: "career_profile_tool",
+            element: "career_profile_tool_quiz_page",
           },
           owner: {
             id: 1,
