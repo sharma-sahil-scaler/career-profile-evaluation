@@ -579,7 +579,8 @@ def run_poc(
                 target_role_index = idx
                 break
 
-    if target_role:
+    # Only create target_role_timeline if user has a clear target role (not "not-sure" or exploring)
+    if target_role and target_role not in ["not-sure", "exploring"]:
         target_role_timeline_data = calculate_timeline_to_role(target_role, quiz_responses)
         display_title = quiz_responses.get("targetRoleLabel", target_role)
         target_role_timeline = {

@@ -121,6 +121,63 @@ def _identify_key_gap(coding_gap: int, sd_gap: int, portfolio_gap: int) -> str:
     return gap_messages.get(max_gap_area, "Skill development needed")
 
 
+def _calculate_5_8_years_multiplier(target_role: str, quiz_responses: Dict[str, Any]) -> float:
+    """
+    Calculate customized multiplier for 5-8 years experience based on role transition.
+
+    Different scenarios:
+    - Tech to same domain (SWE-Product → Senior SWE-Product): 0.6 (fast, only polish needed)
+    - Tech to adjacent domain (SWE-Product → DevOps): 0.75 (moderate, some new skills)
+    - Tech to distant domain (SWE-Service → Data Engineer): 0.85 (harder, more upskilling)
+    - Non-tech → Any tech role: 0.9 (usual path)
+    """
+    current_role = quiz_responses.get("currentRole", "")
+    background = quiz_responses.get("background", "tech")
+
+    target_lower = target_role.lower()
+
+    # Non-tech users transitioning: standard 0.9
+    if background == "non-tech":
+        return 0.9
+
+    # Tech users already in the field - analyze domain transition
+    if current_role:
+        current_lower = current_role.lower()
+
+        # SAME DOMAIN: Quick path (just promotion/leveling up)
+        # SWE-Product → Senior SWE-Product / Staff Engineer
+        if "product" in current_lower and "product" in target_lower:
+            return 0.6  # Very fast - already in right culture
+
+        # SWE-Service → Senior SWE-Service (with goal to move to product)
+        if "service" in current_lower and ("service" in target_lower or "senior" in target_lower):
+            return 0.7  # Moderate - promotion within current role
+
+        # DevOps/Cloud → DevOps/SRE/Cloud
+        if any(x in current_lower for x in ["devops", "cloud", "infra"]) and \
+           any(x in target_lower for x in ["devops", "sre", "cloud", "infra"]):
+            return 0.65  # Fast - same domain
+
+        # QA/Support → Backend/Full-Stack (hard transition)
+        if any(x in current_lower for x in ["qa", "support"]) and \
+           any(x in target_lower for x in ["backend", "fullstack", "frontend", "data", "ml"]):
+            return 0.85  # Harder - need to prove engineering skills
+
+        # SWE-Product → Backend/Full-Stack (adjacent domains)
+        if "product" in current_lower and any(x in target_lower for x in ["backend", "fullstack", "frontend"]):
+            return 0.75  # Moderate - switching within product world
+
+        # SWE-Service → Data/ML (distant domain)
+        if "service" in current_lower and any(x in target_lower for x in ["data", "ml", "ai"]):
+            return 0.85  # Harder - completely new domain
+
+        # Default for 5-8 years: standard 0.9
+        return 0.9
+
+    # No current role specified: standard multiplier
+    return 0.9
+
+
 def _generate_milestones(
     coding_gap: int,
     sd_gap: int,
@@ -246,11 +303,12 @@ def calculate_timeline_to_role(
 
     base_months += 1
 
+    # Enhanced experience multiplier with role-based customization for 5-8 years
     experience_multiplier = {
         "0": 1.3,
         "0-2": 1.1,
         "3-5": 1.0,
-        "5-8": 0.9,
+        "5-8": _calculate_5_8_years_multiplier(target_role, quiz_responses),
         "8+": 0.85
     }.get(experience, 1.0)
 
