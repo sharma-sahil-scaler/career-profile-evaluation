@@ -53,6 +53,14 @@ export const RequestCallbackProvider = ({ children }) => {
   }, []);
 
   const updateField = useCallback((field, value) => {
+    if(value) {
+      tracker.click({
+        click_type: "form_input_filled",
+        custom: {
+          field: field,
+        },
+      });
+    }
     setFormState((prev) => ({
       ...prev,
       [field]: value,
