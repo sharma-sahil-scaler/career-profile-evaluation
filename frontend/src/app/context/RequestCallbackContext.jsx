@@ -9,6 +9,7 @@ import React, {
 import RequestCallbackModal from "../components/RequestCallbackModal";
 import { apiRequest } from "../../utils/api";
 import tracker from "../../utils/tracker";
+import attribution from "../../utils/attribution";
 
 const RequestCallbackContext = createContext({
   open: () => {},
@@ -53,7 +54,7 @@ export const RequestCallbackProvider = ({ children }) => {
   }, []);
 
   const updateField = useCallback((field, value) => {
-    if(value) {
+    if (value) {
       tracker.click({
         click_type: "form_input_filled",
         custom: {
@@ -71,18 +72,12 @@ export const RequestCallbackProvider = ({ children }) => {
     setSubmissionStatus(SUBMISSION_STATUS.LOADING);
     setErrorMessage("");
 
-    console.log("clickSource", clickSource);
+    attribution.setAttribution("career_profile_tool_rcb");
     try {
-      await apiRequest("POST", "/request-callback", {
-        attributions: {
-          intent: "career_profile_tool_rcb",
-          platform: "desktop",
-          product: "career_profile_tool",
-          program: formState.program || "software_development",
-        },
-        user: {
-          program: formState.program || "Career Profile Evaluation",
-          position: formState.jobTitle || "",
+      await apiRequest("POST", "/api/v3/callbacks", {
+        program: formState.program || "software_development",
+        rcb_params: {
+          attributions: attribution.getAttribution(),
         },
       });
 
