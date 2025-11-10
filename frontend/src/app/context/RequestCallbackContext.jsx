@@ -10,6 +10,7 @@ import RequestCallbackModal from "../components/RequestCallbackModal";
 import { apiRequest } from "../../utils/api";
 import tracker from "../../utils/tracker";
 import attribution from "../../utils/attribution";
+import { generateJWT } from "../../utils/api";
 
 const RequestCallbackContext = createContext({
   open: () => {},
@@ -72,14 +73,24 @@ export const RequestCallbackProvider = ({ children }) => {
     setSubmissionStatus(SUBMISSION_STATUS.LOADING);
     setErrorMessage("");
 
-    attribution.setAttribution("career_profile_tool_rcb");
+    attribution.setAttribution("cpe_requested_callback");
     try {
-      await apiRequest("POST", "/api/v3/callbacks", {
-        program: formState.program || "software_development",
-        rcb_params: {
-          attributions: attribution.getAttribution(),
+      const jwt = await generateJWT();
+      await apiRequest(
+        "POST",
+        "/api/v3/callbacks",
+        {
+          program: formState.program || "software_development",
+          rcb_params: {
+            attributions: attribution.getAttribution(),
+          },
         },
-      });
+        {
+          headers: {
+            "X-User-Token": jwt,
+          },
+        }
+      );
 
       tracker.click({
         click_type: "rcb_form_submitted",
