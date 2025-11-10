@@ -206,10 +206,13 @@ export const evaluateProfile = async (
         }
       }
     );
-
+    tracker.click({
+      click_type: "profile_evaluation_detail_submitted",
+    });
   } catch(e) {
 
   }
+
 
   return data.profile_evaluation;
 };
