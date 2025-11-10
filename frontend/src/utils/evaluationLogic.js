@@ -3,6 +3,7 @@ import { apiRequest } from './api';
 import attribution from './attribution';
 import { getURLWithUTMParams } from './url';
 import { generateJWT } from './api';
+import tracker from './tracker';
 
 const deriveCurrentCompany = (currentRole) => {
   const roleToCompanyMap = {
