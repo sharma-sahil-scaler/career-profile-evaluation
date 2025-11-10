@@ -80,77 +80,92 @@ def _filter_and_rerank_roles(
         # Convert Enum to string if needed
         seniority = str(seniority_raw).lower() if seniority_raw else ""
 
-        # 1. CURRENT ROLE DOMAIN MATCHING (highest priority)
-        if current_role:
-            current_lower = current_role.lower()
-
-            # DevOps users → DevOps/SRE/Platform/Infrastructure roles
-            if "devops" in current_lower or "infra" in current_lower or "cloud" in current_lower:
-                if any(x in title_lower for x in ["devops", "sre", "cloud", "infrastructure", "platform"]):
-                    score += 20  # Strong match
-
-            # QA/Support users → QA Automation, Test Engineer, Backend roles
-            if "qa" in current_lower or "support" in current_lower:
-                if any(x in title_lower for x in ["qa", "automation", "test", "backend", "engineer"]):
-                    score += 15  # Good match
-
-            # SWE-Product users → Backend, Full-Stack, Senior roles (stay in product world)
-            if "product" in current_lower:
-                if any(x in title_lower for x in ["backend", "fullstack", "full-stack", "senior", "staff"]):
-                    score += 15  # Good match
-
-            # SWE-Service users → can transition to Product roles
-            if "service" in current_lower:
-                if any(x in title_lower for x in ["backend", "fullstack", "senior"]):
-                    score += 12  # Moderate match
-
-        # 2. TARGET ROLE MATCHING (second priority)
+        # 1. TARGET ROLE MATCHING (HIGHEST PRIORITY - user's explicit choice)
         if target_role:
             target_lower = target_role.lower()
 
             # Data Analytics/ML target → Data Engineer, Data Analyst, ML Engineer (NOT generic engineer roles)
             if "data" in target_lower or "ml" in target_lower or "analytics" in target_lower:
                 if any(x in title_lower for x in ["data engineer", "data analyst", "ml engineer", "machine learning", "analytics engineer"]):
-                    score += 20  # Strong match for data-focused roles
+                    score += 30  # HIGHEST - user's explicit target
 
             # Backend target → Backend, Full-Stack, Senior Backend
             if "backend" in target_lower:
                 if any(x in title_lower for x in ["backend", "api", "full-stack"]):
-                    score += 15  # Good match
+                    score += 25  # HIGHEST - user's explicit target
 
             # Frontend target → Frontend, Full-Stack
             if "frontend" in target_lower:
                 if any(x in title_lower for x in ["frontend", "full-stack", "react", "angular", "vue"]):
-                    score += 15  # Good match
+                    score += 25  # HIGHEST - user's explicit target
 
             # DevOps/SRE target → DevOps, SRE, Cloud, Infrastructure
             if "devops" in target_lower or "sre" in target_lower or "infrastructure" in target_lower:
-                if any(x in title_lower for x in ["devops", "sre", "cloud", "infrastructure", "platform"]):
-                    score += 20  # Strong match
+                if any(x in title_lower for x in ["devops", "sre", "cloud", "infrastructure", "platform", "reliability engineer", "site reliability"]):
+                    score += 30  # HIGHEST - user's explicit target
+
+            # Tech Lead/Manager target → Tech Lead, Manager, Director
+            if "tech-lead" in target_lower or "lead" in target_lower or "manager" in target_lower:
+                if any(x in title_lower for x in ["tech lead", "engineering manager", "director", "manager"]):
+                    score += 30  # HIGHEST - user's explicit target
+
+            # Staff/Principal target → Staff, Principal, Architect
+            if "staff" in target_lower or "principal" in target_lower or "architect" in target_lower:
+                if any(x in title_lower for x in ["staff", "principal", "architect"]):
+                    score += 30  # HIGHEST - user's explicit target
+
+        # 2. CURRENT ROLE DOMAIN MATCHING (secondary priority)
+        if current_role:
+            current_lower = current_role.lower()
+
+            # DevOps users → DevOps/SRE/Platform/Infrastructure roles
+            if "devops" in current_lower or "infra" in current_lower or "cloud" in current_lower:
+                if any(x in title_lower for x in ["devops", "sre", "cloud", "infrastructure", "platform", "reliability engineer", "site reliability"]):
+                    score += 15  # Good match (but lower than target role)
+
+            # QA/Support users → QA Automation, Test Engineer, Backend roles
+            if "qa" in current_lower or "support" in current_lower:
+                if any(x in title_lower for x in ["qa", "automation", "test", "backend", "engineer"]):
+                    score += 12  # Good match
+
+            # SWE-Product users → Backend, Full-Stack, Senior roles (stay in product world)
+            if "product" in current_lower:
+                if any(x in title_lower for x in ["backend", "fullstack", "full-stack", "senior", "staff"]):
+                    score += 12  # Good match
+
+            # SWE-Service users → can transition to Product roles
+            if "service" in current_lower:
+                if any(x in title_lower for x in ["backend", "fullstack", "senior"]):
+                    score += 10  # Moderate match
 
         # 3. EXPERIENCE LEVEL MATCHING (third priority)
         if experience:
             # 8+ years → Staff, Principal, Engineering Manager, Architect, Tech Lead
             if experience == "8+":
-                if any(x in title_lower for x in ["staff", "principal", "engineering manager", "architect", "tech lead", "director"]):
+                if any(x in title_lower for x in ["staff", "principal", "engineering manager", "architect", "tech lead", "director"]) or \
+                   any(x in seniority for x in ["staff", "principal", "principal engineer", "engineering manager", "director"]):
                     score += 18  # Strong match for senior roles
                 # Regular engineer roles should be lower priority
-                elif any(x in title_lower for x in ["senior", "lead"]):
+                elif any(x in title_lower for x in ["senior", "lead"]) or \
+                     "senior" in seniority or "principal" in seniority:
                     score += 10
 
             # 5-8 years → Senior, Tech Lead, Staff (if strong coding)
             elif experience == "5-8":
-                if any(x in title_lower for x in ["senior", "tech lead", "staff", "architect"]):
+                if any(x in title_lower for x in ["senior", "tech lead", "staff", "architect"]) or \
+                   any(x in seniority for x in ["senior", "staff", "architect", "tech lead"]):
                     score += 15
 
             # 3-5 years → Mid-level, Senior (lower-bound)
             elif experience == "3-5":
-                if any(x in title_lower for x in ["senior", "mid-level", "sde-2"]):
+                if any(x in title_lower for x in ["senior", "mid-level", "sde-2"]) or \
+                   any(x in seniority for x in ["mid-senior", "senior", "mid-level"]):
                     score += 10
 
             # 0-2 years → Junior, Entry-level, SDE-1
             elif experience in ["0-2", "0"]:
-                if any(x in title_lower for x in ["junior", "entry", "sde-1", "graduate", "intern"]):
+                if any(x in title_lower for x in ["junior", "entry", "sde-1", "graduate", "intern"]) or \
+                   any(x in seniority for x in ["junior", "entry-level"]):
                     score += 12
 
         # 4. GENERAL RELEVANCE BOOST (baseline for all roles)
@@ -737,10 +752,12 @@ def run_poc(
         target_role_obj = recommended_roles.pop(target_role_index)
         recommended_roles.insert(0, target_role_obj)
     elif target_role_timeline is not None and isinstance(target_role_timeline, dict):
-        target_role_display = target_role_timeline.get("title", "").strip().lower()
-        existing_titles = [r["title"].strip().lower() for r in recommended_roles]
-        if target_role_display not in existing_titles:
-            recommended_roles.insert(0, target_role_timeline)
+        title = target_role_timeline.get("title", "")
+        if title:  # Only process if title exists and is not None/empty
+            target_role_display = str(title).strip().lower()
+            existing_titles = [str(r.get("title", "")).strip().lower() for r in recommended_roles]
+            if target_role_display not in existing_titles:
+                recommended_roles.insert(0, target_role_timeline)
     seen_titles_final = set()
     final_deduplicated_roles = []
     for role in recommended_roles:
@@ -749,7 +766,7 @@ def run_poc(
             seen_titles_final.add(role_title)
             final_deduplicated_roles.append(role)
 
-    result_dict["profile_evaluation"]["recommended_roles_based_on_interests"] = final_deduplicated_roles[:5]
+    result_dict["profile_evaluation"]["recommended_roles_based_on_interests"] = final_deduplicated_roles[:3]
 
     result = FullProfileEvaluationResponse.model_validate(result_dict)
 

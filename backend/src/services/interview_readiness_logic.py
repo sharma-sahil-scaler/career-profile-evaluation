@@ -100,64 +100,76 @@ def _calculate_tech_readiness(quiz_responses: Dict[str, Any]) -> Dict[str, Any]:
 
 
 def _calculate_non_tech_readiness(quiz_responses: Dict[str, Any]) -> Dict[str, Any]:
-    """Calculate readiness for non-tech background users."""
+    """
+    Calculate readiness for non-tech background users (transitioning from other domains).
 
-    code_comfort = quiz_responses.get("codeComfort", "complete-beginner")
-    steps_taken = quiz_responses.get("stepsTaken", "just-exploring")
-    experience = quiz_responses.get("experience", "0")
-    current_background = quiz_responses.get("currentBackground", "other")
+    NOTE: Non-tech users through the API send the same fields as tech users.
+    This uses the available fields to estimate interview readiness.
+    """
 
-    # Base from current coding comfort level (most important signal for interview readiness)
-    if code_comfort == "confident":
-        base = 65  # Can solve problems independently
-    elif code_comfort == "learning":
-        base = 55  # Can follow tutorials and struggle through
-    elif code_comfort == "beginner":
-        base = 50  # Understands concepts but can't code yet
-    else:  # "complete-beginner"
-        base = 45  # Haven't tried yet (floor)
+    problem_solving = quiz_responses.get("problemSolving", "0-10")
+    portfolio = quiz_responses.get("portfolio", "exploring")
+    experience = quiz_responses.get("experience", "0-2")
+    current_role = quiz_responses.get("currentRole", "").lower()
+    target_role = quiz_responses.get("targetRole", "").lower()
 
-    # Bonus for structured learning path (shows commitment and structure)
-    if steps_taken == "bootcamp":
-        base += 5  # Intensive structured learning
-    elif steps_taken == "completed-course":
-        base += 4  # Formal course completion
-    elif steps_taken == "built-projects":
-        base += 3  # Hands-on practical experience
-    elif steps_taken == "self-learning":
-        base += 1  # Self-directed but less structured
-    # "just-exploring" adds 0
+    # Base score from problem solving intensity (most important signal)
+    if problem_solving == "100+":
+        base = 70  # Very active coding practice
+    elif problem_solving == "51-100":
+        base = 60  # Good coding practice
+    elif problem_solving == "11-50":
+        base = 50  # Moderate coding practice
+    else:  # "0-10"
+        base = 45  # Minimal coding practice (floor)
 
-    # Boost for prior work experience (shows maturity and learning ability)
-    if experience in ["3-5", "5+"]:
-        base += 6  # Career switchers with experience are mature hires
+    # Boost for portfolio (shows hands-on commitment to tech transition)
+    if portfolio == "active-5+":
+        base += 8   # Multiple projects - serious commitment
+    elif portfolio == "limited-1-5":
+        base += 4   # Some projects - showing effort
+    elif portfolio == "inactive":
+        base += 1   # Old activity - some history
+    # "exploring" or others add 0
+
+    # Boost for prior work experience (maturity and learning ability)
+    # For non-tech users, prior experience is a strong positive
+    if experience in ["5-8", "8+", "5+"]:
+        base += 8   # Strong prior experience - mature learner
+    elif experience == "3-5":
+        base += 5   # Solid experience
     elif experience == "2-3":
-        base += 3  # Some maturity from work experience
+        base += 3   # Some experience
     elif experience == "0-2":
-        base += 1  # Limited work experience but some maturity
-    elif experience == "0":
-        base += 0  # Fresh grad - no prior work experience
+        base += 1   # Limited experience
+    # "0" years adds 0 - fresh grad
 
-    # Boost for certain backgrounds (analytical skills transfer to coding)
-    if current_background == "operations":
-        base += 2  # Operations teaches systematic problem-solving
-    elif current_background == "finance":
-        base += 2  # Finance teaches precision and analytical thinking
-    elif current_background == "design":
-        base += 1  # Design thinking helps with problem decomposition
-    elif current_background == "sales-marketing":
-        base += 0  # Sales/marketing - less direct technical transfer
-    elif current_background == "other":
-        base += 0  # Other backgrounds
+    # Small boost for current role showing any technical exposure
+    if current_role in ["qa-support", "qa", "support"]:
+        base += 2  # Some QA/support tech exposure
 
-    # Floor at 45, ceiling at 75 for non-tech (they typically need more prep than tech users)
+    # Boost based on clear target role (shows career direction)
+    if "data" in target_role:
+        base += 3   # Data/ML - focused technical path
+    elif "backend" in target_role:
+        base += 3   # Backend - serious engineering path
+    elif "fullstack" in target_role:
+        base += 3   # Fullstack - comprehensive technical path
+    elif "frontend" in target_role:
+        base += 2   # Frontend - web development path
+    # "exploring" or "not-sure" adds 0
+
+    # Floor at 45, ceiling at 75 for non-tech users
     technical_percent = max(45, min(75, base))
 
-    # HR behavioral for non-tech can be higher (many non-tech have strong soft skills)
-    hr_percent = max(45, min(75, technical_percent + 2))
+    # HR behavioral - non-tech often has strong soft skills from prior careers
+    if technical_percent >= 65:
+        hr_percent = max(45, min(75, technical_percent - 2))
+    else:
+        hr_percent = max(45, min(75, technical_percent - 5))
 
     # Determine confidence level
-    confidence = _get_confidence_level(technical_percent, experience, steps_taken)
+    confidence = _get_confidence_level(technical_percent, experience, problem_solving)
 
     return {
         "technical_interview_percent": technical_percent,
