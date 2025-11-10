@@ -15,6 +15,7 @@ from src.models.models_raw import FullProfileEvaluationResponseRaw
 from src.services.quick_wins_logic import generate_quick_wins
 from src.services.job_descriptions import generate_job_opportunities
 from src.services.scoring_logic import calculate_profile_strength
+from src.services.interview_readiness_logic import calculate_interview_readiness
 from src.services.tools_logic import generate_tool_recommendations
 from src.services.profile_notes_logic import generate_profile_strength_notes
 from src.services.timeline_logic import calculate_timeline_to_role, calculate_alternative_paths
@@ -60,6 +61,7 @@ def call_openai_structured(
     openai_model: str,
     input_payload: Dict[str, Any],
     calculated_profile_score: int,
+    calculated_interview_readiness: Dict[str, Any],
     target_company_label: str,
 ) -> FullProfileEvaluationResponse:
     client = OpenAI(api_key=api_key) if api_key else OpenAI()
@@ -71,17 +73,21 @@ def call_openai_structured(
         "or remote roles with Indian/global companies. Tailor all recommendations to be realistic and relevant for the Indian market.\n\n"
         f"CRITICAL: SCORE CONSISTENCY RULES\n"
         f"The user's profile_strength_score has been calculated as {calculated_profile_score}/100.\n"
-        f"ALL other percentage scores MUST be consistent with this baseline:\n\n"
+        f"The user's interview readiness has been independently calculated based on their practice, experience, and preparation.\n"
+        f"ALL percentage scores MUST be consistent with these calculated baselines:\n\n"
         f"1. peer_comparison.metrics.profile_strength_percent: MUST be {calculated_profile_score} (exact match)\n"
-        f"2. interview_readiness.technical_interview_percent: {max(0, calculated_profile_score - 10)} to {min(100, calculated_profile_score + 10)}\n"
-        f"   - Higher if problemSolving >= '51-100'\n"
-        f"   - Lower if problemSolving == '0-10'\n"
-        f"3. interview_readiness.hr_behavioral_percent: {max(0, calculated_profile_score - 10)} to {min(100, calculated_profile_score + 5)}\n"
-        f"   - Lower if mockInterviews == 'never'\n"
+        f"2. interview_readiness.technical_interview_percent: MUST be {calculated_interview_readiness['technical_interview_percent']} (calculated independently, NOT dependent on profile_strength_score)\n"
+        f"3. interview_readiness.hr_behavioral_percent: MUST be {calculated_interview_readiness['hr_behavioral_percent']} (based on soft skills and experience)\n"
+        f"   NOTE: Interview readiness is based on quiz responses (problemSolving, systemDesign, portfolio, experience)\n"
+        f"   It can be higher or lower than profile_strength_score - they measure different things!\n\n"
         f"4. peer_comparison.percentile: {max(0, calculated_profile_score - 5)} to {min(100, calculated_profile_score + 5)}\n"
         f"5. success_likelihood.score_percent: {max(0, calculated_profile_score - 10)} to {min(100, calculated_profile_score + 5)}\n"
-        f"   - CANNOT significantly exceed profile_strength_score\n\n"
-        f"LOGIC CHECK: If profile is {calculated_profile_score}% strong, success likelihood cannot be much higher!\n\n"
+        f"   - Should be reasonable given profile_strength_score\n\n"
+        f"IMPORTANT DISTINCTION:\n"
+        f"- profile_strength_score ({calculated_profile_score}%): Overall career strength (experience, skills, track record)\n"
+        f"- interview_readiness ({calculated_interview_readiness['technical_interview_percent']}%): Specifically how prepared they are for technical interviews\n"
+        f"- A person can have high interview readiness but lower profile strength (new grad who practices hard)\n"
+        f"- A person can have strong profile but lower interview readiness (experienced but not interview-prepped)\n\n"
         f"CRITICAL: USE ACTUAL TARGET COMPANY IN ALL TEXT\n"
         f"The user selected target company: '{target_company_label}'\n\n"
         f"When generating ANY text field (areas_to_develop, technical_notes, success_likelihood.notes, peer_comparison.summary):\n"
@@ -506,6 +512,9 @@ def run_poc(
     scoring_result = calculate_profile_strength(background, quiz_responses)
     calculated_score = scoring_result["score"]
 
+    # Calculate interview readiness independently (not dependent on profile strength score)
+    interview_readiness_result = calculate_interview_readiness(background, quiz_responses)
+
     from src.utils.label_mappings import get_company_label
     target_company = quiz_responses.get("targetCompany", "")
     target_company_label = quiz_responses.get("targetCompanyLabel") or get_company_label(target_company)
@@ -515,6 +524,7 @@ def run_poc(
         openai_model=model_name,
         input_payload=payload,
         calculated_profile_score=calculated_score,
+        calculated_interview_readiness=interview_readiness_result,
         target_company_label=target_company_label,
     )
 
@@ -523,6 +533,12 @@ def run_poc(
     hardcoded_tools = generate_tool_recommendations(background, quiz_responses)
     result_dict = result.model_dump()
     result_dict["profile_evaluation"]["profile_strength_score"] = scoring_result["score"]
+
+    # Override interview readiness with calculated values (independent of profile_strength_score)
+    interview_readiness = result_dict["profile_evaluation"]["interview_readiness"]
+    interview_readiness["technical_interview_percent"] = interview_readiness_result["technical_interview_percent"]
+    interview_readiness["hr_behavioral_percent"] = interview_readiness_result["hr_behavioral_percent"]
+
     personalized_notes = generate_profile_strength_notes(background, quiz_responses, scoring_result["score"])
 
     if scoring_result["has_contradictions"]:
