@@ -8,7 +8,7 @@ services:
     ports:
       - "8000:8000"
     environment:
-      - DATABASE_URL=postgres://root:getshitdone@career-profile-tool-db.cwgkgnfvhifq.us-west-2.rds.amazonaws.com:5432/postgres
+      - DATABASE_URL=postgres://postgres:KXUO6QgZ34rkjJ8lmDBq@career-profile-tool-db.clqiyios0ry1.us-west-2.rds.amazonaws.com:5432/postgres
       - OPENAI_API_KEY=${OPENAI_API_KEY}
       - ENVIRONMENT=${ENVIRONMENT:-production}
       - LOG_LEVEL=${LOG_LEVEL:-INFO}
