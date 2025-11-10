@@ -90,7 +90,7 @@ export const RequestCallbackProvider = ({ children }) => {
         "/api/v3/callbacks",
         {
           program: formState.program || "academy",
-          rcb_params: {
+          rcb_prams: {
             attributions: attribution.getAttribution(),
           },
         },
@@ -150,3 +150,8 @@ export const RequestCallbackProvider = ({ children }) => {
 };
 
 export const useRequestCallback = () => useContext(RequestCallbackContext);
+
+
+
+
+  
