@@ -28,6 +28,10 @@ const SUBMISSION_STATUS = {
   ERROR: "error",
 };
 
+const PROGRAMS_MAPPING = {
+  academy: "software_development",
+};
+
 export const RequestCallbackProvider = ({ children }) => {
   const [isOpen, setIsOpen] = useState(false);
   const [formState, setFormState] = useState(INITIAL_FORM_STATE);
@@ -73,14 +77,19 @@ export const RequestCallbackProvider = ({ children }) => {
     setSubmissionStatus(SUBMISSION_STATUS.LOADING);
     setErrorMessage("");
 
-    attribution.setAttribution("cpe_requested_callback");
+    attribution.setAttribution("cpe_requested_callback", {
+      program:
+        PROGRAMS_MAPPING[formState.program] ||
+        formState.program ||
+        "software_development",
+    });
     try {
       const jwt = await generateJWT();
       await apiRequest(
         "POST",
         "/api/v3/callbacks",
         {
-          program: formState.program || "software_development",
+          program: formState.program || "academy",
           rcb_params: {
             attributions: attribution.getAttribution(),
           },

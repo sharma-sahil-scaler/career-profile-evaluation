@@ -181,7 +181,7 @@ const LoadingSpinner = styled.div`
 
   @keyframes spin {
     to {
-      transform: rotate(360deg);
+;      transform: rotate(360deg);
     }
   }
 `;
@@ -189,40 +189,14 @@ const LoadingSpinner = styled.div`
 const programOptions = [
   { value: "", label: "Select a program" },
   { value: "data_science", label: "Data Science" },
-  { value: "software_development", label: "Software Development" },
+  { value: "academy", label: "Software Development" },
   { value: "devops", label: "DevOps" },
   { value: "ai_ml", label: "AI/ML" },
-];
-
-const JOB_TITLE_OPTIONS = [
-  { label: "Select job title", value: "" },
-  { label: "Engineering Leadership", value: "Engineering Leadership" },
-  {
-    label: "Software Development Engineer (Backend)",
-    value: "Software Development Engineer (Backend)",
-  },
-  {
-    label: "Software Development Engineer (Frontend)",
-    value: "Software Development Engineer (Frontend)",
-  },
-  { label: "Data Scientist", value: "Data Scientist" },
-  { label: "Android Engineer", value: "Android Engineer" },
-  { label: "iOS Engineer", value: "iOS Engineer" },
-  { label: "Devops Engineer", value: "Devops Engineer" },
-  { label: "Support Engineer", value: "Support Engineer" },
-  { label: "Research Engineer", value: "Research Engineer" },
-  { label: "Engineering Intern", value: "Engineering Intern" },
-  { label: "QA Engineer", value: "QA Engineer" },
-  { label: "Co-founder", value: "Co-founder" },
-  { label: "SDET", value: "SDET" },
-  { label: "Product Manager", value: "Product Manager" },
-  { label: "Product Designer", value: "Product Designer" },
 ];
 
 const RequestCallbackModal = ({
   isOpen,
   program,
-  jobTitle,
   onChangeField,
   onClose,
   onSubmit,
@@ -310,22 +284,6 @@ const RequestCallbackModal = ({
               ))}
             </Select>
           </Field>
-          <Field>
-            Job title (optional)
-            <Select
-              value={jobTitle}
-              onChange={(event) =>
-                onChangeField("jobTitle", event.target.value)
-              }
-              disabled={isLoading || isSuccess}
-            >
-              {JOB_TITLE_OPTIONS.map((option) => (
-                <option key={option.value || "empty"} value={option.value}>
-                  {option.label}
-                </option>
-              ))}
-            </Select>
-          </Field>
           <Actions>
             <SecondaryButton
               type="button"
@@ -353,7 +311,6 @@ const RequestCallbackModal = ({
 RequestCallbackModal.propTypes = {
   isOpen: PropTypes.bool.isRequired,
   program: PropTypes.string.isRequired,
-  jobTitle: PropTypes.string.isRequired,
   onChangeField: PropTypes.func.isRequired,
   onClose: PropTypes.func.isRequired,
   onSubmit: PropTypes.func.isRequired,
