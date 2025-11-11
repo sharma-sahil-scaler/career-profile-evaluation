@@ -51,10 +51,13 @@ def calculate_profile_strength(background: str, quiz_responses: Dict[str, Any]) 
         port_score * 0.10
     )
 
-    # Step 3: Adjust for role transition difficulty
-    # How hard is the jump from current role to target role?
-    gap_deduction = _calculate_role_transition_gap(current_role, target_role)
-    adjusted_readiness = raw_readiness - gap_deduction
+    # Step 3: Adjust for transition difficulties
+    # Role transition: How hard is the jump from current role to target role?
+    role_gap = _calculate_role_transition_gap(current_role, target_role)
+    # Company transition: How hard is the jump from current company type to target?
+    company_gap = _calculate_company_transition_gap(current_role, quiz_responses.get("targetCompany", ""))
+
+    adjusted_readiness = raw_readiness - role_gap - company_gap
 
     # Step 4: Apply floor & ceiling
     ceiling = 75
@@ -189,6 +192,72 @@ def _score_portfolio_simple(portfolio: str) -> float:
     return scores.get(portfolio, 10)
 
 
+def _get_current_company_difficulty(current_role: str) -> float:
+    """
+    Infer current company difficulty from current role.
+
+    Mapping based on typical company types for each role:
+    - swe-product: Works at product company (medium-high bar) = 6
+    - swe-service: Works at service company (moderate bar) = 4
+    - devops: Infrastructure role (could be anywhere) = 5 (middle ground)
+    - qa-support: Support/QA role (usually service companies) = 4
+    """
+    role_company_difficulty = {
+        "swe-product": 6,      # Product companies are competitive
+        "swe-service": 4,      # Service companies are moderate
+        "devops": 5,           # Infrastructure (could be anywhere)
+        "qa-support": 4,       # QA/Support typically at service companies
+    }
+    return role_company_difficulty.get(current_role, 5)  # Default to middle ground
+
+
+def _get_target_company_difficulty(target_company: str) -> float:
+    """
+    Target company difficulty scale (0-10 deduction).
+    """
+    company_difficulty = {
+        "faang": 10,
+        "unicorns": 6,
+        "product": 6,
+        "startups": 2,
+        "service": 4,
+        "better-service": 4,
+        "any-tech": 1,
+        "evaluating": 0,
+        "not-sure": 0,
+        "faang-longterm": 10,
+    }
+    company_lower = target_company.lower() if target_company else "evaluating"
+    for key, difficulty in company_difficulty.items():
+        if key in company_lower:
+            return difficulty
+    return 0
+
+
+def _calculate_company_transition_gap(current_role: str, target_company: str) -> float:
+    """
+    Company transition difficulty.
+
+    Positive value = harder transition (deduction)
+    Negative value = easier transition (bonus)
+
+    Gap = Target Company Difficulty - Current Company Difficulty
+
+    Examples:
+    - SWE-Product (6) → FAANG (10): 10 - 6 = +4 (harder, deduct 4)
+    - SWE-Service (4) → Startups (2): 2 - 4 = -2 (easier, bonus 2)
+    - SWE-Product (6) → Product (6): 6 - 6 = 0 (same, no gap)
+    """
+    current_difficulty = _get_current_company_difficulty(current_role)
+    target_difficulty = _get_target_company_difficulty(target_company)
+
+    gap = target_difficulty - current_difficulty
+
+    # Only penalize for harder transitions, don't reward for easier ones
+    # (to avoid inflating scores too much)
+    return max(0, gap)
+
+
 def _calculate_role_transition_gap(current_role: str, target_role: str) -> float:
     """
     Role transition difficulty: How much harder is the jump?
@@ -303,15 +372,21 @@ def _calculate_nontech_score_simple(quiz_responses: Dict[str, Any]) -> Dict[str,
         exp_score * 0.25
     )
 
-    # Step 3: No role gap adjustment (non-tech, so all transitions are significant)
-    # But target role matters for ceiling
+    # Step 3: Adjust for transition difficulties
+    # Role gap: Senior roles harder for career changers
     target_lower = target_role.lower()
     if any(x in target_lower for x in ["tech-lead", "staff", "senior"]):
         role_gap = 5  # Senior roles harder for career changers
     else:
         role_gap = 0  # Entry/mid roles no extra penalty
 
-    adjusted_readiness = raw_readiness - role_gap
+    # Company gap: Inferred from being non-tech (assume they're not in tech companies)
+    # Non-tech people are transitioning, so all target companies face a base penalty
+    # But we can still use company transition logic
+    current_background = quiz_responses.get("currentRole", "other")  # Maps to currentRole in API
+    company_gap = _calculate_company_transition_gap(current_background, quiz_responses.get("targetCompany", ""))
+
+    adjusted_readiness = raw_readiness - role_gap - company_gap
 
     # Step 4: Apply floor & ceiling (lower ceiling for non-tech)
     ceiling = 70
