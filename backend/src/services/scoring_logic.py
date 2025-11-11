@@ -1,347 +1,416 @@
-from typing import Any, Dict, Tuple
-
-
-def _get_target_role_seniority(target_role: str, experience: str) -> str:
-    """
-    Determine the seniority level of the target role.
-    This is used to calculate ROLE-RELATIVE readiness.
-
-    Returns: "entry", "mid", or "senior"
-    """
-    # Entry-level target roles (0-2 years typically required)
-    entry_roles = [
-        "backend", "frontend", "fullstack", "data-analyst",
-        "junior", "entry", "sde-1", "exploring"
-    ]
-
-    # Senior-level target roles (5+ years typically required)
-    senior_roles = [
-        "tech-lead", "staff", "principal", "architect", "engineering-manager",
-        "senior-backend", "senior-fullstack", "senior-frontend", "data-ml"
-    ]
-
-    target_lower = target_role.lower() if target_role else "exploring"
-
-    # Check explicit senior roles
-    if any(role in target_lower for role in senior_roles):
-        return "senior"
-
-    # Check explicit entry roles
-    if any(role in target_lower for role in entry_roles):
-        return "entry"
-
-    # Default to mid-level (most target roles)
-    return "mid"
-
-
-def _get_target_role_ceiling(background: str) -> int:
-    """
-    Get the maximum score ceiling for target role readiness.
-
-    Tech roles: 75% (always room for mastery)
-    Non-tech roles: 70% (career changers have steeper learning curve)
-    """
-    if background == "non-tech":
-        return 70
-    return 75
-
-
-def _get_role_relative_baseline(background: str) -> int:
-    """
-    Get the baseline score for role-relative readiness.
-
-    Fixed baseline (not dependent on target role seniority):
-    Both Tech & Non-Tech: 45% baseline
-
-    Why 45%?
-    - Motivating: Shows everyone has starting potential
-    - Fair: Doesn't demotivate complete beginners
-    - Aspirational: Room to grow to 70-75% with effort
-    """
-    return 45  # Same for both tech and non-tech
-
-
-def _ensure_no_multiple_of_five(score: int, seed: str) -> int:
-    import random
-    # Don't apply generic floor here; use persona-specific floor above
-    score = min(100, score)
-    if score % 5 == 0:
-        random.seed(hash(seed))
-        adjustment = random.choice([1, 2, 3, -1, -2, -3])
-        score = score + adjustment
-        score = min(100, score)
-        if score % 5 == 0:
-            score = score + 1 if score < 100 else score - 1
-
-    return score
-
-
-def _get_experience_score(experience: str, current_role: str) -> int:
-    # IMPROVED: Higher base points for all levels (Option 1)
-    exp_points = {
-        "0": 5,
-        "0-2": 18,
-        "3-5": 26,
-        "5-8": 32,
-        "8+": 38
-    }.get(experience, 18)
-
-    role_multipliers = {
-        "swe-product": 1.0,
-        "devops": 1.0,
-        "swe-service": 1.0,
-        "qa-support": 0.90,
-    }
-
-    multiplier = role_multipliers.get(current_role, 0.95)
-    return int(exp_points * multiplier)
-
-
-def _get_system_design_score(system_design: str, experience: str, problem_solving: str) -> Tuple[int, bool]:
-    is_contradiction = False
-
-    if system_design == "multiple":
-        if problem_solving in ["0-10", "11-50"] or experience in ["0", "0-2"]:
-            is_contradiction = True
-            system_design = "once"
-
-    experience_years = {"0": 0, "0-2": 1, "3-5": 4, "5-8": 6.5, "8+": 10}.get(experience, 1)
-
-    if experience_years >= 5:
-        scores = {
-            "multiple": 40,
-            "once": 25,
-            "learning": 15,
-            "not-yet": 5
-        }
-    else:
-        scores = {
-            "multiple": 15,
-            "once": 12,
-            "learning": 8,
-            "not-yet": 5
-        }
-
-    return scores.get(system_design, 5), is_contradiction
-
-
-def _get_problem_solving_score(problem_solving: str) -> int:
-    # IMPROVED: Higher weights for problem solving practice (Option 3)
-    scores = {
-        "100+": 17,
-        "51-100": 14,
-        "11-50": 11,
-        "0-10": 4
-    }
-    return scores.get(problem_solving, 4)
-
-
-def _get_portfolio_score(portfolio: str, problem_solving: str) -> int:
-    base_scores = {
-        "active-5+": 15,
-        "limited-1-5": 10,
-        "inactive": 5,
-        "none": 0
-    }
-    score = base_scores.get(portfolio, 0)
-
-    if portfolio in ["active-5+", "limited-1-5"] and problem_solving == "0-10":
-        score = score // 2
-
-    return score
-
-
-def _detect_contradictions(quiz_responses: Dict[str, Any]) -> Tuple[bool, str]:
-    experience = quiz_responses.get("experience", "0-2")
-    problem_solving = quiz_responses.get("problemSolving", "0-10")
-    system_design = quiz_responses.get("systemDesign", "not-yet")
-    portfolio = quiz_responses.get("portfolio", "none")
-    current_role = quiz_responses.get("currentRole", "")
-
-    contradictions = []
-
-    if system_design == "multiple" and problem_solving in ["0-10", "11-50"]:
-        contradictions.append(
-            "System design expertise requires extensive coding practice. "
-            "Focus on solving 100+ problems to match your claimed design experience."
-        )
-
-    if experience in ["3-5", "5-8", "8+"] and problem_solving == "0-10":
-        if experience == "3-5":
-            contradictions.append(
-                "Your 3-5 years of professional experience is valuable, but interview preparation "
-                "needs immediate focus to unlock senior opportunities. Aim for 100+ problems."
-            )
-        else:
-            contradictions.append(
-                "Your experience level doesn't match current interview readiness. "
-                "Results may not reflect actual capability without practice."
-            )
-
-    if portfolio == "active-5+" and problem_solving == "0-10":
-        contradictions.append(
-            "Your projects suggest practical experience, but lack of problem-solving practice "
-            "may hinder technical interviews. Balance portfolio work with DSA prep."
-        )
-
-    if experience in ["0", "0-2"] and system_design == "multiple":
-        contradictions.append(
-            "System design expertise typically requires 5+ years of production experience. "
-            "Your claim may be aspirational - focus on building fundamentals first."
-        )
-
-    if contradictions:
-        return True, " ".join(contradictions)
-
-    return False, ""
+from typing import Any, Dict
 
 
 def calculate_profile_strength(background: str, quiz_responses: Dict[str, Any]) -> Dict[str, Any]:
-    if background == "non-tech":
-        return _calculate_nontech_score(quiz_responses)
+    """
+    SIMPLIFIED PROBABILISTIC SCORING
 
+    Question: "What % likely are you ready for your TARGET role?"
+
+    LOGIC:
+    1. Score each readiness component (0-100)
+    2. Weight and combine them
+    3. Adjust for role transition difficulty
+    4. Apply floor (45%) and ceiling (75% tech, 70% non-tech)
+
+    INPUTS:
+    - Current Role (your starting point)
+    - Preparation (experience, problem-solving, system-design, portfolio)
+    - Target Role (where you want to go)
+
+    OUTPUT:
+    - 45-80%: Probability you're ready (floor motivates, ceiling shows mastery path)
+    """
+
+    if background == "non-tech":
+        return _calculate_nontech_score_simple(quiz_responses)
+
+    # === TECH PROFESSIONAL ===
     experience = quiz_responses.get("experience", "0-2")
     current_role = quiz_responses.get("currentRole", "swe-service")
-    system_design = quiz_responses.get("systemDesign", "not-yet")
     problem_solving = quiz_responses.get("problemSolving", "0-10")
+    system_design = quiz_responses.get("systemDesign", "not-yet")
     portfolio = quiz_responses.get("portfolio", "none")
     target_role = quiz_responses.get("targetRole", "backend-sde")
 
-    # Calculate base components
-    exp_score = _get_experience_score(experience, current_role)
-    sd_score, sd_contradiction = _get_system_design_score(system_design, experience, problem_solving)
-    ps_score = _get_problem_solving_score(problem_solving)
-    port_score = _get_portfolio_score(portfolio, problem_solving)
-    has_contradictions, contradiction_note = _detect_contradictions(quiz_responses)
+    # Step 1: Score each component (0-100 scale, normalized)
+    exp_score = _score_experience_simple(experience, current_role)
+    ps_score = _score_problem_solving_simple(problem_solving)
+    sd_score = _score_system_design_simple(system_design, experience)
+    port_score = _score_portfolio_simple(portfolio)
 
-    # Calculate raw base score
-    base_score = exp_score + sd_score + ps_score + port_score
-    contradiction_penalty = 0
-    if has_contradictions:
-        contradiction_penalty = 15
+    # Step 2: Weighted combination
+    # Experience: 30% (shows you're in the field and growing)
+    # Problem solving: 35% (core interview readiness)
+    # System design: 25% (seniority/maturity indicator)
+    # Portfolio: 10% (proof of ability)
+    raw_readiness = (
+        exp_score * 0.30 +
+        ps_score * 0.35 +
+        sd_score * 0.25 +
+        port_score * 0.10
+    )
 
-    raw_score = max(0, min(100, base_score - contradiction_penalty))
+    # Step 3: Adjust for role transition difficulty
+    # How hard is the jump from current role to target role?
+    gap_deduction = _calculate_role_transition_gap(current_role, target_role)
+    adjusted_readiness = raw_readiness - gap_deduction
 
-    # REDESIGN (Option A): TARGET-ROLE RELATIVE with FLOOR & CEILING
-    # Philosophy: "You're X% ready to land your TARGET ROLE"
-    #
-    # Floor: 45% (never demotivate - everyone has potential)
-    # Ceiling: 75% (tech) / 70% (non-tech) (always room to grow for mastery)
-    #
-    # Why this works:
-    # - Junior aiming for junior role: Shows 50-60% readiness (achievable!)
-    # - Senior aiming for senior role: Shows 70-75% readiness (strong candidate!)
-    # - Career switcher: Shows 45-65% readiness (realistic path forward!)
-
-    target_role_level = _get_target_role_seniority(target_role, experience)
-    role_baseline = _get_role_relative_baseline(background)  # 45% for all
-    role_ceiling = _get_target_role_ceiling(background)  # 75% tech, 70% non-tech
-
-    # Direct floor & ceiling application
-    # The raw_score already represents their readiness, just cap it
-    final_score = max(role_baseline, min(role_ceiling, raw_score))
-
-    # Add variation and anti-multiple-of-five adjustment
-    import random
-    seed_string = f"{experience}_{current_role}_{system_design}_{problem_solving}_{portfolio}_{target_role}"
-    random.seed(hash(seed_string))
-    variation = random.randint(-2, 2)
-    final_score = final_score + variation
-
-    final_score = _ensure_no_multiple_of_five(final_score, seed_string)
-    final_score = max(role_baseline, min(role_ceiling, final_score))  # Ensure still within bounds
+    # Step 4: Apply floor & ceiling
+    ceiling = 75
+    floor = 45
+    final_score = max(floor, min(ceiling, adjusted_readiness))
 
     return {
         "score": int(final_score),
-        "has_contradictions": has_contradictions,
-        "contradiction_note": contradiction_note,
         "breakdown": {
-            "experience": exp_score,
-            "system_design": sd_score,
-            "problem_solving": ps_score,
-            "portfolio": port_score,
-            "contradiction_penalty": -contradiction_penalty if contradiction_penalty > 0 else 0,
-            "target_role_level": target_role_level,
-            "raw_score": int(raw_score),
-            "role_baseline": role_baseline,
-            "role_ceiling": role_ceiling
+            "experience_component": int(exp_score),
+            "problem_solving_component": int(ps_score),
+            "system_design_component": int(sd_score),
+            "portfolio_component": int(port_score),
+            "raw_readiness_weighted": int(raw_readiness),
+            "role_transition_gap": gap_deduction,
+            "adjusted_readiness": int(adjusted_readiness),
+            "floor": floor,
+            "ceiling": ceiling,
+            "final_score": int(final_score),
         }
     }
 
 
-def _calculate_nontech_score(quiz_responses: Dict[str, Any]) -> Dict[str, Any]:
+def _score_experience_simple(experience: str, current_role: str) -> float:
+    """
+    Experience readiness: 0-100 scale
+
+    Base score by years:
+    - 0 years: 10 (just starting)
+    - 0-2 years: 30 (early career, still learning)
+    - 3-5 years: 50 (mid-level, productive)
+    - 5-8 years: 70 (experienced, can mentor)
+    - 8+ years: 90 (senior, domain expert)
+
+    Role multiplier:
+    - SWE (product/service): 1.0x (most relevant experience)
+    - DevOps: 1.0x (equally relevant)
+    - QA/Support: 0.90x (non-traditional start, needs more prep)
+    """
+    base_scores = {
+        "0": 10,
+        "0-2": 30,
+        "3-5": 50,
+        "5-8": 70,
+        "8+": 90
+    }
+    base = base_scores.get(experience, 30)
+
+    role_multipliers = {
+        "swe-product": 1.0,
+        "swe-service": 1.0,
+        "devops": 1.0,
+        "qa-support": 0.90,
+    }
+    multiplier = role_multipliers.get(current_role, 0.95)
+
+    return min(100, base * multiplier)
+
+
+def _score_problem_solving_simple(problem_solving: str) -> float:
+    """
+    Problem solving readiness: 0-100 scale
+
+    Based on interview problem practice (last 3 months):
+    - 0-10: 20 (needs lots of practice, interview-unprepared)
+    - 11-50: 50 (decent practice, okay for interviews)
+    - 51-100: 75 (strong foundation, good interview readiness)
+    - 100+: 95 (very ready, competitive for top roles)
+    """
+    scores = {
+        "0-10": 20,
+        "11-50": 50,
+        "51-100": 75,
+        "100+": 95
+    }
+    return scores.get(problem_solving, 20)
+
+
+def _score_system_design_simple(system_design: str, experience: str) -> float:
+    """
+    System design readiness: 0-100 scale
+
+    Varies by experience level because system design typically comes with years.
+    A junior can't credibly have "multiple" design discussions.
+
+    JUNIOR (0-2 years):
+    - multiple: 30 (suspicious, probably inflated)
+    - once: 40 (some exposure)
+    - learning: 30 (self-study)
+    - not-yet: 15 (expected, will learn)
+
+    MID (3-5 years):
+    - multiple: 70 (legitimate, some design work)
+    - once: 55 (participated in designs)
+    - learning: 40 (active learning phase)
+    - not-yet: 25 (gap for mid-level)
+
+    SENIOR (5+ years):
+    - multiple: 95 (expected for senior)
+    - once: 75 (some design work but less)
+    - learning: 55 (always learning)
+    - not-yet: 35 (gap for senior)
+    """
+    exp_level = _get_experience_level(experience)
+
+    if exp_level == "junior":
+        scores = {"multiple": 30, "once": 40, "learning": 30, "not-yet": 15}
+    elif exp_level == "mid":
+        scores = {"multiple": 70, "once": 55, "learning": 40, "not-yet": 25}
+    else:  # senior
+        scores = {"multiple": 95, "once": 75, "learning": 55, "not-yet": 35}
+
+    return scores.get(system_design, 15)
+
+
+def _score_portfolio_simple(portfolio: str) -> float:
+    """
+    Portfolio/projects visibility: 0-100 scale
+
+    Based on GitHub/GitLab activity:
+    - active-5+: 90 (strong portfolio, constantly improving)
+    - limited-1-5: 60 (some proof of work)
+    - inactive: 30 (old work, lost momentum)
+    - none: 10 (no public proof)
+    """
+    scores = {
+        "active-5+": 90,
+        "limited-1-5": 60,
+        "inactive": 30,
+        "none": 10
+    }
+    return scores.get(portfolio, 10)
+
+
+def _calculate_role_transition_gap(current_role: str, target_role: str) -> float:
+    """
+    Role transition difficulty: How much harder is the jump?
+
+    Deduction scale (0-10 points to subtract from readiness):
+
+    EASY TRANSITIONS (0-2 point deduction):
+    - SWE-Product → Backend/Fullstack SDE (same company type)
+    - SWE-Service → Backend/Fullstack SDE (same base skills)
+
+    MODERATE TRANSITIONS (3-5 point deduction):
+    - SWE-Product → Senior Backend (same skills, harder goal)
+    - DevOps → Backend SDE (different focus, same company)
+
+    HARD TRANSITIONS (5-8 point deduction):
+    - QA → Backend SDE (different skill set entirely)
+    - DevOps → Data/ML (different domain)
+
+    VERY HARD TRANSITIONS (8-10+ point deduction):
+    - QA → Tech Lead (biggest gap)
+    - QA → Staff Engineer
+    """
+    gap_map = {
+        # Same family, easy transitions
+        ("swe-product", "backend-sde"): 1,
+        ("swe-product", "fullstack-sde"): 1,
+        ("swe-service", "backend-sde"): 2,
+        ("swe-service", "fullstack-sde"): 2,
+        ("devops", "backend-sde"): 4,
+
+        # Same family, leveling up (harder)
+        ("swe-product", "senior-backend"): 4,
+        ("swe-product", "tech-lead"): 6,
+        ("swe-service", "senior-backend"): 5,
+        ("swe-service", "tech-lead"): 7,
+        ("devops", "tech-lead"): 5,
+
+        # Different family transitions (hard)
+        ("qa-support", "backend-sde"): 8,
+        ("qa-support", "fullstack-sde"): 8,
+        ("qa-support", "data-ml"): 7,
+
+        # QA to senior roles (very hard)
+        ("qa-support", "senior-backend"): 9,
+        ("qa-support", "tech-lead"): 10,
+        ("qa-support", "staff"): 10,
+
+        # Data/ML transitions
+        ("devops", "data-ml"): 4,
+        ("swe-product", "data-ml"): 3,
+        ("swe-service", "data-ml"): 4,
+    }
+
+    # Look up specific transition
+    gap = gap_map.get((current_role, target_role), None)
+
+    if gap is None:
+        # Estimate: if target role is senior-level, add gap penalty
+        target_lower = target_role.lower()
+        if any(x in target_lower for x in ["senior", "tech-lead", "staff", "principal"]):
+            gap = 5  # Generic senior penalty
+        else:
+            gap = 3  # Generic entry/mid penalty
+
+    return gap
+
+
+def _get_experience_level(experience: str) -> str:
+    """Categorize experience into: junior, mid, or senior"""
+    if experience in ["0", "0-2"]:
+        return "junior"
+    elif experience in ["3-5"]:
+        return "mid"
+    else:  # 5-8, 8+
+        return "senior"
+
+
+def _calculate_nontech_score_simple(quiz_responses: Dict[str, Any]) -> Dict[str, Any]:
+    """
+    NON-TECH PROFESSIONAL SCORING
+
+    Non-tech people are transitioning to tech, so scoring emphasizes:
+    1. Code comfort level (what they've already learned)
+    2. Steps taken (bootcamp, course, projects)
+    3. Time commitment (can they sustain?)
+    4. Work experience (relevant skills transferable?)
+
+    LOGIC:
+    1. Score each component (0-100)
+    2. Combine with equal weights (25% each)
+    3. Apply floor (45%) and ceiling (70%)
+    """
+
     experience = quiz_responses.get("experience", "0")
     code_comfort = quiz_responses.get("codeComfort", "complete-beginner")
     steps_taken = quiz_responses.get("stepsTaken", "just-exploring")
     time_per_week = quiz_responses.get("timePerWeek", "0-2")
     target_role = quiz_responses.get("targetRole", "backend")
 
-    comfort_scores = {
-        "confident": 40,
-        "learning": 30,
-        "beginner": 20,
-        "complete-beginner": 10
-    }
-    comfort_score = comfort_scores.get(code_comfort, 10)
+    # Step 1: Score components
+    comfort_score = _score_code_comfort_simple(code_comfort)
+    steps_score = _score_steps_taken_simple(steps_taken)
+    time_score = _score_time_commitment_simple(time_per_week)
+    exp_score = _score_nontech_experience_simple(experience)
 
-    steps_scores = {
-        "completed-course": 25,
-        "built-projects": 25,
-        "bootcamp": 20,
-        "self-learning": 15,
-        "just-exploring": 5
-    }
-    steps_score = steps_scores.get(steps_taken, 5)
+    # Step 2: Equal weighting (25% each)
+    # All four components equally important for career changers
+    raw_readiness = (
+        comfort_score * 0.25 +
+        steps_score * 0.25 +
+        time_score * 0.25 +
+        exp_score * 0.25
+    )
 
-    time_scores = {
-        "10+": 20,
-        "6-10": 15,
-        "3-5": 10,
-        "0-2": 3
-    }
-    time_score = time_scores.get(time_per_week, 3)
+    # Step 3: No role gap adjustment (non-tech, so all transitions are significant)
+    # But target role matters for ceiling
+    target_lower = target_role.lower()
+    if any(x in target_lower for x in ["tech-lead", "staff", "senior"]):
+        role_gap = 5  # Senior roles harder for career changers
+    else:
+        role_gap = 0  # Entry/mid roles no extra penalty
 
-    exp_scores = {
-        "5+": 15,
-        "3-5": 12,
-        "0-2": 8,
-        "0": 5
-    }
-    exp_score = exp_scores.get(experience, 5)
+    adjusted_readiness = raw_readiness - role_gap
 
-    raw_score = comfort_score + steps_score + time_score + exp_score
-
-    # REDESIGN (Option A): TARGET-ROLE RELATIVE with FLOOR & CEILING
-    # Floor: 45% (never demotivate)
-    # Ceiling: 70% (non-tech always needs more room to grow)
-
-    target_role_level = _get_target_role_seniority(target_role, experience)
-    role_baseline = _get_role_relative_baseline("non-tech")  # 45% for all
-    role_ceiling = _get_target_role_ceiling("non-tech")  # 70% for non-tech
-
-    # Direct floor & ceiling application
-    final_score = max(role_baseline, min(role_ceiling, raw_score))
-
-    import random
-    seed_string = f"{experience}_{code_comfort}_{steps_taken}_{time_per_week}_{target_role}"
-    random.seed(hash(seed_string))
-    variation = random.randint(-2, 2)
-    final_score = final_score + variation
-    final_score = _ensure_no_multiple_of_five(final_score, seed_string)
-    final_score = max(role_baseline, min(role_ceiling, final_score))  # Ensure still within bounds
+    # Step 4: Apply floor & ceiling (lower ceiling for non-tech)
+    ceiling = 70
+    floor = 45
+    final_score = max(floor, min(ceiling, adjusted_readiness))
 
     return {
         "score": int(final_score),
-        "has_contradictions": False,
-        "contradiction_note": "",
         "breakdown": {
-            "code_comfort": comfort_score,
-            "steps_taken": steps_score,
-            "time_commitment": time_score,
-            "experience": exp_score,
-            "target_role_level": target_role_level,
-            "raw_score": int(raw_score),
-            "role_baseline": role_baseline,
-            "role_ceiling": role_ceiling
+            "code_comfort_component": int(comfort_score),
+            "steps_taken_component": int(steps_score),
+            "time_commitment_component": int(time_score),
+            "experience_component": int(exp_score),
+            "raw_readiness_weighted": int(raw_readiness),
+            "role_transition_gap": role_gap,
+            "adjusted_readiness": int(adjusted_readiness),
+            "floor": floor,
+            "ceiling": ceiling,
+            "final_score": int(final_score),
         }
     }
+
+
+def _score_code_comfort_simple(code_comfort: str) -> float:
+    """
+    Code comfort level: 0-100 scale
+
+    - confident: 80 (can solve simple problems)
+    - learning: 55 (following tutorials, struggling alone)
+    - beginner: 35 (understand concepts, can't write code yet)
+    - complete-beginner: 15 (haven't tried yet)
+    """
+    scores = {
+        "confident": 80,
+        "learning": 55,
+        "beginner": 35,
+        "complete-beginner": 15
+    }
+    return scores.get(code_comfort, 15)
+
+
+def _score_steps_taken_simple(steps_taken: str) -> float:
+    """
+    Learning path progress: 0-100 scale
+
+    - bootcamp: 85 (structured, intensive learning)
+    - completed-course: 75 (structured learning)
+    - built-projects: 70 (hands-on learning)
+    - self-learning: 55 (less structured)
+    - just-exploring: 20 (not serious yet)
+    """
+    scores = {
+        "bootcamp": 85,
+        "completed-course": 75,
+        "built-projects": 70,
+        "self-learning": 55,
+        "just-exploring": 20
+    }
+    return scores.get(steps_taken, 20)
+
+
+def _score_time_commitment_simple(time_per_week: str) -> float:
+    """
+    Time commitment: 0-100 scale
+
+    - 10+: 90 (full-time devotion)
+    - 6-10: 70 (serious part-time)
+    - 3-5: 45 (casual learning)
+    - 0-2: 20 (not really committed)
+    """
+    scores = {
+        "10+": 90,
+        "6-10": 70,
+        "3-5": 45,
+        "0-2": 20
+    }
+    return scores.get(time_per_week, 20)
+
+
+def _score_nontech_experience_simple(experience: str) -> float:
+    """
+    Professional experience (transferable skills): 0-100 scale
+
+    Career changers with experience have:
+    - Professional maturity
+    - Work ethic proven
+    - Sometimes transferable skills (data, problem-solving, communication)
+
+    - 5+: 75 (substantial experience, mature mindset)
+    - 3-5: 60 (good experience, understands work world)
+    - 2-3: 45 (some experience)
+    - 0-2: 30 (junior, early career)
+    - 0: 20 (fresh grad, no work experience)
+    """
+    scores = {
+        "5+": 75,
+        "3-5": 60,
+        "2-3": 45,
+        "0-2": 30,
+        "0": 20
+    }
+    return scores.get(experience, 20)
