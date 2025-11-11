@@ -63,9 +63,8 @@ const HeroContainer = styled.div`
 
 const LeftPanel = styled.div`
   background: ${(props) => {
-    if (props.score >= 60) return "#064e3b";
-    if (props.score < 55) return "#0F2B48";
-    return "#1f2937";
+    if (props.score >= 60) return "#059669"; // Green for high score
+    return "#0F2B48"; // Dark blue for low/medium score
   }};
   color: #ffffff;
   padding: ${(props) =>
