@@ -1,5 +1,5 @@
 from enum import Enum
-from typing import List, TYPE_CHECKING
+from typing import List, TYPE_CHECKING, Any, Dict
 
 from pydantic import BaseModel, Field
 
@@ -98,6 +98,30 @@ class QuickWin(BaseModel):
     icon: str = Field(
         default="lightbulb",
         description="Icon name from Phosphor icons (lightbulb, trophy, target, rocket, code, books, certificate, etc.)"
+    )
+
+
+class JobOpportunityCard(BaseModel):
+    title: str = Field(
+        ..., description="Job title and company (e.g., 'Senior Backend Engineer @ FAANG')"
+    )
+    role: str = Field(
+        ..., description="Role identifier (e.g., 'senior-backend', 'frontend')"
+    )
+    key_focus: str = Field(
+        ..., description="Primary focus area or gap to address for this role"
+    )
+    milestones: List[str] = Field(
+        default_factory=list, description="Monthly milestones to achieve this role"
+    )
+    min_months: int = Field(
+        ..., ge=1, le=24, description="Minimum months to reach this role"
+    )
+    max_months: int = Field(
+        ..., ge=1, le=24, description="Maximum months to reach this role"
+    )
+    timeline_text: str = Field(
+        ..., description="Human-readable timeline (e.g., '6-12 months')"
     )
 
 
@@ -214,9 +238,9 @@ class ProfileEvaluation(BaseModel):
         min_length=3,
         description="List of quick wins to improve profile with title and description"
     )
-    opportunities_you_qualify_for: List[str] = Field(
+    opportunities_you_qualify_for: List[JobOpportunityCard] = Field(
         ...,
-        description="List of job opportunities you currently qualify for",
+        description="List of personalized job opportunity cards based on your profile",
         min_length=0
     )
     recommended_roles_based_on_interests: List[RecommendedRole]
