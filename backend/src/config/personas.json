@@ -1,0 +1,382 @@
+{
+  "description": "Persona matching logic based on Free Profile Evaluator quiz responses",
+  "notes": "This bridges quiz inputs to 12 core personas with realistic timelines",
+
+  "persona_definitions": {
+    "tech_entry_backend": {
+      "id": "tech_entry_backend",
+      "label": "Tech Entry-Level Backend Engineer",
+      "matching_criteria": {
+        "background": ["tech"],
+        "experience": ["0-2", "2-3"],
+        "targetRole": ["backend", "backend-sde", "backend-dev"],
+        "currentRole": ["swe-product", "swe-service", "qa-support"]
+      },
+      "timeline_config": {
+        "stepping_stone": {
+          "min_months": 2,
+          "max_months": 3,
+          "timeline_text": "2-3 months"
+        },
+        "target": {
+          "min_months": 4,
+          "max_months": 6,
+          "timeline_text": "4-6 months"
+        },
+        "alternative": {
+          "min_months": 6,
+          "max_months": 8,
+          "timeline_text": "6-8 months"
+        }
+      }
+    },
+
+    "tech_entry_frontend": {
+      "id": "tech_entry_frontend",
+      "label": "Tech Entry-Level Frontend Engineer",
+      "matching_criteria": {
+        "background": ["tech"],
+        "experience": ["0-2", "2-3"],
+        "targetRole": ["frontend", "frontend-sde", "frontend-dev"],
+        "currentRole": ["swe-product", "swe-service"]
+      },
+      "timeline_config": {
+        "stepping_stone": {
+          "min_months": 2,
+          "max_months": 3,
+          "timeline_text": "2-3 months"
+        },
+        "target": {
+          "min_months": 3,
+          "max_months": 5,
+          "timeline_text": "3-5 months"
+        },
+        "alternative": {
+          "min_months": 5,
+          "max_months": 7,
+          "timeline_text": "5-7 months"
+        }
+      }
+    },
+
+    "tech_entry_fullstack": {
+      "id": "tech_entry_fullstack",
+      "label": "Tech Entry-Level Full Stack Engineer",
+      "matching_criteria": {
+        "background": ["tech"],
+        "experience": ["0-2", "2-3"],
+        "targetRole": ["fullstack", "fullstack-sde", "fullstack-dev"],
+        "currentRole": ["swe-product", "swe-service"]
+      },
+      "timeline_config": {
+        "stepping_stone": {
+          "min_months": 2,
+          "max_months": 4,
+          "timeline_text": "2-4 months"
+        },
+        "target": {
+          "min_months": 4,
+          "max_months": 6,
+          "timeline_text": "4-6 months"
+        },
+        "alternative": {
+          "min_months": 6,
+          "max_months": 8,
+          "timeline_text": "6-8 months"
+        }
+      }
+    },
+
+    "tech_mid_backend": {
+      "id": "tech_mid_backend",
+      "label": "Tech Mid-Level Backend Engineer",
+      "matching_criteria": {
+        "background": ["tech"],
+        "experience": ["3-5", "5-8"],
+        "targetRole": ["backend", "backend-sde"],
+        "currentRole": ["swe-product", "swe-service"]
+      },
+      "timeline_config": {
+        "stepping_stone": {
+          "min_months": 1,
+          "max_months": 2,
+          "timeline_text": "1-2 months"
+        },
+        "target": {
+          "min_months": 3,
+          "max_months": 4,
+          "timeline_text": "3-4 months"
+        },
+        "alternative": {
+          "min_months": 5,
+          "max_months": 6,
+          "timeline_text": "5-6 months"
+        }
+      }
+    },
+
+    "tech_mid_frontend": {
+      "id": "tech_mid_frontend",
+      "label": "Tech Mid-Level Frontend Engineer",
+      "matching_criteria": {
+        "background": ["tech"],
+        "experience": ["3-5", "5-8"],
+        "targetRole": ["frontend", "frontend-sde"],
+        "currentRole": ["swe-product", "swe-service"]
+      },
+      "timeline_config": {
+        "stepping_stone": {
+          "min_months": 1,
+          "max_months": 2,
+          "timeline_text": "1-2 months"
+        },
+        "target": {
+          "min_months": 2,
+          "max_months": 4,
+          "timeline_text": "2-4 months"
+        },
+        "alternative": {
+          "min_months": 4,
+          "max_months": 6,
+          "timeline_text": "4-6 months"
+        }
+      }
+    },
+
+    "tech_mid_fullstack": {
+      "id": "tech_mid_fullstack",
+      "label": "Tech Mid-Level Full Stack Engineer",
+      "matching_criteria": {
+        "background": ["tech"],
+        "experience": ["3-5", "5-8"],
+        "targetRole": ["fullstack", "fullstack-sde"],
+        "currentRole": ["swe-product", "swe-service"]
+      },
+      "timeline_config": {
+        "stepping_stone": {
+          "min_months": 1,
+          "max_months": 2,
+          "timeline_text": "1-2 months"
+        },
+        "target": {
+          "min_months": 3,
+          "max_months": 4,
+          "timeline_text": "3-4 months"
+        },
+        "alternative": {
+          "min_months": 5,
+          "max_months": 6,
+          "timeline_text": "5-6 months"
+        }
+      }
+    },
+
+    "tech_senior_backend": {
+      "id": "tech_senior_backend",
+      "label": "Tech Senior Backend Engineer",
+      "matching_criteria": {
+        "background": ["tech"],
+        "experience": ["5-8", "8+"],
+        "targetRole": ["backend", "backend-sde", "tech-lead"],
+        "currentRole": ["swe-product", "swe-service", "devops"]
+      },
+      "timeline_config": {
+        "stepping_stone": {
+          "min_months": 1,
+          "max_months": 2,
+          "timeline_text": "1-2 months"
+        },
+        "target": {
+          "min_months": 2,
+          "max_months": 3,
+          "timeline_text": "2-3 months"
+        },
+        "alternative": {
+          "min_months": 4,
+          "max_months": 5,
+          "timeline_text": "4-5 months"
+        }
+      }
+    },
+
+    "tech_senior_frontend": {
+      "id": "tech_senior_frontend",
+      "label": "Tech Senior Frontend Engineer",
+      "matching_criteria": {
+        "background": ["tech"],
+        "experience": ["5-8", "8+"],
+        "targetRole": ["frontend", "frontend-sde", "tech-lead"],
+        "currentRole": ["swe-product", "swe-service"]
+      },
+      "timeline_config": {
+        "stepping_stone": {
+          "min_months": 1,
+          "max_months": 2,
+          "timeline_text": "1-2 months"
+        },
+        "target": {
+          "min_months": 2,
+          "max_months": 3,
+          "timeline_text": "2-3 months"
+        },
+        "alternative": {
+          "min_months": 3,
+          "max_months": 5,
+          "timeline_text": "3-5 months"
+        }
+      }
+    },
+
+    "switcher_early_backend": {
+      "id": "switcher_early_backend",
+      "label": "Career Switcher - Early Backend",
+      "matching_criteria": {
+        "background": ["non-tech"],
+        "experience": ["0", "0-2"],
+        "targetRole": ["backend", "backend-dev"],
+        "currentRole": ["sales-marketing", "finance", "operations", "design", "student"]
+      },
+      "timeline_config": {
+        "stepping_stone": {
+          "min_months": 6,
+          "max_months": 9,
+          "timeline_text": "6-9 months"
+        },
+        "target": {
+          "min_months": 9,
+          "max_months": 12,
+          "timeline_text": "9-12 months"
+        },
+        "alternative": {
+          "min_months": 12,
+          "max_months": 15,
+          "timeline_text": "12-15 months"
+        }
+      }
+    },
+
+    "switcher_early_frontend": {
+      "id": "switcher_early_frontend",
+      "label": "Career Switcher - Early Frontend",
+      "matching_criteria": {
+        "background": ["non-tech"],
+        "experience": ["0", "0-2"],
+        "targetRole": ["frontend", "frontend-dev"],
+        "currentRole": ["sales-marketing", "design", "finance", "operations", "student"]
+      },
+      "timeline_config": {
+        "stepping_stone": {
+          "min_months": 5,
+          "max_months": 8,
+          "timeline_text": "5-8 months"
+        },
+        "target": {
+          "min_months": 8,
+          "max_months": 11,
+          "timeline_text": "8-11 months"
+        },
+        "alternative": {
+          "min_months": 11,
+          "max_months": 14,
+          "timeline_text": "11-14 months"
+        }
+      }
+    },
+
+    "switcher_early_fullstack": {
+      "id": "switcher_early_fullstack",
+      "label": "Career Switcher - Early Full Stack",
+      "matching_criteria": {
+        "background": ["non-tech"],
+        "experience": ["0", "0-2"],
+        "targetRole": ["fullstack", "fullstack-dev"],
+        "currentRole": ["sales-marketing", "finance", "operations", "design", "student"]
+      },
+      "timeline_config": {
+        "stepping_stone": {
+          "min_months": 7,
+          "max_months": 10,
+          "timeline_text": "7-10 months"
+        },
+        "target": {
+          "min_months": 10,
+          "max_months": 13,
+          "timeline_text": "10-13 months"
+        },
+        "alternative": {
+          "min_months": 13,
+          "max_months": 16,
+          "timeline_text": "13-16 months"
+        }
+      }
+    },
+
+    "switcher_advanced_backend": {
+      "id": "switcher_advanced_backend",
+      "label": "Career Switcher - Advanced Backend",
+      "matching_criteria": {
+        "background": ["non-tech"],
+        "experience": ["2-3", "3-5", "5-8"],
+        "targetRole": ["backend", "backend-dev"],
+        "currentRole": ["sales-marketing", "finance", "operations"]
+      },
+      "timeline_config": {
+        "stepping_stone": {
+          "min_months": 3,
+          "max_months": 5,
+          "timeline_text": "3-5 months"
+        },
+        "target": {
+          "min_months": 6,
+          "max_months": 9,
+          "timeline_text": "6-9 months"
+        },
+        "alternative": {
+          "min_months": 9,
+          "max_months": 12,
+          "timeline_text": "9-12 months"
+        }
+      }
+    },
+
+    "switcher_advanced_frontend": {
+      "id": "switcher_advanced_frontend",
+      "label": "Career Switcher - Advanced Frontend",
+      "matching_criteria": {
+        "background": ["non-tech"],
+        "experience": ["2-3", "3-5", "5-8"],
+        "targetRole": ["frontend", "frontend-dev"],
+        "currentRole": ["design", "sales-marketing", "operations"]
+      },
+      "timeline_config": {
+        "stepping_stone": {
+          "min_months": 3,
+          "max_months": 5,
+          "timeline_text": "3-5 months"
+        },
+        "target": {
+          "min_months": 5,
+          "max_months": 8,
+          "timeline_text": "5-8 months"
+        },
+        "alternative": {
+          "min_months": 8,
+          "max_months": 11,
+          "timeline_text": "8-11 months"
+        }
+      }
+    }
+  },
+
+  "matching_algorithm": {
+    "description": "Algorithm to select best matching persona from quiz responses",
+    "process": [
+      "1. Calculate match score for each persona based on matching_criteria",
+      "2. Weight criteria: targetRole (35%), experience (25%), background (30%), currentRole (10%)",
+      "3. Exact matches = 1.0, partial matches = 0.5, no match = 0",
+      "4. Select persona with highest score",
+      "5. If tie: prefer more specific match (more matching criteria met)",
+      "6. Fallback: match on targetRole + background if needed"
+    ]
+  }
+}

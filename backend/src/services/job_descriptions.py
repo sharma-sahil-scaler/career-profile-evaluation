@@ -1,5 +1,6 @@
 from typing import Any, Dict, List
 from src.utils.label_mappings import get_role_label, get_company_label
+from src.services.persona_matcher import get_matching_persona, get_timeline_config
 
 
 # ===========================================================================================
@@ -259,63 +260,23 @@ def _generate_personalized_milestones(
 # ===========================================================================================
 
 def _estimate_timeline(
-    background: str,
-    current_role_difficulty: int,
-    target_role_difficulty: int,
+    persona_id: str,
     card_type: str
 ) -> Dict[str, Any]:
     """
-    Estimate months and create human-readable timeline.
+    Get timeline for persona and card type using persona-based config.
+
+    No more hardcoded values or calculations - all timelines are
+    based on persona matching and defined in personas.json
 
     Args:
-        background: 'tech' or 'non-tech'
-        current_role_difficulty: Current difficulty score (0-10)
-        target_role_difficulty: Target difficulty score (0-10)
+        persona_id: Matched persona ID (e.g., 'tech_entry_backend')
         card_type: 'stepping_stone', 'target', or 'alternative'
 
     Returns:
         Dict with: min_months, max_months, timeline_text
     """
-
-    if card_type == "stepping_stone":
-        return {
-            "min_months": 2,
-            "max_months": 4,
-            "timeline_text": "2-4 months"
-        }
-
-    # Calculate difficulty jump
-    difficulty_gap = max(0, target_role_difficulty - current_role_difficulty)
-
-    if background == "non-tech":
-        # Non-tech roles take longer due to learning curve
-        base_months = 6 + (difficulty_gap * 2)
-        max_months = 12 + (difficulty_gap * 2)
-    else:
-        # Tech transitions are faster
-        base_months = 3 + difficulty_gap
-        max_months = 9 + (difficulty_gap * 1.5)
-
-    min_months = max(2, int(base_months))
-    max_months = max(min_months + 2, int(max_months))
-
-    # Cap at reasonable limits
-    min_months = min(min_months, 24)
-    max_months = min(max_months, 24)
-
-    timeline_text = f"{min_months}-{max_months} months"
-
-    if card_type == "alternative":
-        # Alternative roles take longer (learning new specialization)
-        min_months = max(12, min_months)
-        max_months = max(18, max_months)
-        timeline_text = f"{min_months}-{max_months} months"
-
-    return {
-        "min_months": min_months,
-        "max_months": max_months,
-        "timeline_text": timeline_text
-    }
+    return get_timeline_config(persona_id, card_type)
 
 
 # ===========================================================================================
@@ -483,7 +444,17 @@ def generate_job_opportunities(background: str, quiz_responses: Dict[str, Any]) 
             target_role = _infer_target_role_from_current(current_role)
             target_company = _infer_target_company_for_explorer(background)
 
-    # Get difficulty levels
+    # Match user to persona for realistic timelines
+    # Map background to persona matching format
+    persona_background = "non-tech" if background == "non-tech" else "tech"
+    persona_id, persona_config = get_matching_persona(
+        background=persona_background,
+        experience=current_experience,
+        target_role=target_role,
+        current_role=current_role if background == "tech" else ""
+    )
+
+    # Get difficulty levels (kept for alternative logic, not timeline estimation)
     current_company_difficulty = _get_current_company_difficulty(current_role) if background == "tech" else 3
     target_role_difficulty = ROLE_DIFFICULTY.get(target_role, 5)
     target_company_difficulty = COMPANY_DIFFICULTY.get(target_company, 5)
@@ -494,12 +465,7 @@ def generate_job_opportunities(background: str, quiz_responses: Dict[str, Any]) 
         # CARD 1: TARGET ROLE (their actual target)
         title = _format_job_title(target_role, target_company)
         milestones = _generate_personalized_milestones(background, quiz_responses, target_role, "target")
-        timeline = _estimate_timeline(
-            background,
-            current_company_difficulty,
-            target_role_difficulty,
-            "target"
-        )
+        timeline = _estimate_timeline(persona_id, "target")
 
         cards.append(_create_job_card(
             title=title,
@@ -516,12 +482,7 @@ def generate_job_opportunities(background: str, quiz_responses: Dict[str, Any]) 
 
         title = _format_job_title(stepping_role, stepping_company)
         milestones = _generate_personalized_milestones(background, quiz_responses, stepping_role, "stepping_stone")
-        timeline = _estimate_timeline(
-            background,
-            current_company_difficulty,
-            ROLE_DIFFICULTY.get(stepping_role, 4),
-            "stepping_stone"
-        )
+        timeline = _estimate_timeline(persona_id, "stepping_stone")
 
         cards.append(_create_job_card(
             title=title,
@@ -538,12 +499,7 @@ def generate_job_opportunities(background: str, quiz_responses: Dict[str, Any]) 
 
         title = _format_job_title(alt_role, alt_company)
         milestones = _generate_personalized_milestones(background, quiz_responses, alt_role, "alternative")
-        timeline = _estimate_timeline(
-            background,
-            current_company_difficulty,
-            ROLE_DIFFICULTY.get(alt_role, 6),
-            "alternative"
-        )
+        timeline = _estimate_timeline(persona_id, "alternative")
 
         cards.append(_create_job_card(
             title=title,
@@ -562,12 +518,7 @@ def generate_job_opportunities(background: str, quiz_responses: Dict[str, Any]) 
 
         title = _format_job_title(entry_role, entry_company)
         milestones = _generate_personalized_milestones(background, quiz_responses, entry_role, "stepping_stone")
-        timeline = _estimate_timeline(
-            background,
-            current_company_difficulty,
-            ROLE_DIFFICULTY.get(entry_role, 4),
-            "stepping_stone"
-        )
+        timeline = _estimate_timeline(persona_id, "stepping_stone")
 
         cards.append(_create_job_card(
             title=title,
@@ -581,12 +532,7 @@ def generate_job_opportunities(background: str, quiz_responses: Dict[str, Any]) 
         # CARD 2: BIGGER GOAL (full target role for long-term)
         title = _format_job_title(target_role, target_company)
         milestones = _generate_personalized_milestones(background, quiz_responses, target_role, "target")
-        timeline = _estimate_timeline(
-            background,
-            current_company_difficulty,
-            ROLE_DIFFICULTY.get(target_role, 5),
-            "target"
-        )
+        timeline = _estimate_timeline(persona_id, "target")
 
         cards.append(_create_job_card(
             title=title,

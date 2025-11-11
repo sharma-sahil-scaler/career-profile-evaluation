@@ -434,7 +434,7 @@ const NavigationBar = ({
                 </IconButton>
               </>
             )}
-            <CTAButton onClick={handleRCBClick}>Request Call Back</CTAButton>
+            <CTAButton onClick={handleRCBClick}>Book Free 1:1 Career Call</CTAButton>
           </NavActions>
         </NavContent>
         {showProgress && (

@@ -654,8 +654,11 @@ def run_poc(
 
     personalized_notes = generate_profile_strength_notes(background, quiz_responses, scoring_result["score"])
 
-    if scoring_result["has_contradictions"]:
-        personalized_notes = f"{scoring_result['contradiction_note']} {personalized_notes}"
+    # Check if there are contradictions in the profile (optional feature)
+    if scoring_result.get("has_contradictions", False):
+        contradiction_note = scoring_result.get("contradiction_note", "")
+        if contradiction_note:
+            personalized_notes = f"{contradiction_note} {personalized_notes}"
 
     result_dict["profile_evaluation"]["profile_strength_notes"] = personalized_notes
 
