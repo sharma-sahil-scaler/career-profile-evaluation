@@ -97,10 +97,8 @@ async def mobile_signin():
 @app.post("/generate-jwt")
 async def generate_jwt():
     """Generate JWT token for authentication"""
-    return {
-        "jwt": "mock-jwt-token-eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9",
-        "status": "ok"
-    }
+    from fastapi.responses import PlainTextResponse
+    return PlainTextResponse("mock-jwt-token-eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9")
 
 
 @app.get("/api/initial-data", response_model=InitialDataResponse)
