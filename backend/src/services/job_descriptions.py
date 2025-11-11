@@ -3,6 +3,30 @@ from src.utils.label_mappings import get_role_label, get_company_label
 
 
 # ===========================================================================================
+# GENERIC COMPANY FILTERS - Don't append these to job titles
+# ===========================================================================================
+GENERIC_COMPANIES = {
+    "any-tech",        # "Any tech company (experience first)"
+    "not-sure",        # "Not sure / Need guidance"
+    "Not specified",   # Fallback
+}
+
+
+def _should_append_company(company: str) -> bool:
+    """Check if company should be appended to job title (filter out generic options)."""
+    return company not in GENERIC_COMPANIES
+
+
+def _format_job_title(role: str, company: str) -> str:
+    """Format job title with company, excluding generic/placeholder companies."""
+    role_label = get_role_label(role)
+    if _should_append_company(company):
+        company_label = get_company_label(company)
+        return f"{role_label} @ {company_label}"
+    return role_label
+
+
+# ===========================================================================================
 # ROLE & COMPANY DIFFICULTY MAPPINGS
 # ===========================================================================================
 
@@ -468,7 +492,7 @@ def generate_job_opportunities(background: str, quiz_responses: Dict[str, Any]) 
 
     if not is_exploring:
         # CARD 1: TARGET ROLE (their actual target)
-        title = f"{get_role_label(target_role)} @ {get_company_label(target_company)}"
+        title = _format_job_title(target_role, target_company)
         milestones = _generate_personalized_milestones(background, quiz_responses, target_role, "target")
         timeline = _estimate_timeline(
             background,
@@ -490,7 +514,7 @@ def generate_job_opportunities(background: str, quiz_responses: Dict[str, Any]) 
         stepping_role = _get_stepping_stone_role(background, target_role, current_experience)
         stepping_company = "startups" if target_company_difficulty > 6 else target_company
 
-        title = f"{get_role_label(stepping_role)} @ {get_company_label(stepping_company)}"
+        title = _format_job_title(stepping_role, stepping_company)
         milestones = _generate_personalized_milestones(background, quiz_responses, stepping_role, "stepping_stone")
         timeline = _estimate_timeline(
             background,
@@ -512,7 +536,7 @@ def generate_job_opportunities(background: str, quiz_responses: Dict[str, Any]) 
         alt_role = _get_alternative_role(background, target_role)
         alt_company = target_company  # Same difficulty level as target
 
-        title = f"{get_role_label(alt_role)} @ {get_company_label(alt_company)}"
+        title = _format_job_title(alt_role, alt_company)
         milestones = _generate_personalized_milestones(background, quiz_responses, alt_role, "alternative")
         timeline = _estimate_timeline(
             background,
@@ -536,7 +560,7 @@ def generate_job_opportunities(background: str, quiz_responses: Dict[str, Any]) 
         entry_role = _get_stepping_stone_role(background, target_role, current_experience)
         entry_company = "startups" if background == "non-tech" else target_company
 
-        title = f"{get_role_label(entry_role)} @ {get_company_label(entry_company)}"
+        title = _format_job_title(entry_role, entry_company)
         milestones = _generate_personalized_milestones(background, quiz_responses, entry_role, "stepping_stone")
         timeline = _estimate_timeline(
             background,
@@ -555,7 +579,7 @@ def generate_job_opportunities(background: str, quiz_responses: Dict[str, Any]) 
         ))
 
         # CARD 2: BIGGER GOAL (full target role for long-term)
-        title = f"{get_role_label(target_role)} @ {get_company_label(target_company)}"
+        title = _format_job_title(target_role, target_company)
         milestones = _generate_personalized_milestones(background, quiz_responses, target_role, "target")
         timeline = _estimate_timeline(
             background,
