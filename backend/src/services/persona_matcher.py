@@ -1,174 +1,214 @@
 """
-Persona matching logic - maps quiz responses to one of 12 core personas
-with realistic timelines and content recommendations
+Persona matcher for the 25-persona system.
+
+Tech: 4 current roles × 5 experience levels = 20 personas
+Non-Tech: 5 target roles × 1 code comfort = 5 personas
+
+Total: 25 personas
 """
 
 import json
+from typing import Tuple, Dict, Any, Optional
 from pathlib import Path
-from typing import Dict, Any, Tuple
 
 
-def load_personas() -> Dict[str, Any]:
-    """Load persona configuration from JSON"""
+def load_personas():
+    """Load personas from config file."""
     personas_path = Path(__file__).parent.parent / "config" / "personas.json"
     with open(personas_path, "r") as f:
-        return json.load(f)
+        data = json.load(f)
+    return data["personas"]
 
 
-def _normalize_value(value: str) -> str:
-    """Normalize quiz response values for matching"""
-    if not value:
-        return ""
-    return value.lower().replace(" ", "-").replace(".", "")
-
-
-def _calculate_match_score(
-    user_data: Dict[str, str],
-    persona_criteria: Dict[str, list]
-) -> float:
-    """
-    Calculate match score for persona based on matching criteria
-
-    Weights:
-    - targetRole: 35%
-    - experience: 25%
-    - background: 30%
-    - currentRole: 10%
-    """
-
-    score = 0
-    total_weight = 0
-
-    # Weight mapping
-    weights = {
-        "targetRole": 0.35,
-        "experience": 0.25,
-        "background": 0.30,
-        "currentRole": 0.10
-    }
-
-    for field, weight in weights.items():
-        total_weight += weight
-        criteria_values = persona_criteria.get(field, [])
-        user_value = user_data.get(field, "")
-
-        if not criteria_values or not user_value:
-            continue
-
-        # Normalize for comparison
-        user_normalized = _normalize_value(user_value)
-        criteria_normalized = [_normalize_value(v) for v in criteria_values]
-
-        # Exact match = 1.0, partial match = 0.5, no match = 0
-        if user_normalized in criteria_normalized:
-            score += weight * 1.0
-        elif any(user_normalized.startswith(c.split("-")[0]) for c in criteria_normalized):
-            score += weight * 0.5
-
-    return score / total_weight if total_weight > 0 else 0
+PERSONAS = load_personas()
 
 
 def get_matching_persona(
     background: str,
-    experience: str,
-    target_role: str,
-    current_role: str
+    currentRole: Optional[str] = None,
+    currentSkill: Optional[str] = None,
+    experience: Optional[str] = None,
+    targetRole: Optional[str] = None,
+    targetCompany: Optional[str] = None,
+    codeComfort: Optional[str] = None
 ) -> Tuple[str, Dict[str, Any]]:
     """
-    Match quiz responses to best persona
+    Match user to a persona from the 25-persona system.
+
+    Args:
+        background: "tech" or "non-tech"
+        currentRole: (tech only) "swe-product" | "swe-service" | "devops" | "qa-support"
+        currentSkill: (tech only) role-specific skill
+        experience: "0-2" | "2-3" | "3-5" | "5-8" | "8+" (tech) or "0" | "0-2" | "2-3" | "3-5" | "5+" (non-tech)
+        targetRole: "backend-sde" | "fullstack-sde" | etc (tech) or "frontend" | "backend" | "fullstack" | "data-ml" | "not-sure" (non-tech)
+        targetCompany: "faang" | "unicorns" | etc
+        codeComfort: (non-tech only) "confident" | "learning" | "beginner" | "complete-beginner"
 
     Returns:
         Tuple of (persona_id, persona_config)
     """
 
-    personas_config = load_personas()
-    personas = personas_config.get("persona_definitions", {})
+    if background == "tech":
+        return _match_tech_persona(
+            current_role=currentRole,
+            experience=experience
+        )
+    else:  # non-tech
+        return _match_nontech_persona(
+            target_role=targetRole,
+            code_comfort=codeComfort
+        )
 
-    user_data = {
-        "background": background,
-        "experience": experience,
-        "targetRole": target_role,
-        "currentRole": current_role
+
+def _match_tech_persona(
+    current_role: str,
+    experience: str
+) -> Tuple[str, Dict[str, Any]]:
+    """
+    Match tech user to one of 20 tech personas.
+
+    Formula: {currentRole}_{experience_level}
+
+    Examples:
+    - swe_product + 0-2 years → "swe_product_junior"
+    - devops + 5-8 years → "devops_senior"
+    - qa-support + 8+ years → "qa_support_expert"
+    """
+
+    # Normalize experience to level name
+    experience_mapping = {
+        "0-2": "junior",
+        "2-3": "mid1",
+        "3-5": "mid2",
+        "5-8": "senior",
+        "8+": "expert"
     }
 
-    # Calculate scores for all personas
-    scores = {}
-    for persona_id, persona_config in personas.items():
-        criteria = persona_config.get("matching_criteria", {})
-        score = _calculate_match_score(user_data, criteria)
-        scores[persona_id] = score
+    # Normalize currentRole to persona name
+    role_mapping = {
+        "swe-product": "swe_product",
+        "swe-service": "swe_service",
+        "devops": "devops",
+        "qa-support": "qa_support"
+    }
 
-    # Find best match
-    best_persona_id = max(scores, key=scores.get)
-    best_persona = personas.get(best_persona_id, {})
+    experience_level = experience_mapping.get(experience, "mid2")
+    role_prefix = role_mapping.get(current_role, "swe_product")
 
-    return best_persona_id, best_persona
+    persona_id = f"{role_prefix}_{experience_level}"
+
+    persona = PERSONAS.get(persona_id)
+    if not persona:
+        # Fallback to default
+        persona_id = "swe_product_mid2"
+        persona = PERSONAS.get(persona_id)
+
+    return persona_id, persona
+
+
+def _match_nontech_persona(
+    target_role: Optional[str] = None,
+    code_comfort: Optional[str] = None
+) -> Tuple[str, Dict[str, Any]]:
+    """
+    Match non-tech user to one of 5 non-tech personas.
+
+    Formula: nontech_{targetRole}
+
+    For non-tech users, experience is applied dynamically within the persona,
+    not as a separate persona identifier.
+
+    Examples:
+    - targetRole: frontend → "nontech_frontend"
+    - targetRole: backend → "nontech_backend"
+    - targetRole: not-sure → "nontech_exploring"
+    """
+
+    # Normalize targetRole
+    role_mapping = {
+        "frontend": "frontend",
+        "backend": "backend",
+        "fullstack": "fullstack",
+        "data-ml": "dataml",
+        "not-sure": "exploring",
+        "exploring": "exploring"
+    }
+
+    role_key = role_mapping.get(target_role, "exploring")
+    persona_id = f"nontech_{role_key}"
+
+    persona = PERSONAS.get(persona_id)
+    if not persona:
+        # Fallback to exploring
+        persona_id = "nontech_exploring"
+        persona = PERSONAS.get(persona_id)
+
+    return persona_id, persona
 
 
 def get_timeline_config(
     persona_id: str,
     card_type: str,
-    company_type: str = "any-tech"
+    company_type: Optional[str] = None
 ) -> Dict[str, Any]:
     """
-    Get timeline config for persona, card type, and company type
+    Get timeline config for a specific card.
 
-    Company types: faang, unicorns, product, service, startups, any-tech
+    Args:
+        persona_id: e.g., "swe_product_junior"
+        card_type: "target", "alternative_1_easier_company", "alternative_2_different_role"
+        company_type: (legacy, not used in v3) - kept for backwards compatibility
 
     Returns:
-        Dict with min_months, max_months, timeline_text
+        Dict with timeline_text, min_months, max_months
     """
 
-    personas_config = load_personas()
-    personas = personas_config.get("persona_definitions", {})
+    persona = PERSONAS.get(persona_id)
+    if not persona:
+        return {
+            "min_months": 4,
+            "max_months": 6,
+            "timeline_text": "4-6 months"
+        }
 
-    persona = personas.get(persona_id, {})
-    timeline_config = persona.get("timeline_config", {})
-    card_timeline = timeline_config.get(card_type, {})
+    card_config = persona.get("cards", {}).get(card_type)
+    if not card_config:
+        return {
+            "min_months": 4,
+            "max_months": 6,
+            "timeline_text": "4-6 months"
+        }
 
-    # Try to get company-type specific timeline
-    company_modifiers = card_timeline.get("company_modifiers", {})
-    if company_type in company_modifiers:
-        return company_modifiers[company_type]
-
-    # Fallback to base timeline
-    base_timeline = card_timeline.get("base", {})
-    if base_timeline:
-        return base_timeline
-
-    # Ultimate fallback if not found
+    # In v3, timeline is calculated dynamically, not stored in config
+    # This function returns the card config for reference
     return {
-        "min_months": 3,
-        "max_months": 6,
-        "timeline_text": "3-6 months"
+        "copy": card_config.get("copy", ""),
+        "goal": card_config.get("goal", ""),
+        "action_items": card_config.get("action_items", []),
+        "milestones": card_config.get("milestones", [])
     }
 
 
-def get_job_recommendations(persona_id: str, card_type: str) -> Dict[str, Any]:
+def get_alternative_role(
+    persona_id: str,
+    target_role: str
+) -> Optional[str]:
     """
-    Get hardcoded job recommendations for persona and card type
+    Get the alternative role recommendation for this persona.
+
+    Args:
+        persona_id: e.g., "swe_product_junior"
+        target_role: user's current target role
 
     Returns:
-        Dict with key_focus and milestones
+        Alternative role, or None if not defined
     """
 
-    personas_config = load_personas()
-    personas = personas_config.get("persona_definitions", {})
+    persona = PERSONAS.get(persona_id)
+    if not persona:
+        return None
 
-    persona = personas.get(persona_id, {})
-    recommendations = persona.get("job_recommendations", {})
-    card_recommendation = recommendations.get(card_type, {})
+    role_recommendations = persona.get("role_recommendations", {})
+    target_to_alt = role_recommendations.get("target_to_alternative_role", {})
 
-    # Fallback if not found
-    if not card_recommendation:
-        return {
-            "key_focus": "Build your skills and prepare for the target role",
-            "milestones": [
-                "Focus on mastering core technical skills",
-                "Build portfolio projects",
-                "Practice interviews",
-                "Prepare to transition"
-            ]
-        }
-
-    return card_recommendation
+    return target_to_alt.get(target_role)

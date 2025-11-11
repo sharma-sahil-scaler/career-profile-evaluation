@@ -13,12 +13,11 @@ from src.repositories.cache_repository import CacheRepository
 from src.models import FullProfileEvaluationResponse, enrich_full_profile_evaluation
 from src.models.models_raw import FullProfileEvaluationResponseRaw
 from src.services.quick_wins_logic import generate_quick_wins
-from src.services.job_descriptions import generate_job_opportunities
+from src.services.job_descriptions import generate_job_opportunities, generate_recommended_roles
 from src.services.scoring_logic import calculate_profile_strength
 from src.services.interview_readiness_logic import calculate_interview_readiness
 from src.services.tools_logic import generate_tool_recommendations
 from src.services.profile_notes_logic import generate_profile_strength_notes
-from src.services.timeline_logic import calculate_timeline_to_role, calculate_alternative_paths
 from src.services.current_profile_summary import generate_current_profile_summary
 from src.services.peer_comparison_logic import generate_peer_group_description, calculate_potential_percentile
 from src.utils.label_mappings import get_role_label, get_company_label
@@ -694,71 +693,16 @@ def run_poc(
         experience
     )
 
-    target_role_timeline = None
-    target_role_index = None
+    # Use v3 system: Generate recommended roles with timeline, copy, goals, and action items
+    recommended_roles_v3 = generate_recommended_roles(
+        background=background,
+        quiz_responses=quiz_responses
+    )
 
-    if target_role:
-        target_lower = target_role.lower()
-        for idx, role in enumerate(recommended_roles):
-            role_title = role.get("title", "").lower()
-            if target_lower in role_title or role_title in target_lower:
-                target_role_index = idx
-                break
+    # Convert to dict format for result_dict
+    recommended_roles_dicts = [role.model_dump() for role in recommended_roles_v3]
 
-    # Only create target_role_timeline if user has a clear target role (not "not-sure" or exploring)
-    if target_role and target_role not in ["not-sure", "exploring"]:
-        target_role_timeline_data = calculate_timeline_to_role(target_role, quiz_responses)
-        display_title = quiz_responses.get("targetRoleLabel", target_role)
-        target_role_timeline = {
-            "title": display_title,
-            "seniority": recommended_roles[0]["seniority"] if recommended_roles else "Mid-Senior",
-            "reason": f"Your stated target role - {target_role_timeline_data['key_gap']}",
-            "timeline_text": target_role_timeline_data["timeline_text"],
-            "min_months": target_role_timeline_data["min_months"],
-            "max_months": target_role_timeline_data["max_months"],
-            "key_gap": target_role_timeline_data["key_gap"],
-            "milestones": target_role_timeline_data["milestones"],
-            "confidence": target_role_timeline_data["confidence"]
-        }
-
-    seen_titles = set()
-    deduplicated_roles = []
-    for role in recommended_roles:
-        role_title = role.get("title", "").strip().lower()
-        if role_title and role_title not in seen_titles:
-            seen_titles.add(role_title)
-            deduplicated_roles.append(role)
-
-    recommended_roles = deduplicated_roles
-
-    for role in recommended_roles:
-        role_timeline = calculate_timeline_to_role(role["title"], quiz_responses)
-        role["timeline_text"] = role_timeline["timeline_text"]
-        role["min_months"] = role_timeline["min_months"]
-        role["max_months"] = role_timeline["max_months"]
-        role["key_gap"] = role_timeline["key_gap"]
-        role["milestones"] = role_timeline["milestones"]
-        role["confidence"] = role_timeline["confidence"]
-
-    if target_role_index is not None and target_role_index > 0:
-        target_role_obj = recommended_roles.pop(target_role_index)
-        recommended_roles.insert(0, target_role_obj)
-    elif target_role_timeline is not None and isinstance(target_role_timeline, dict):
-        title = target_role_timeline.get("title", "")
-        if title:  # Only process if title exists and is not None/empty
-            target_role_display = str(title).strip().lower()
-            existing_titles = [str(r.get("title", "")).strip().lower() for r in recommended_roles]
-            if target_role_display not in existing_titles:
-                recommended_roles.insert(0, target_role_timeline)
-    seen_titles_final = set()
-    final_deduplicated_roles = []
-    for role in recommended_roles:
-        role_title = role.get("title", "").strip().lower()
-        if role_title and role_title not in seen_titles_final:
-            seen_titles_final.add(role_title)
-            final_deduplicated_roles.append(role)
-
-    result_dict["profile_evaluation"]["recommended_roles_based_on_interests"] = final_deduplicated_roles[:3]
+    result_dict["profile_evaluation"]["recommended_roles_based_on_interests"] = recommended_roles_dicts[:3]
 
     result = FullProfileEvaluationResponse.model_validate(result_dict)
 

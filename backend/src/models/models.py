@@ -41,8 +41,13 @@ class PeerComparisonLabel(Enum):
 
 class RecommendedRole(BaseModel):
     title: str
+    role: str = Field(
+        default="", description="Role identifier (e.g., 'backend-sde', 'fullstack-sde', 'senior-backend')"
+    )
     seniority: ExperienceLevel
     reason: str
+
+    # Timeline (no caps - can go 2-36+ months)
     timeline_text: str = Field(
         default="4-6 months",
         description="Human-readable timeline (e.g., '4-6 months', '2-3 months')"
@@ -50,15 +55,15 @@ class RecommendedRole(BaseModel):
     min_months: int = Field(
         default=4,
         ge=1,
-        le=24,
-        description="Minimum months to achieve this role"
+        description="Minimum months to achieve this role (no upper limit)"
     )
     max_months: int = Field(
         default=6,
         ge=1,
-        le=24,
-        description="Maximum months to achieve this role"
+        description="Maximum months to achieve this role (no upper limit)"
     )
+
+    # Key gap & milestones (frontend displays these 3)
     key_gap: str = Field(
         default="Skill development needed",
         description="Primary bottleneck or gap to address"
@@ -66,6 +71,12 @@ class RecommendedRole(BaseModel):
     milestones: List[str] = Field(
         default_factory=list,
         description="Monthly milestones for achieving this role"
+    )
+
+    # Meta
+    card_type: str = Field(
+        default="target",
+        description="Card type: 'target', 'alternative_1_easier_company', 'alternative_2_different_role'"
     )
     confidence: str = Field(
         default="medium",
@@ -108,20 +119,44 @@ class JobOpportunityCard(BaseModel):
     role: str = Field(
         ..., description="Role identifier (e.g., 'senior-backend', 'frontend')"
     )
+
+    # Card-specific copy & goals
+    copy: str = Field(
+        default="Focus on developing the skills needed for this role.",
+        description="Card-specific copy explaining the path"
+    )
+    goal: str = Field(
+        default="Achieve this role with full readiness.",
+        description="Clear goal statement for this specific card"
+    )
+    action_items: List[str] = Field(
+        default_factory=list, description="Specific action items (3-5 items)"
+    )
+
+    # Key focus & milestones
     key_focus: str = Field(
-        ..., description="Primary focus area or gap to address for this role"
+        default="Skill development",
+        description="Primary focus area or gap to address for this role"
     )
     milestones: List[str] = Field(
         default_factory=list, description="Monthly milestones to achieve this role"
     )
+
+    # Timeline (no caps)
     min_months: int = Field(
-        ..., ge=1, le=24, description="Minimum months to reach this role"
+        ..., ge=1, description="Minimum months to reach this role"
     )
     max_months: int = Field(
-        ..., ge=1, le=24, description="Maximum months to reach this role"
+        ..., ge=1, description="Maximum months to reach this role"
     )
     timeline_text: str = Field(
         ..., description="Human-readable timeline (e.g., '6-12 months')"
+    )
+
+    # Meta
+    card_type: str = Field(
+        default="target",
+        description="Card type: 'target', 'alternative_1_easier_company', 'alternative_2_different_role', or 'intern_explore'"
     )
 
 

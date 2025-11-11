@@ -1707,26 +1707,18 @@ const ProfileMatchHeroV2 = ({
                     const baseTimeline =
                       role.timeline_text ||
                       `${role.min_months || 4}-${role.max_months || 6} months`;
-                    let displayTimeline = baseTimeline;
-                    let cardType = "target";
-                    let label = "Target Role";
 
-                    if (index === 1) {
-                      displayTimeline = calculateAlternateTimeline(
-                        baseTimeline,
-                        1
-                      );
-                      cardType = "alternate";
-                      label = "Alternate Path 1";
-                    } else if (index === 2) {
-                      displayTimeline = calculateAlternateTimeline(
-                        baseTimeline,
-                        2
-                      );
-                      cardType = "alternate";
-                      label = "Alternate Path 2";
-                    } else {
-                      label = "Your Target Role";
+                    let cardType = role.card_type || "target";
+                    let label = "Your Target Role";
+
+                    if (cardType === "alternative_1_easier_company") {
+                      label = "Easier Path";
+                    } else if (cardType === "alternative_2_different_role") {
+                      label = "Alternative Path";
+                    } else if (cardType === "intern_explore_1") {
+                      label = "Explore Path 1";
+                    } else if (cardType === "intern_explore_2") {
+                      label = "Explore Path 2";
                     }
 
                     return (
@@ -1738,7 +1730,7 @@ const ProfileMatchHeroV2 = ({
                         <CategoryLabel type={cardType}>{label}</CategoryLabel>
                         <CategoryTimeline>
                           <Clock size={16} weight="bold" />
-                          {displayTimeline}
+                          {baseTimeline}
                         </CategoryTimeline>
                       </CategoryCard>
                     );
@@ -1750,12 +1742,8 @@ const ProfileMatchHeroV2 = ({
                     const isPrimary = index === 0;
                     const formattedSalary = formatSalary(role.salary_range_usd);
 
-                    const targetCompanyLabel =
-                      quizResponses?.targetCompanyLabel ||
-                      goals?.targetCompany ||
-                      "";
-                    const roleTitle = role.title || role.role;
-                    const displayTitle = formatDisplayTitle(roleTitle, targetCompanyLabel);
+                    // Use title directly - backend already includes company type
+                    const displayTitle = role.title;
 
                     return (
                       <RoleCard
@@ -1768,7 +1756,81 @@ const ProfileMatchHeroV2 = ({
                           <RoleHeader>
                             <RoleTitle>{displayTitle}</RoleTitle>
                           </RoleHeader>
-                          {role.key_gap && (
+
+                          {/* Card-specific copy from v3 */}
+                          {role.copy && (
+                            <RoleDescription
+                              style={{
+                                display: "flex",
+                                alignItems: "flex-start",
+                                marginBottom: "12px",
+                                fontStyle: "italic",
+                                color: "#475569",
+                              }}
+                            >
+                              <span>{role.copy}</span>
+                            </RoleDescription>
+                          )}
+
+                          {/* Card-specific goal from v3 */}
+                          {role.goal && (
+                            <RoleDescription
+                              style={{
+                                display: "flex",
+                                alignItems: "flex-start",
+                                marginBottom: "12px",
+                                fontWeight: "600",
+                                color: "#1e293b",
+                              }}
+                            >
+                              <Target
+                                size={16}
+                                weight="regular"
+                                color="#059669"
+                                style={{
+                                  marginRight: "6px",
+                                  marginTop: "2px",
+                                  flexShrink: 0,
+                                }}
+                              />
+                              <span>{role.goal}</span>
+                            </RoleDescription>
+                          )}
+
+                          {/* Action items from v3 */}
+                          {role.action_items && role.action_items.length > 0 && (
+                            <>
+                              <RoleDescription style={{ fontWeight: "600", marginBottom: "8px" }}>
+                                Next Steps:
+                              </RoleDescription>
+                              {role.action_items.map((item, itemIndex) => (
+                                <RoleDescription
+                                  key={itemIndex}
+                                  style={{
+                                    display: "flex",
+                                    alignItems: "flex-start",
+                                    marginBottom: "6px",
+                                    marginLeft: "0px",
+                                  }}
+                                >
+                                  <CheckCircle
+                                    size={14}
+                                    weight="fill"
+                                    color="#10b981"
+                                    style={{
+                                      marginRight: "8px",
+                                      marginTop: "3px",
+                                      flexShrink: 0,
+                                    }}
+                                  />
+                                  <span style={{ fontSize: "0.95rem" }}>{item}</span>
+                                </RoleDescription>
+                              ))}
+                            </>
+                          )}
+
+                          {/* Key focus (fallback to old field) */}
+                          {!role.copy && role.key_gap && (
                             <RoleDescription
                               style={{
                                 display: "flex",
@@ -1790,6 +1852,8 @@ const ProfileMatchHeroV2 = ({
                               </span>
                             </RoleDescription>
                           )}
+
+                          {/* Milestones */}
                           {role.milestones && role.milestones.length > 0 && (
                             <>
                               {role.milestones.map((milestone, mIndex) => (

@@ -1,588 +1,396 @@
-from typing import Any, Dict, List
-from src.utils.label_mappings import get_role_label, get_company_label
-from src.services.persona_matcher import get_matching_persona, get_timeline_config, get_job_recommendations
+"""
+Job opportunity generation with alt path logic.
+
+Generates 3 career timeline cards:
+1. Target role + target company (user's stated goal)
+2. Same role + easier company (stepping stone)
+3. Different role + target company (alternative specialization)
+
+For non-tech exploring users: Shows 2 intern roles (frontend + backend)
+"""
+
+from typing import Dict, List, Any, Optional, Tuple
+from src.models.models import JobOpportunityCard, RecommendedRole
+from src.services.persona_matcher import (
+    get_matching_persona,
+    get_alternative_role
+)
+from src.services.timeline_logic import calculate_timeline_for_card
 
 
-# ===========================================================================================
-# GENERIC COMPANY FILTERS - Don't append these to job titles
-# ===========================================================================================
-GENERIC_COMPANIES = {
-    "any-tech",        # "Any tech company (experience first)"
-    "not-sure",        # "Not sure / Need guidance"
-    "Not specified",   # Fallback
-}
-
-
-def _should_append_company(company: str) -> bool:
-    """Check if company should be appended to job title (filter out generic options)."""
-    return company not in GENERIC_COMPANIES
-
-
-def _format_job_title(role: str, company: str) -> str:
-    """Format job title with company, excluding generic/placeholder companies."""
-    role_label = get_role_label(role)
-    if _should_append_company(company):
-        company_label = get_company_label(company)
-        return f"{role_label} @ {company_label}"
-    return role_label
-
-
-# ===========================================================================================
-# ROLE & COMPANY DIFFICULTY MAPPINGS
-# ===========================================================================================
-
-ROLE_DIFFICULTY = {
-    # Tech roles
-    "backend-sde": 5,
-    "fullstack-sde": 6,
-    "senior-backend": 7,
-    "senior-fullstack": 8,
-    "data-ml": 6,
-    "tech-lead": 8,
-
-    # Non-tech roles
-    "backend": 5,
-    "fullstack": 6,
-    "frontend": 4,
-    "data-ml": 6,
-}
-
-COMPANY_DIFFICULTY = {
-    "faang": 9,
-    "faang-longterm": 9,
-    "unicorns": 7,
-    "product": 7,
-    "service": 4,
-    "better-service": 4,
-    "startups": 6,
-    "any-tech": 3,
-    "evaluating": 5,
-    "not-sure": 5,
-}
-
-# Map target company options to persona company types
-COMPANY_TYPE_MAPPING = {
-    "faang": "faang",
-    "faang-longterm": "faang",
-    "unicorns": "unicorns",
-    "product": "product",
-    "service": "service",
-    "better-service": "service",
-    "startups": "startups",
-    "any-tech": "any-tech",
-    "evaluating": "startups",
-    "not-sure": "any-tech",
-}
-
-
-def _get_company_type(target_company: str) -> str:
-    """Map target company option to persona company type"""
-    return COMPANY_TYPE_MAPPING.get(target_company, "any-tech")
-
-
-# ===========================================================================================
-# HELPER FUNCTIONS FOR EXPLORER DETECTION & INFERENCE
-# ===========================================================================================
-
-def _is_non_tech_explorer(quiz_responses: Dict[str, Any]) -> bool:
-    """Check if non-tech user is exploring (targetRole = 'not-sure')"""
-    return quiz_responses.get("targetRole") == "not-sure"
-
-
-def _is_tech_explorer(quiz_responses: Dict[str, Any]) -> bool:
-    """Check if tech user is exploring (targetCompany = 'evaluating')"""
-    target_company = quiz_responses.get("targetCompany", "")
-    return target_company == "evaluating"
-
-
-def _infer_target_role_from_comfort(code_comfort: str) -> str:
-    """
-    Infer best target role for non-tech explorer based on code comfort level.
-
-    Args:
-        code_comfort: 'confident', 'learning', 'beginner', or 'complete-beginner'
-
-    Returns:
-        Inferred target role: 'backend', 'fullstack', or 'frontend'
-    """
-    comfort_to_role = {
-        "confident": "fullstack",      # Can handle complexity
-        "learning": "backend",          # Structured, logic-based
-        "beginner": "frontend",         # Visual, easier entry
-        "complete-beginner": "frontend" # Visual, easier entry
+def _format_role_display(role: str, company_type: Optional[str] = None) -> str:
+    """Format role ID to display text."""
+    role_display_map = {
+        "backend-sde": "Backend Engineer",
+        "fullstack-sde": "Full-Stack Engineer",
+        "senior-backend": "Senior Backend Engineer",
+        "senior-fullstack": "Senior Full-Stack Engineer",
+        "data-ml": "Data / ML Engineer",
+        "tech-lead": "Tech Lead / Staff Engineer",
+        "devops": "DevOps / SRE Engineer",
+        "frontend": "Frontend Engineer",
+        "qa-automation": "QA Automation Engineer",
+        "architect": "Solutions Architect"
     }
-    return comfort_to_role.get(code_comfort, "frontend")
+
+    display = role_display_map.get(role, role.replace("-", " ").title())
+
+    if company_type:
+        company_display = _format_company_display(company_type)
+        return f"{display} @ {company_display}"
+
+    return display
 
 
-def _infer_target_role_from_current(current_role: str) -> str:
-    """
-    Infer best target role for tech explorer based on current role.
-
-    Args:
-        current_role: 'swe-product', 'swe-service', 'devops', or 'qa-support'
-
-    Returns:
-        Inferred target role
-    """
-    role_to_target = {
-        "swe-product": "backend-sde",      # Know architecture already
-        "swe-service": "backend-sde",      # Enterprise background
-        "devops": "backend-sde",           # Infrastructure → backend transition
-        "qa-support": "backend-sde",       # Testing → backend progression
+def _format_company_display(company_type: str) -> str:
+    """Format company type to display text."""
+    company_display_map = {
+        "faang": "FAANG / Big Tech",
+        "unicorns": "Product Unicorns",
+        "product": "Product Companies",
+        "startups": "High-Growth Startups",
+        "better-service": "Service Companies",
+        "any-tech": "Any Tech Company",
+        "service": "Service Companies",
+        "faang-longterm": "FAANG / Big Tech",
+        "not-sure": "Top Tech Company"
     }
-    return role_to_target.get(current_role, "backend-sde")
+
+    return company_display_map.get(company_type, company_type)
 
 
-def _infer_target_company_for_explorer(background: str, current_company_type: str = None) -> str:
+def _get_easier_company(target_company: str) -> str:
     """
-    Infer progression path for company transition.
+    Get next easier company in hierarchy.
 
-    For non-tech: Start with "any-tech" (experience first)
-    For tech: Progress from current company type
+    Hierarchy: FAANG → Unicorns → Product → Startups → Service → Any-Tech
     """
-    if background == "non-tech":
-        return "any-tech"  # Non-tech explorers start with any tech company
+    hierarchy = {
+        "faang": "unicorns",
+        "unicorns": "product",
+        "product": "startups",
+        "startups": "better-service",
+        "better-service": "better-service",
+        "any-tech": "any-tech",
+        "service": "service",
+        "faang-longterm": "product",
+        "not-sure": "any-tech",
+        "evaluating": "any-tech"
+    }
 
-    # Tech explorers: infer based on current
-    if current_company_type == "product":
-        return "unicorns"  # Product → unicorns/scale-ups
-    elif current_company_type == "service":
-        return "product"   # Service → product companies
-    elif current_company_type == "startup":
-        return "unicorns"  # Startup → bigger startups/unicorns
-    else:
-        return "product"   # Default to product
+    return hierarchy.get(target_company, "any-tech")
 
 
-# ===========================================================================================
-# MILESTONE GENERATION BASED ON ACTUAL GAPS
-# ===========================================================================================
+def _generate_exploring_cards(persona_id: str) -> List[JobOpportunityCard]:
+    """
+    Generate 2 intern cards for non-tech users who are exploring.
 
-def _generate_personalized_milestones(
+    Users still exploring should try both frontend and backend to decide.
+    """
+
+    return [
+        JobOpportunityCard(
+            title="Frontend Engineer (Intern)",
+            role="frontend",
+            copy="Want to test if you enjoy building UIs? This is perfect for exploring. Frontend is visual, immediate feedback, and beginner-friendly.",
+            goal="Complete 2-3 frontend projects and decide if this specialization excites you.",
+            action_items=[
+                "Build a simple to-do app with React",
+                "Create a portfolio website to showcase your work",
+                "Learn responsive design principles"
+            ],
+            key_focus="Understanding user interfaces and learning JavaScript fundamentals",
+            milestones=[
+                "Month 1: HTML, CSS, JavaScript basics",
+                "Month 2: Learn React or Vue framework",
+                "Month 3: Build frontend projects and decide your path"
+            ],
+            min_months=3,
+            max_months=6,
+            timeline_text="3-6 months",
+            card_type="intern_explore_1"
+        ),
+        JobOpportunityCard(
+            title="Backend Engineer (Intern)",
+            role="backend",
+            copy="Prefer building APIs and databases? Backend is the foundation. It's trickier but more powerful and lucrative.",
+            goal="Complete 2-3 backend projects and decide if this specialization excites you.",
+            action_items=[
+                "Build a simple REST API with Node.js or Python",
+                "Learn database design and SQL",
+                "Understand how frontend and backend communicate"
+            ],
+            key_focus="Understanding server-side logic, databases, and API design",
+            milestones=[
+                "Month 1: Python/Node.js basics and databases",
+                "Month 2: Build simple API projects",
+                "Month 3: Decide between frontend, backend, or full-stack"
+            ],
+            min_months=3,
+            max_months=6,
+            timeline_text="3-6 months",
+            card_type="intern_explore_2"
+        )
+    ]
+
+
+def generate_job_opportunities(
     background: str,
-    quiz_responses: Dict[str, Any],
-    target_role: str,
-    card_type: str  # "target", "stepping_stone", or "alternative"
-) -> List[str]:
+    quiz_responses: Dict[str, Any]
+) -> List[JobOpportunityCard]:
     """
-    Generate milestones personalized to user's actual gaps and SPECIFIC ROLE.
+    Generate 3 career timeline cards for the user.
 
-    Each card gets role-specific milestones so they don't feel repetitive.
+    For non-tech exploring users: Returns 2 intern cards
+    For others: Returns 3 cards (target, alternative_1_easier_company, alternative_2_different_role)
 
     Args:
-        background: 'tech' or 'non-tech'
-        quiz_responses: User's quiz answers
-        target_role: The target role for this card (AFFECTS content)
-        card_type: Type of card (affects milestone specificity)
+        background: "tech" or "non-tech"
+        quiz_responses: User's quiz responses
 
     Returns:
-        List of personalized milestones
+        List of JobOpportunityCard objects
     """
 
-    milestones = []
+    # Get basic info
+    target_role = quiz_responses.get("targetRole")
+    target_company = quiz_responses.get("targetCompany", "any-tech")
 
-    if background == "non-tech":
-        code_comfort = quiz_responses.get("codeComfort", "beginner")
-        experience = quiz_responses.get("experience", "0")
-
-        # ROLE-SPECIFIC FIRST MILESTONE
-        if target_role == "frontend":
-            if code_comfort in ["beginner", "complete-beginner"]:
-                milestones.append("Month 1-2: Master HTML, CSS, JavaScript fundamentals")
-            elif code_comfort == "learning":
-                milestones.append("Month 1-2: Build responsive UI projects with React/Vue")
-            else:
-                milestones.append("Month 1-2: Advanced frontend patterns & accessibility")
-        elif target_role == "backend":
-            if code_comfort in ["beginner", "complete-beginner"]:
-                milestones.append("Month 1-2: Learn backend basics (Python/Node.js, APIs)")
-            elif code_comfort == "learning":
-                milestones.append("Month 1-2: Build backend services with databases")
-            else:
-                milestones.append("Month 1-2: Advanced backend architecture & scaling")
-        else:  # fullstack or data-ml
-            if code_comfort in ["beginner", "complete-beginner"]:
-                milestones.append("Month 1-2: Complete full-stack fundamentals (frontend + backend)")
-            elif code_comfort == "learning":
-                milestones.append("Month 1-2: Build full-stack applications (MERN, LAMP, etc)")
-            else:
-                milestones.append("Month 1-2: Advanced full-stack patterns & system design")
-
-        # EXPERIENCE-BASED MILESTONE (role-generic progression)
-        if experience in ["0", "0-2"]:
-            milestones.append("Month 2-3: Create 2-3 projects showcasing this specialization")
-            milestones.append("Month 3-4: Practice technical interviews for this role")
-        else:
-            milestones.append("Month 2-3: Contribute to real projects in this domain")
-            milestones.append("Month 3-4: Build professional portfolio in this area")
-
-        # CARD-SPECIFIC CLOSING MILESTONE
-        if card_type == "stepping_stone":
-            milestones.append(f"Month 4-5: Secure first {target_role} role")
-        elif card_type == "alternative":
-            milestones.append(f"Month 6+: Transition to advanced {target_role} specializations")
-
-    else:  # tech background
-        problem_solving = quiz_responses.get("problemSolving", "0-10")
-        system_design = quiz_responses.get("systemDesign", "not-yet")
-        portfolio = quiz_responses.get("portfolio", "none")
-        experience = quiz_responses.get("experience", "0-2")
-
-        # ROLE-SPECIFIC PROBLEM-SOLVING MILESTONE
-        role_focus = "patterns" if target_role in ["backend-sde", "data-ml"] else "algorithms"
-        if problem_solving in ["0-10", "11-50"]:
-            milestones.append(f"Month 1-2: Practice 50+ {role_focus} for {target_role} interviews")
-        elif problem_solving == "51-100":
-            milestones.append(f"Month 1-2: Master 100+ advanced {role_focus}")
-        else:
-            milestones.append(f"Month 1-2: Specialize in {target_role} problem patterns")
-
-        # ROLE-SPECIFIC SYSTEM DESIGN MILESTONE
-        if target_role in ["senior-backend", "senior-fullstack", "tech-lead"]:
-            if system_design in ["not-yet", "learning"]:
-                milestones.append("Month 2-3: Deep dive into system design (Alex Xu, mock interviews)")
-            elif system_design == "once":
-                milestones.append("Month 2-3: Lead architecture discussions in team")
-            else:
-                milestones.append("Month 2-3: Design enterprise-scale systems")
-        else:
-            if system_design in ["not-yet", "learning"]:
-                milestones.append(f"Month 2-3: Learn {target_role} specific design patterns")
-            elif system_design == "once":
-                milestones.append(f"Month 2-3: Apply system design to {target_role} projects")
-            else:
-                milestones.append(f"Month 2-3: Master {target_role} architecture")
-
-        # ROLE-SPECIFIC PROJECT MILESTONE
-        if target_role in ["data-ml"]:
-            if portfolio in ["none", "inactive"]:
-                milestones.append("Month 3-4: Build 2 end-to-end ML/data projects")
-            else:
-                milestones.append("Month 3-4: Contribute to open-source ML projects")
-        else:
-            if portfolio in ["none", "inactive"]:
-                milestones.append(f"Month 3-4: Build 2 production-grade {target_role} projects")
-            else:
-                milestones.append(f"Month 3-4: Contribute to {target_role} open-source")
-
-        # CARD-SPECIFIC CLOSING MILESTONE
-        if card_type == "stepping_stone":
-            milestones.append(f"Month 4-5: Interview prep for {target_role} positions")
-        elif card_type == "alternative":
-            milestones.append(f"Month 6-8: Master alternative {target_role} specializations")
-
-    return milestones[:4] if len(milestones) > 4 else milestones
-
-
-# ===========================================================================================
-# TIMELINE ESTIMATION
-# ===========================================================================================
-
-def _estimate_timeline(
-    persona_id: str,
-    card_type: str,
-    target_company: str = "any-tech"
-) -> Dict[str, Any]:
-    """
-    Get timeline for persona, card type, and company type using persona-based config.
-
-    All timelines are persona-specific and company-aware,
-    defined in personas.json with company modifiers.
-
-    Args:
-        persona_id: Matched persona ID (e.g., 'switcher_early_backend')
-        card_type: 'stepping_stone', 'target', or 'alternative'
-        target_company: Target company value (maps to company type)
-
-    Returns:
-        Dict with: min_months, max_months, timeline_text
-    """
-    company_type = _get_company_type(target_company)
-    return get_timeline_config(persona_id, card_type, company_type)
-
-
-# ===========================================================================================
-# KEY FOCUS DETERMINATION
-# ===========================================================================================
-
-def _get_key_focus(background: str, quiz_responses: Dict[str, Any], card_type: str) -> str:
-    """
-    Determine the primary focus/gap for this role.
-    """
-
-    if card_type == "stepping_stone":
-        return "Build fundamentals and get hands-on experience"
-
-    if background == "non-tech":
-        code_comfort = quiz_responses.get("codeComfort", "beginner")
-        if code_comfort in ["beginner", "complete-beginner"]:
-            return "Master coding fundamentals and build confidence"
-        elif code_comfort == "learning":
-            return "Build projects and gain real-world experience"
-        else:
-            return "Deepen specialized skills in target domain"
-
-    else:  # tech
-        problem_solving = quiz_responses.get("problemSolving", "0-10")
-        system_design = quiz_responses.get("systemDesign", "not-yet")
-
-        if problem_solving in ["0-10", "11-50"]:
-            return "Master coding problem-solving skills"
-        elif system_design in ["not-yet", "learning"]:
-            return "Strengthen system design and architecture knowledge"
-        else:
-            return "Build production experience and leadership skills"
-
-
-# ===========================================================================================
-# CARD GENERATION
-# ===========================================================================================
-
-def _create_job_card(
-    title: str,
-    role: str,
-    key_focus: str,
-    milestones: List[str],
-    min_months: int,
-    max_months: int
-) -> Dict[str, Any]:
-    """Create a single job opportunity card."""
-    return {
-        "title": title,
-        "role": role,
-        "key_focus": key_focus,
-        "milestones": milestones,
-        "min_months": min_months,
-        "max_months": max_months,
-        "timeline_text": f"{min_months}-{max_months} months"
-    }
-
-
-def _get_stepping_stone_role(
-    background: str,
-    target_role: str,
-    current_experience: str
-) -> str:
-    """
-    Get a 1-level easier role for stepping stone.
-    """
-
-    if background == "non-tech":
-        # For entry-level, suggest intern/junior versions
-        stepping_roles = {
-            "backend": "frontend",      # Easier: visual/frontend
-            "fullstack": "frontend",    # Easier: specialize in frontend
-            "frontend": "frontend",     # Already easy, stick with it
-            "data-ml": "frontend",      # Easier: web dev first
-        }
-        return stepping_roles.get(target_role, "frontend")
-
-    else:  # tech
-        # For tech users, suggest lower seniority in current domain
-        stepping_roles = {
-            "senior-backend": "backend-sde",
-            "senior-fullstack": "fullstack-sde",
-            "backend-sde": "fullstack-sde",  # Easier: broader skills
-            "fullstack-sde": "backend-sde",  # More specialized, then broaden
-            "data-ml": "backend-sde",        # Easier: general backend first
-            "tech-lead": "senior-backend",
-        }
-        return stepping_roles.get(target_role, "fullstack-sde")
-
-
-def _get_alternative_role(
-    background: str,
-    target_role: str
-) -> str:
-    """
-    Get an alternative specialization for diversity.
-    """
-
-    if background == "non-tech":
-        alternatives = {
-            "backend": "fullstack",
-            "fullstack": "backend",
-            "frontend": "fullstack",
-            "data-ml": "backend",
-        }
-        return alternatives.get(target_role, "fullstack")
-
-    else:  # tech
-        alternatives = {
-            "senior-backend": "senior-fullstack",
-            "senior-fullstack": "senior-backend",
-            "backend-sde": "fullstack-sde",
-            "fullstack-sde": "backend-sde",
-            "data-ml": "backend-sde",
-            "tech-lead": "backend-sde",
-        }
-        return alternatives.get(target_role, "backend-sde")
-
-
-def _get_current_company_difficulty(current_role: str) -> int:
-    """Infer company difficulty from current role."""
-    company_by_role = {
-        "swe-product": 7,      # Product companies: 7 difficulty
-        "swe-service": 4,      # Service companies: 4 difficulty
-        "devops": 6,           # Usually mid-tier companies: 6 difficulty
-        "qa-support": 4,       # Service companies: 4 difficulty
-    }
-    return company_by_role.get(current_role, 5)
-
-
-# ===========================================================================================
-# MAIN FUNCTION: generate_job_opportunities
-# ===========================================================================================
-
-def generate_job_opportunities(background: str, quiz_responses: Dict[str, Any]) -> List[Dict[str, Any]]:
-    """
-    Generate 2-3 personalized job opportunity cards based on user profile.
-
-    Returns:
-        List of job opportunity dicts with: title, role, key_focus, milestones, timeline_text, min_months, max_months
-
-    Card Strategy:
-    - If has target role: 3 cards (target + stepping stone + alternative)
-    - If exploring: 2 cards (stepping stone + bigger goal)
-    """
-
-    cards = []
-    target_role = quiz_responses.get("targetRole", "")
-    target_company = quiz_responses.get("targetCompany", "")
-    current_role = quiz_responses.get("currentRole", "")
-    current_experience = quiz_responses.get("experience", "0-2")
-
-    # Determine if exploring
-    is_exploring = False
-    if background == "non-tech":
-        is_exploring = _is_non_tech_explorer(quiz_responses)
-        if is_exploring:
-            code_comfort = quiz_responses.get("codeComfort", "beginner")
-            target_role = _infer_target_role_from_comfort(code_comfort)
-            target_company = "any-tech"
-    else:  # tech
-        is_exploring = _is_tech_explorer(quiz_responses)
-        if is_exploring:
-            target_role = _infer_target_role_from_current(current_role)
-            target_company = _infer_target_company_for_explorer(background)
-
-    # Match user to persona for realistic timelines
-    # Map background to persona matching format
-    persona_background = "non-tech" if background == "non-tech" else "tech"
-    persona_id, persona_config = get_matching_persona(
-        background=persona_background,
-        experience=current_experience,
-        target_role=target_role,
-        current_role=current_role if background == "tech" else ""
+    # Match to persona
+    persona_id, persona = get_matching_persona(
+        background=background,
+        currentRole=quiz_responses.get("currentRole"),
+        currentSkill=quiz_responses.get("currentSkill"),
+        experience=quiz_responses.get("experience"),
+        targetRole=target_role,
+        targetCompany=target_company,
+        codeComfort=quiz_responses.get("codeComfort")
     )
 
-    # Get difficulty levels (kept for alternative logic, not timeline estimation)
-    current_company_difficulty = _get_current_company_difficulty(current_role) if background == "tech" else 3
-    target_role_difficulty = ROLE_DIFFICULTY.get(target_role, 5)
-    target_company_difficulty = COMPANY_DIFFICULTY.get(target_company, 5)
+    # Handle non-tech exploring case
+    if background == "non-tech" and target_role == "not-sure":
+        return _generate_exploring_cards(persona_id)
 
-    # ===== CASE 1: USER HAS TARGET ROLE (OR NOW HAS INFERRED ROLE) =====
+    # Generate 3 cards: target, easier company, different role
+    cards = []
 
-    if not is_exploring:
-        # CARD 1: TARGET ROLE (their actual target)
-        title = _format_job_title(target_role, target_company)
-        timeline = _estimate_timeline(persona_id, "target", target_company)
+    # CARD 1: Target role + target company
+    card1_timeline = calculate_timeline_for_card(
+        persona_id=persona_id,
+        card_type="target",
+        quiz_responses=quiz_responses,
+        target_company=target_company
+    )
 
-        # Get hardcoded recommendations from persona config
-        recommendations = get_job_recommendations(persona_id, "target")
-        key_focus = recommendations.get("key_focus", _get_key_focus(background, quiz_responses, "target"))
-        milestones = recommendations.get("milestones", _generate_personalized_milestones(background, quiz_responses, target_role, "target"))
+    card1 = JobOpportunityCard(
+        title=_format_role_display(target_role, target_company),
+        role=target_role,
+        copy=card1_timeline["copy"],
+        goal=card1_timeline["goal"],
+        action_items=card1_timeline["action_items"],
+        key_focus="Your stated goal - focus on these areas",
+        milestones=card1_timeline["milestones"],
+        min_months=card1_timeline["min_months"],
+        max_months=card1_timeline["max_months"],
+        timeline_text=card1_timeline["timeline_text"],
+        card_type="target"
+    )
+    cards.append(card1)
 
-        cards.append(_create_job_card(
-            title=title,
-            role=target_role,
-            key_focus=key_focus,
-            milestones=milestones,
-            min_months=timeline["min_months"],
-            max_months=timeline["max_months"]
-        ))
+    # CARD 2: Same role + easier company
+    easier_company = _get_easier_company(target_company)
+    card2_timeline = calculate_timeline_for_card(
+        persona_id=persona_id,
+        card_type="alternative_1_easier_company",
+        quiz_responses=quiz_responses,
+        target_company=easier_company
+    )
 
-        # CARD 2: STEPPING STONE (1 level easier, easier company)
-        stepping_role = _get_stepping_stone_role(background, target_role, current_experience)
-        stepping_company = "startups" if target_company_difficulty > 6 else target_company
+    card2 = JobOpportunityCard(
+        title=_format_role_display(target_role, easier_company),
+        role=target_role,
+        copy=card2_timeline["copy"],
+        goal=card2_timeline["goal"],
+        action_items=card2_timeline["action_items"],
+        key_focus="Easier entry point - faster timeline",
+        milestones=card2_timeline["milestones"],
+        min_months=card2_timeline["min_months"],
+        max_months=card2_timeline["max_months"],
+        timeline_text=card2_timeline["timeline_text"],
+        card_type="alternative_1_easier_company"
+    )
+    cards.append(card2)
 
-        title = _format_job_title(stepping_role, stepping_company)
-        timeline = _estimate_timeline(persona_id, "stepping_stone", stepping_company)
+    # CARD 3: Different role + target company
+    alt_role = get_alternative_role(persona_id, target_role)
+    if alt_role:
+        card3_timeline = calculate_timeline_for_card(
+            persona_id=persona_id,
+            card_type="alternative_2_different_role",
+            quiz_responses=quiz_responses,
+            target_company=target_company
+        )
 
-        # Get hardcoded recommendations
-        recommendations = get_job_recommendations(persona_id, "stepping_stone")
-        key_focus = recommendations.get("key_focus", "Build fundamentals and get hands-on experience")
-        milestones = recommendations.get("milestones", _generate_personalized_milestones(background, quiz_responses, stepping_role, "stepping_stone"))
-
-        cards.append(_create_job_card(
-            title=title,
-            role=stepping_role,
-            key_focus=key_focus,
-            milestones=milestones,
-            min_months=timeline["min_months"],
-            max_months=timeline["max_months"]
-        ))
-
-        # CARD 3: ALTERNATIVE SPECIALIZATION
-        alt_role = _get_alternative_role(background, target_role)
-        alt_company = target_company  # Same difficulty level as target
-
-        title = _format_job_title(alt_role, alt_company)
-        timeline = _estimate_timeline(persona_id, "alternative", alt_company)
-
-        # Get hardcoded recommendations
-        recommendations = get_job_recommendations(persona_id, "alternative")
-        key_focus = recommendations.get("key_focus", f"Explore alternative specialization: {get_role_label(alt_role)}")
-        milestones = recommendations.get("milestones", _generate_personalized_milestones(background, quiz_responses, alt_role, "alternative"))
-
-        cards.append(_create_job_card(
-            title=title,
+        card3 = JobOpportunityCard(
+            title=_format_role_display(alt_role, target_company),
             role=alt_role,
-            key_focus=key_focus,
-            milestones=milestones,
-            min_months=timeline["min_months"],
-            max_months=timeline["max_months"]
-        ))
-
-    # ===== CASE 2: USER IS EXPLORING =====
-    else:
-        # CARD 1: ACHIEVABLE ENTRY-LEVEL ROLE (1 step easier)
-        entry_role = _get_stepping_stone_role(background, target_role, current_experience)
-        entry_company = "startups" if background == "non-tech" else target_company
-
-        title = _format_job_title(entry_role, entry_company)
-        timeline = _estimate_timeline(persona_id, "stepping_stone", entry_company)
-
-        # Get hardcoded recommendations
-        recommendations = get_job_recommendations(persona_id, "stepping_stone")
-        key_focus = recommendations.get("key_focus", "Get your first role quickly with fundamentals")
-        milestones = recommendations.get("milestones", _generate_personalized_milestones(background, quiz_responses, entry_role, "stepping_stone"))
-
-        cards.append(_create_job_card(
-            title=title,
-            role=entry_role,
-            key_focus=key_focus,
-            milestones=milestones,
-            min_months=timeline["min_months"],
-            max_months=timeline["max_months"]
-        ))
-
-        # CARD 2: BIGGER GOAL (full target role for long-term)
-        title = _format_job_title(target_role, target_company)
-        timeline = _estimate_timeline(persona_id, "target", target_company)
-
-        # Get hardcoded recommendations
-        recommendations = get_job_recommendations(persona_id, "target")
-        key_focus = recommendations.get("key_focus", "Long-term growth path in your area of interest")
-        milestones = recommendations.get("milestones", _generate_personalized_milestones(background, quiz_responses, target_role, "target"))
-
-        cards.append(_create_job_card(
-            title=title,
-            role=target_role,
-            key_focus=key_focus,
-            milestones=milestones,
-            min_months=timeline["min_months"],
-            max_months=timeline["max_months"]
-        ))
+            copy=card3_timeline["copy"],
+            goal=card3_timeline["goal"],
+            action_items=card3_timeline["action_items"],
+            key_focus="Alternative specialization - expands your options",
+            milestones=card3_timeline["milestones"],
+            min_months=card3_timeline["min_months"],
+            max_months=card3_timeline["max_months"],
+            timeline_text=card3_timeline["timeline_text"],
+            card_type="alternative_2_different_role"
+        )
+        cards.append(card3)
 
     return cards
+
+
+def generate_recommended_roles(
+    background: str,
+    quiz_responses: Dict[str, Any]
+) -> List[RecommendedRole]:
+    """
+    Generate recommended roles for the RecommendedRole section.
+
+    Same 3 cards as job opportunities, but using RecommendedRole schema.
+    """
+
+    # Get basic info
+    target_role = quiz_responses.get("targetRole")
+    target_company = quiz_responses.get("targetCompany", "any-tech")
+
+    # Match to persona
+    persona_id, persona = get_matching_persona(
+        background=background,
+        currentRole=quiz_responses.get("currentRole"),
+        currentSkill=quiz_responses.get("currentSkill"),
+        experience=quiz_responses.get("experience"),
+        targetRole=target_role,
+        targetCompany=target_company,
+        codeComfort=quiz_responses.get("codeComfort")
+    )
+
+    # For exploring users, show 2 roles instead
+    if background == "non-tech" and target_role == "not-sure":
+        return _generate_exploring_recommended_roles()
+
+    roles = []
+
+    # CARD 1: Target role + target company
+    card1_timeline = calculate_timeline_for_card(
+        persona_id=persona_id,
+        card_type="target",
+        quiz_responses=quiz_responses,
+        target_company=target_company
+    )
+
+    role1 = RecommendedRole(
+        title=_format_role_display(target_role, target_company),
+        role=target_role,
+        seniority="Entry",  # Would be derived from role ID in production
+        reason=f"Your stated target role at {_format_company_display(target_company)}",
+        key_gap="Primary focus area",
+        milestones=card1_timeline["milestones"],
+        timeline_text=card1_timeline["timeline_text"],
+        min_months=card1_timeline["min_months"],
+        max_months=card1_timeline["max_months"],
+        card_type="target",
+        confidence="high"
+    )
+    roles.append(role1)
+
+    # CARD 2: Easier company
+    easier_company = _get_easier_company(target_company)
+    card2_timeline = calculate_timeline_for_card(
+        persona_id=persona_id,
+        card_type="alternative_1_easier_company",
+        quiz_responses=quiz_responses,
+        target_company=easier_company
+    )
+
+    role2 = RecommendedRole(
+        title=_format_role_display(target_role, easier_company),
+        role=target_role,
+        seniority="Entry",
+        reason=f"Same role, easier entry point at {_format_company_display(easier_company)}",
+        key_gap="Faster path to your goal",
+        milestones=card2_timeline["milestones"],
+        timeline_text=card2_timeline["timeline_text"],
+        min_months=card2_timeline["min_months"],
+        max_months=card2_timeline["max_months"],
+        card_type="alternative_1_easier_company",
+        confidence="high"
+    )
+    roles.append(role2)
+
+    # CARD 3: Different role
+    alt_role = get_alternative_role(persona_id, target_role)
+    if alt_role:
+        card3_timeline = calculate_timeline_for_card(
+            persona_id=persona_id,
+            card_type="alternative_2_different_role",
+            quiz_responses=quiz_responses,
+            target_company=target_company
+        )
+
+        role3 = RecommendedRole(
+            title=_format_role_display(alt_role, target_company),
+            role=alt_role,
+            seniority="Entry",
+            reason=f"Alternative specialization at {_format_company_display(target_company)} - expands your options",
+            key_gap="New specialization",
+            milestones=card3_timeline["milestones"],
+            timeline_text=card3_timeline["timeline_text"],
+            min_months=card3_timeline["min_months"],
+            max_months=card3_timeline["max_months"],
+            card_type="alternative_2_different_role",
+            confidence="medium"
+        )
+        roles.append(role3)
+
+    return roles
+
+
+def _generate_exploring_recommended_roles() -> List[RecommendedRole]:
+    """Generate recommended roles for exploring users."""
+
+    return [
+        RecommendedRole(
+            title="Frontend Engineer (Intern)",
+            role="frontend",
+            seniority="Entry",
+            reason="Test if you enjoy building user interfaces and frontend development",
+            key_gap="Understanding UI fundamentals",
+            milestones=[
+                "Month 1: HTML, CSS, JavaScript basics",
+                "Month 2: Learn React or Vue",
+                "Month 3: Build frontend projects"
+            ],
+            timeline_text="3-6 months",
+            min_months=3,
+            max_months=6,
+            card_type="intern_explore_1",
+            confidence="medium"
+        ),
+        RecommendedRole(
+            title="Backend Engineer (Intern)",
+            role="backend",
+            seniority="Entry",
+            reason="Test if you enjoy building APIs, databases, and server-side logic",
+            key_gap="Understanding server-side fundamentals",
+            milestones=[
+                "Month 1: Python/Node.js basics and databases",
+                "Month 2: Build simple API projects",
+                "Month 3: Decide your specialization"
+            ],
+            timeline_text="3-6 months",
+            min_months=3,
+            max_months=6,
+            card_type="intern_explore_2",
+            confidence="medium"
+        )
+    ]
