@@ -77,8 +77,10 @@ const TrustBadgeSection = styled.div`
   border-top: 1px solid #e2e8f0;
 
   @media (max-width: 768px) {
-    margin-top: 20px;
-    padding-top: 16px;
+    /* Mobile: Reduce space between content and logo ticker */
+    margin-top: 8px;
+    padding-top: 12px;
+    padding-bottom: 12px; /* ADJUST THIS: increase space for trust section */
   }
 `;
 
@@ -92,7 +94,8 @@ const TrustBadgeTitle = styled.div`
   text-align: center;
 
   @media (max-width: 768px) {
-    margin-bottom: 12px;
+    /* Mobile: Space between "Trusted by..." text and logo ticker */
+    margin-bottom: 16px; /* ADJUST THIS: increase/decrease gap above ticker */
   }
 `;
 
@@ -100,6 +103,10 @@ const LogoTicker = styled.div`
   overflow: hidden;
   position: relative;
   width: 100%;
+  /* Mobile: Reduce ticker height - ADJUST gap/spacing here */
+  @media (max-width: 768px) {
+    min-height: 40px; /* ADJUST THIS: reduce purple ticker height */
+  }
 
   &::before {
     content: "";
@@ -189,6 +196,8 @@ const LogoContainer = styled.div`
   margin-bottom: 40px;
 
   @media (max-width: 768px) {
+    /* Mobile: Remove margin above logo */
+    margin-top: 0;
     margin-bottom: 24px;
   }
 `;
@@ -445,6 +454,42 @@ const NextButton = styled.button`
   }
 `;
 
+const SkipButton = styled.button`
+  background: transparent;
+  color: #64748b;
+  border: none;
+  padding: 8px 0;
+  border-radius: 0;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  font-weight: 500;
+  font-size: 0.9rem;
+  font-family: 'Plus Jakarta Sans', -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen', 'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans', 'Helvetica Neue', sans-serif;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+
+  @media (max-width: 768px) {
+    /* Mobile: Reduce font size of Skip Evaluation CTA */
+    font-size: 0.75rem; /* ADJUST THIS: reduce font size on mobile */
+  }
+
+  &:hover {
+    color: #475569;
+  }
+
+  &:disabled {
+    opacity: 0.3;
+    cursor: not-allowed;
+  }
+`;
+
+const NavDivider = styled.div`
+  width: 1px;
+  height: 24px;
+  background: #e2e8f0;
+  margin: 0 6px;
+`;
+
 const TopNavigationWrapper = styled.div`
   position: sticky;
   top: 0;
@@ -466,6 +511,7 @@ const TopNavigationWrapper = styled.div`
 const DesktopNavigation = styled.div`
   display: flex;
   gap: 12px;
+  align-items: center;
 `;
 
 const CarouselDotsContainer = styled.div`
@@ -571,14 +617,21 @@ const BottomNavigation = styled.div`
   padding: 16px 20px;
   display: none;
   z-index: 100;
+  flex-direction: column;
+  gap: 12px;
 
   @media (max-width: 768px) {
     display: flex;
     justify-content: ${(props) =>
     props.isLastStep ? 'space-between' : 'space-between'};
     align-items: center;
-    gap: 12px;
   }
+`;
+
+const MobileNavButtonsContainer = styled.div`
+  display: flex;
+  gap: 12px;
+  width: 100%;
 `;
 
 const MobileWelcomeScreen = styled.div`
@@ -591,7 +644,8 @@ const MobileWelcomeScreen = styled.div`
     height: 100vh;
     max-height: 100vh;
     overflow: hidden;
-    padding: 20px 20px 100px;
+    /* ADJUST THIS: reduce side margins on mobile */
+    padding: 20px 20px 140px;
     background: #fbfbfb;
   }
 `;
@@ -604,13 +658,25 @@ const MobileWelcomeContent = styled.div`
   overflow-y: auto;
   overflow-x: hidden;
   min-height: 0;
+
+  @media (max-width: 768px) {
+    justify-content: flex-start;
+    /* Removed padding-top to eliminate green space above logo */
+  }
 `;
 
-const StickyMobileCTA = styled.button`
+const MobileButtonsContainer = styled.div`
   position: fixed;
   bottom: 20px;
   left: 20px;
   right: 20px;
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  z-index: 1000;
+`;
+
+const StickyMobileCTA = styled.button`
   background: #d80566;
   color: white;
   border: none;
@@ -794,6 +860,21 @@ const FinalModeQuiz = ({ onProgressChange }) => {
     setCurrentStep(currentStep - 1);
     window.scrollTo({ top: 0, behavior: 'smooth' });
   }, [currentStep, clearQuizResponses, setBackground, navigate]);
+
+  // TODO: Developers - Redirect user to free dashboard on skip
+  // This will be used when user clicks "Skip Evaluation" button
+  // Should redirect to the free dashboard/home page or a "skip confirmation" page
+  const handleSkip = useCallback(() => {
+    tracker.click({
+      click_type: 'quiz_skip_evaluation_clicked',
+      custom: {
+        source: 'final_mode_quiz',
+        currentStep: currentStep
+      }
+    });
+    // Redirect to free dashboard
+    window.location.href = '/';
+  }, [currentStep]);
 
   const canProceed = useCallback(() => {
     if (currentStep === 0) {
@@ -1106,9 +1187,14 @@ const FinalModeQuiz = ({ onProgressChange }) => {
             </LogoTicker>
           </TrustBadgeSection>
         </MobileWelcomeContent>
-        <StickyMobileCTA onClick={handleMobileContinue}>
-          Continue
-        </StickyMobileCTA>
+        <MobileButtonsContainer>
+          <StickyMobileCTA onClick={handleMobileContinue}>
+            Continue
+          </StickyMobileCTA>
+          <SkipButton onClick={handleSkip}>
+            Skip Evaluation
+          </SkipButton>
+        </MobileButtonsContainer>
       </MobileWelcomeScreen>
     );
   }
@@ -1141,6 +1227,16 @@ const FinalModeQuiz = ({ onProgressChange }) => {
                   Evaluate my Profile
                 </LastStepNavButton>
               )}
+
+              {/* Skip Evaluation button - only visible on first step */}
+              {currentStep === 0 && (
+                <>
+                  <NavDivider />
+                  <SkipButton onClick={handleSkip}>
+                    Skip Evaluation
+                  </SkipButton>
+                </>
+              )}
             </DesktopNavigation>
 
             <CarouselDotsContainer>
@@ -1171,29 +1267,32 @@ const FinalModeQuiz = ({ onProgressChange }) => {
 
       {isMobile && (
         <BottomNavigation isLastStep={isLastStep}>
-          {!isLastStep ? (
-            <>
-              <NavButton onClick={handlePrevious} disabled={currentStep === 0}>
-                <CaretLeft size={20} weight="regular" />
-              </NavButton>
-              <NavButton onClick={handleNext} disabled={!canProceed()}>
-                <CaretRight size={20} weight="regular" />
-              </NavButton>
-            </>
-          ) : (
-            <>
-              <LastStepNavButton onClick={handlePrevious}>
-                <CaretLeft size={20} weight="regular" />
-              </LastStepNavButton>
-              <LastStepNavButton
-                variant="primary"
-                onClick={handleNext}
-                disabled={!canProceed()}
-              >
-                Evaluate my Profile
-              </LastStepNavButton>
-            </>
-          )}
+          <MobileNavButtonsContainer>
+            {!isLastStep ? (
+              <>
+                <NavButton onClick={handlePrevious} disabled={currentStep === 0}>
+                  <CaretLeft size={20} weight="regular" />
+                </NavButton>
+                <NavButton onClick={handleNext} disabled={!canProceed()}>
+                  <CaretRight size={20} weight="regular" />
+                </NavButton>
+              </>
+            ) : (
+              <>
+                <LastStepNavButton onClick={handlePrevious}>
+                  <CaretLeft size={20} weight="regular" />
+                </LastStepNavButton>
+                <LastStepNavButton
+                  variant="primary"
+                  onClick={handleNext}
+                  disabled={!canProceed()}
+                >
+                  Evaluate my Profile
+                </LastStepNavButton>
+              </>
+            )}
+          </MobileNavButtonsContainer>
+
         </BottomNavigation>
       )}
     </QuizContainer>
