@@ -1,7 +1,7 @@
-import React, { useState, useEffect, useCallback } from 'react';
+import React, { useState, useEffect, useCallback, useRef } from 'react';
 import { Link, useLocation, useNavigate } from 'react-router-dom';
 import styled from 'styled-components';
-import { DownloadSimple } from 'phosphor-react';
+import { ArrowClockwise } from 'phosphor-react';
 import { ReactComponent as ScalerLogo } from '../assets/scaler-logo.svg';
 import { useProfile } from '../context/ProfileContext';
 import { useRequestCallback } from '../app/context/RequestCallbackContext';
@@ -86,7 +86,32 @@ const CTAButton = styled.button`
   }
 `;
 
-const OutlineCTAButton = styled.button`
+const TextReEvaluateButton = styled.button`
+  background: transparent;
+  color: #b30158;
+  border: none;
+  padding: 8px 12px;
+  border-radius: 0;
+  font-weight: 600;
+  font-size: 0.875rem;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  &:hover {
+    opacity: 0.8;
+  }
+
+  @media (max-width: 768px) {
+    display: none;
+  }
+`;
+
+const DesktopDashboardButton = styled.button`
   background: transparent;
   color: #b30158;
   border: 2px solid #b30158;
@@ -109,6 +134,31 @@ const OutlineCTAButton = styled.button`
 
   @media (max-width: 768px) {
     display: none;
+  }
+`;
+
+const OutlineCTAButton = styled.button`
+  background: transparent;
+  color: #b30158;
+  border: none;
+  padding: 8px 12px;
+  border-radius: 0;
+  font-weight: 600;
+  font-size: 0.75rem;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  display: none;
+  align-items: center;
+  justify-content: center;
+
+  &:hover {
+    opacity: 0.7;
+  }
+
+  @media (max-width: 768px) {
+    display: flex;
   }
 `;
 
@@ -221,8 +271,11 @@ const CSATBanner = styled.button`
   cursor: pointer;
   border: none;
   width: 100%;
-  transition: transform 0.3s ease, background 0.2s ease;
-  transform: translateY(${(props) => (props.isVisible ? '0' : '-100%')});
+  transition: opacity 0.2s linear, visibility 0.2s linear;
+  will-change: opacity;
+  opacity: ${(props) => (props.isVisible ? '1' : '0')};
+  visibility: ${(props) => (props.isVisible ? 'visible' : 'hidden')};
+  pointer-events: ${(props) => (props.isVisible ? 'auto' : 'none')};
 
   &:hover {
     background: #5a2e8a;
@@ -290,14 +343,15 @@ const NavigationBar = ({
   const { resetProfile, evaluationResults } = useProfile();
   const { open: openCallbackModal } = useRequestCallback();
 
-  const [showCSATBanner, setShowCSATBanner] = useState(true);
-  const [lastScrollY, setLastScrollY] = useState(0);
-
   const showProgress =
     location.pathname === '/quiz' || location.pathname === '/goals';
   const showModeToggle = location.pathname === '/quiz';
   const isResultsPage =
     location.pathname === '/results';
+
+  const [showCSATBanner, setShowCSATBanner] = useState(true);
+  const lastScrollYRef = useRef(0);
+  const lastVisibilityRef = useRef(true);
 
   const handleRCBClick = useCallback(() => {
     tracker.click({
@@ -319,26 +373,39 @@ const NavigationBar = ({
     });
   }, []);
 
+  // Scroll direction detection for CSAT banner
   useEffect(() => {
     if (!isResultsPage) return;
 
     const handleScroll = () => {
       const currentScrollY = window.scrollY;
+      let newVisibility;
 
       if (currentScrollY < 10) {
-        setShowCSATBanner(true);
-      } else if (currentScrollY < lastScrollY) {
-        setShowCSATBanner(true);
-      } else if (currentScrollY > lastScrollY) {
-        setShowCSATBanner(false);
+        newVisibility = true;
+      } else if (currentScrollY < lastScrollYRef.current) {
+        // Scrolling up - show banner
+        newVisibility = true;
+      } else if (currentScrollY > lastScrollYRef.current) {
+        // Scrolling down - hide banner
+        newVisibility = false;
+      } else {
+        // No change in direction, keep current visibility
+        newVisibility = lastVisibilityRef.current;
       }
 
-      setLastScrollY(currentScrollY);
+      // Only update state if visibility actually changed
+      if (newVisibility !== lastVisibilityRef.current) {
+        setShowCSATBanner(newVisibility);
+        lastVisibilityRef.current = newVisibility;
+      }
+
+      lastScrollYRef.current = currentScrollY;
     };
 
     window.addEventListener('scroll', handleScroll, { passive: true });
     return () => window.removeEventListener('scroll', handleScroll);
-  }, [lastScrollY, isResultsPage]);
+  }, [isResultsPage]);
 
   const handleReEvaluate = useCallback(() => {
     tracker.click({
@@ -351,14 +418,14 @@ const NavigationBar = ({
     navigate?.('/quiz');
   }, [resetProfile, navigate]);
 
-  const handleDownloadReport = useCallback(() => {
+  const handleGoToDashboard = useCallback(() => {
     tracker.click({
-      click_type: 'download_report_btn_clicked',
+      click_type: 'go_to_dashboard_btn_clicked',
       custom: {
         source: 'navbar'
       }
     });
-    window.print();
+    window.location.href = '/';
   }, []);
 
   return (
@@ -423,14 +490,17 @@ const NavigationBar = ({
           <NavActions>
             {isResultsPage && evaluationResults && (
               <>
-                <TextCTAButton onClick={handleReEvaluate}>
+                <TextReEvaluateButton onClick={handleReEvaluate}>
                   Re-evaluate
-                </TextCTAButton>
-                <OutlineCTAButton onClick={handleDownloadReport}>
-                  Download Report
+                </TextReEvaluateButton>
+                <DesktopDashboardButton onClick={handleGoToDashboard}>
+                  Go to Free Dashboard
+                </DesktopDashboardButton>
+                <OutlineCTAButton onClick={handleGoToDashboard}>
+                  Go to Dashboard
                 </OutlineCTAButton>
-                <IconButton onClick={handleDownloadReport}>
-                  <DownloadSimple size={20} weight="bold" />
+                <IconButton onClick={handleReEvaluate} title="Re-evaluate">
+                  <ArrowClockwise size={20} weight="bold" />
                 </IconButton>
               </>
             )}

@@ -63,7 +63,8 @@ def _get_easier_company(target_company: str) -> str:
     """
     Get next easier company in hierarchy.
 
-    Hierarchy: FAANG → Unicorns → Product → Startups → Service → Any-Tech
+    Hierarchy: FAANG → Unicorns → Product → Startups → Service → Startups
+    For beginners (any-tech, not-sure): downgrade to service companies
     """
     hierarchy = {
         "faang": "unicorns",
@@ -71,14 +72,14 @@ def _get_easier_company(target_company: str) -> str:
         "product": "startups",
         "startups": "better-service",
         "better-service": "better-service",
-        "any-tech": "any-tech",
+        "any-tech": "better-service",
         "service": "service",
         "faang-longterm": "product",
-        "not-sure": "any-tech",
-        "evaluating": "any-tech"
+        "not-sure": "better-service",
+        "evaluating": "better-service"
     }
 
-    return hierarchy.get(target_company, "any-tech")
+    return hierarchy.get(target_company, "better-service")
 
 
 def _generate_exploring_cards(persona_id: str) -> List[JobOpportunityCard]:
