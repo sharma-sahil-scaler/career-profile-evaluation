@@ -72,7 +72,7 @@ def calculate_profile_strength(background: str, quiz_responses: Dict[str, Any]) 
             "system_design_component": int(sd_score),
             "portfolio_component": int(port_score),
             "raw_readiness_weighted": int(raw_readiness),
-            "role_transition_gap": gap_deduction,
+            "role_transition_gap": role_gap,
             "adjusted_readiness": int(adjusted_readiness),
             "floor": floor,
             "ceiling": ceiling,
