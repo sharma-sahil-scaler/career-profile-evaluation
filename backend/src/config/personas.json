@@ -1,235 +1,12 @@
 {
-  "description": "Persona matching logic based on Free Profile Evaluator quiz responses",
-  "notes": "This bridges quiz inputs to 12 core personas with realistic timelines",
+  "description": "Persona matching system with hardcoded recommendations and company-type-aware timelines",
+  "notes": "Each persona has job recommendations and timeline modifiers based on company type",
 
   "persona_definitions": {
-    "tech_entry_backend": {
-      "id": "tech_entry_backend",
-      "label": "Tech Entry-Level Backend Engineer",
-      "matching_criteria": {
-        "background": ["tech"],
-        "experience": ["0-2", "2-3"],
-        "targetRole": ["backend", "backend-sde", "backend-dev"],
-        "currentRole": ["swe-product", "swe-service", "qa-support"]
-      },
-      "timeline_config": {
-        "stepping_stone": {
-          "min_months": 2,
-          "max_months": 3,
-          "timeline_text": "2-3 months"
-        },
-        "target": {
-          "min_months": 4,
-          "max_months": 6,
-          "timeline_text": "4-6 months"
-        },
-        "alternative": {
-          "min_months": 6,
-          "max_months": 8,
-          "timeline_text": "6-8 months"
-        }
-      }
-    },
-
-    "tech_entry_frontend": {
-      "id": "tech_entry_frontend",
-      "label": "Tech Entry-Level Frontend Engineer",
-      "matching_criteria": {
-        "background": ["tech"],
-        "experience": ["0-2", "2-3"],
-        "targetRole": ["frontend", "frontend-sde", "frontend-dev"],
-        "currentRole": ["swe-product", "swe-service"]
-      },
-      "timeline_config": {
-        "stepping_stone": {
-          "min_months": 2,
-          "max_months": 3,
-          "timeline_text": "2-3 months"
-        },
-        "target": {
-          "min_months": 3,
-          "max_months": 5,
-          "timeline_text": "3-5 months"
-        },
-        "alternative": {
-          "min_months": 5,
-          "max_months": 7,
-          "timeline_text": "5-7 months"
-        }
-      }
-    },
-
-    "tech_entry_fullstack": {
-      "id": "tech_entry_fullstack",
-      "label": "Tech Entry-Level Full Stack Engineer",
-      "matching_criteria": {
-        "background": ["tech"],
-        "experience": ["0-2", "2-3"],
-        "targetRole": ["fullstack", "fullstack-sde", "fullstack-dev"],
-        "currentRole": ["swe-product", "swe-service"]
-      },
-      "timeline_config": {
-        "stepping_stone": {
-          "min_months": 2,
-          "max_months": 4,
-          "timeline_text": "2-4 months"
-        },
-        "target": {
-          "min_months": 4,
-          "max_months": 6,
-          "timeline_text": "4-6 months"
-        },
-        "alternative": {
-          "min_months": 6,
-          "max_months": 8,
-          "timeline_text": "6-8 months"
-        }
-      }
-    },
-
-    "tech_mid_backend": {
-      "id": "tech_mid_backend",
-      "label": "Tech Mid-Level Backend Engineer",
-      "matching_criteria": {
-        "background": ["tech"],
-        "experience": ["3-5", "5-8"],
-        "targetRole": ["backend", "backend-sde"],
-        "currentRole": ["swe-product", "swe-service"]
-      },
-      "timeline_config": {
-        "stepping_stone": {
-          "min_months": 1,
-          "max_months": 2,
-          "timeline_text": "1-2 months"
-        },
-        "target": {
-          "min_months": 3,
-          "max_months": 4,
-          "timeline_text": "3-4 months"
-        },
-        "alternative": {
-          "min_months": 5,
-          "max_months": 6,
-          "timeline_text": "5-6 months"
-        }
-      }
-    },
-
-    "tech_mid_frontend": {
-      "id": "tech_mid_frontend",
-      "label": "Tech Mid-Level Frontend Engineer",
-      "matching_criteria": {
-        "background": ["tech"],
-        "experience": ["3-5", "5-8"],
-        "targetRole": ["frontend", "frontend-sde"],
-        "currentRole": ["swe-product", "swe-service"]
-      },
-      "timeline_config": {
-        "stepping_stone": {
-          "min_months": 1,
-          "max_months": 2,
-          "timeline_text": "1-2 months"
-        },
-        "target": {
-          "min_months": 2,
-          "max_months": 4,
-          "timeline_text": "2-4 months"
-        },
-        "alternative": {
-          "min_months": 4,
-          "max_months": 6,
-          "timeline_text": "4-6 months"
-        }
-      }
-    },
-
-    "tech_mid_fullstack": {
-      "id": "tech_mid_fullstack",
-      "label": "Tech Mid-Level Full Stack Engineer",
-      "matching_criteria": {
-        "background": ["tech"],
-        "experience": ["3-5", "5-8"],
-        "targetRole": ["fullstack", "fullstack-sde"],
-        "currentRole": ["swe-product", "swe-service"]
-      },
-      "timeline_config": {
-        "stepping_stone": {
-          "min_months": 1,
-          "max_months": 2,
-          "timeline_text": "1-2 months"
-        },
-        "target": {
-          "min_months": 3,
-          "max_months": 4,
-          "timeline_text": "3-4 months"
-        },
-        "alternative": {
-          "min_months": 5,
-          "max_months": 6,
-          "timeline_text": "5-6 months"
-        }
-      }
-    },
-
-    "tech_senior_backend": {
-      "id": "tech_senior_backend",
-      "label": "Tech Senior Backend Engineer",
-      "matching_criteria": {
-        "background": ["tech"],
-        "experience": ["5-8", "8+"],
-        "targetRole": ["backend", "backend-sde", "tech-lead"],
-        "currentRole": ["swe-product", "swe-service", "devops"]
-      },
-      "timeline_config": {
-        "stepping_stone": {
-          "min_months": 1,
-          "max_months": 2,
-          "timeline_text": "1-2 months"
-        },
-        "target": {
-          "min_months": 2,
-          "max_months": 3,
-          "timeline_text": "2-3 months"
-        },
-        "alternative": {
-          "min_months": 4,
-          "max_months": 5,
-          "timeline_text": "4-5 months"
-        }
-      }
-    },
-
-    "tech_senior_frontend": {
-      "id": "tech_senior_frontend",
-      "label": "Tech Senior Frontend Engineer",
-      "matching_criteria": {
-        "background": ["tech"],
-        "experience": ["5-8", "8+"],
-        "targetRole": ["frontend", "frontend-sde", "tech-lead"],
-        "currentRole": ["swe-product", "swe-service"]
-      },
-      "timeline_config": {
-        "stepping_stone": {
-          "min_months": 1,
-          "max_months": 2,
-          "timeline_text": "1-2 months"
-        },
-        "target": {
-          "min_months": 2,
-          "max_months": 3,
-          "timeline_text": "2-3 months"
-        },
-        "alternative": {
-          "min_months": 3,
-          "max_months": 5,
-          "timeline_text": "3-5 months"
-        }
-      }
-    },
-
     "switcher_early_backend": {
       "id": "switcher_early_backend",
       "label": "Career Switcher - Early Backend",
+      "description": "Non-tech background, 0-2 years experience, targeting backend roles",
       "matching_criteria": {
         "background": ["non-tech"],
         "experience": ["0", "0-2"],
@@ -238,19 +15,66 @@
       },
       "timeline_config": {
         "stepping_stone": {
-          "min_months": 6,
-          "max_months": 9,
-          "timeline_text": "6-9 months"
+          "base": {"min_months": 6, "max_months": 9, "timeline_text": "6-9 months"},
+          "company_modifiers": {
+            "faang": {"min_months": 8, "max_months": 11, "timeline_text": "8-11 months"},
+            "unicorns": {"min_months": 7, "max_months": 10, "timeline_text": "7-10 months"},
+            "product": {"min_months": 6, "max_months": 9, "timeline_text": "6-9 months"},
+            "service": {"min_months": 5, "max_months": 8, "timeline_text": "5-8 months"},
+            "startups": {"min_months": 6, "max_months": 9, "timeline_text": "6-9 months"},
+            "any-tech": {"min_months": 6, "max_months": 9, "timeline_text": "6-9 months"}
+          }
         },
         "target": {
-          "min_months": 9,
-          "max_months": 12,
-          "timeline_text": "9-12 months"
+          "base": {"min_months": 9, "max_months": 12, "timeline_text": "9-12 months"},
+          "company_modifiers": {
+            "faang": {"min_months": 12, "max_months": 16, "timeline_text": "12-16 months"},
+            "unicorns": {"min_months": 10, "max_months": 14, "timeline_text": "10-14 months"},
+            "product": {"min_months": 9, "max_months": 12, "timeline_text": "9-12 months"},
+            "service": {"min_months": 8, "max_months": 11, "timeline_text": "8-11 months"},
+            "startups": {"min_months": 9, "max_months": 12, "timeline_text": "9-12 months"},
+            "any-tech": {"min_months": 9, "max_months": 12, "timeline_text": "9-12 months"}
+          }
         },
         "alternative": {
-          "min_months": 12,
-          "max_months": 15,
-          "timeline_text": "12-15 months"
+          "base": {"min_months": 12, "max_months": 15, "timeline_text": "12-15 months"},
+          "company_modifiers": {
+            "faang": {"min_months": 14, "max_months": 18, "timeline_text": "14-18 months"},
+            "unicorns": {"min_months": 12, "max_months": 15, "timeline_text": "12-15 months"},
+            "product": {"min_months": 11, "max_months": 14, "timeline_text": "11-14 months"},
+            "service": {"min_months": 10, "max_months": 13, "timeline_text": "10-13 months"},
+            "startups": {"min_months": 12, "max_months": 15, "timeline_text": "12-15 months"},
+            "any-tech": {"min_months": 12, "max_months": 15, "timeline_text": "12-15 months"}
+          }
+        }
+      },
+      "job_recommendations": {
+        "stepping_stone": {
+          "key_focus": "Build backend fundamentals with entry-level exposure",
+          "milestones": [
+            "Month 1-2: Master backend basics (Python/Node.js, REST APIs, databases)",
+            "Month 2-3: Build 2-3 backend projects (CRUD apps, API servers)",
+            "Month 3-4: Practice backend system design interviews",
+            "Month 4-5: Contribute to open-source backend projects"
+          ]
+        },
+        "target": {
+          "key_focus": "Transition to mid-level backend engineer with production experience",
+          "milestones": [
+            "Month 1-2: Master advanced backend patterns (async, caching, optimization)",
+            "Month 2-4: Build production-grade backend systems",
+            "Month 4-6: Learn system design and architecture patterns",
+            "Month 6-8: Prepare for backend engineer interviews at target companies"
+          ]
+        },
+        "alternative": {
+          "key_focus": "Explore full-stack development for broader career flexibility",
+          "milestones": [
+            "Month 1-3: Build foundational frontend skills (HTML, CSS, React basics)",
+            "Month 3-6: Create full-stack applications (backend + frontend)",
+            "Month 6-10: Master modern full-stack patterns (MERN, LAMP, JAM stack)",
+            "Month 10-12: Interview prep for full-stack engineer positions"
+          ]
         }
       }
     },
@@ -258,6 +82,7 @@
     "switcher_early_frontend": {
       "id": "switcher_early_frontend",
       "label": "Career Switcher - Early Frontend",
+      "description": "Non-tech background, 0-2 years experience, targeting frontend roles",
       "matching_criteria": {
         "background": ["non-tech"],
         "experience": ["0", "0-2"],
@@ -266,19 +91,66 @@
       },
       "timeline_config": {
         "stepping_stone": {
-          "min_months": 5,
-          "max_months": 8,
-          "timeline_text": "5-8 months"
+          "base": {"min_months": 5, "max_months": 8, "timeline_text": "5-8 months"},
+          "company_modifiers": {
+            "faang": {"min_months": 7, "max_months": 10, "timeline_text": "7-10 months"},
+            "unicorns": {"min_months": 6, "max_months": 9, "timeline_text": "6-9 months"},
+            "product": {"min_months": 5, "max_months": 8, "timeline_text": "5-8 months"},
+            "service": {"min_months": 4, "max_months": 7, "timeline_text": "4-7 months"},
+            "startups": {"min_months": 5, "max_months": 8, "timeline_text": "5-8 months"},
+            "any-tech": {"min_months": 5, "max_months": 8, "timeline_text": "5-8 months"}
+          }
         },
         "target": {
-          "min_months": 8,
-          "max_months": 11,
-          "timeline_text": "8-11 months"
+          "base": {"min_months": 8, "max_months": 11, "timeline_text": "8-11 months"},
+          "company_modifiers": {
+            "faang": {"min_months": 11, "max_months": 15, "timeline_text": "11-15 months"},
+            "unicorns": {"min_months": 9, "max_months": 13, "timeline_text": "9-13 months"},
+            "product": {"min_months": 8, "max_months": 11, "timeline_text": "8-11 months"},
+            "service": {"min_months": 7, "max_months": 10, "timeline_text": "7-10 months"},
+            "startups": {"min_months": 8, "max_months": 11, "timeline_text": "8-11 months"},
+            "any-tech": {"min_months": 8, "max_months": 11, "timeline_text": "8-11 months"}
+          }
         },
         "alternative": {
-          "min_months": 11,
-          "max_months": 14,
-          "timeline_text": "11-14 months"
+          "base": {"min_months": 11, "max_months": 14, "timeline_text": "11-14 months"},
+          "company_modifiers": {
+            "faang": {"min_months": 13, "max_months": 17, "timeline_text": "13-17 months"},
+            "unicorns": {"min_months": 11, "max_months": 14, "timeline_text": "11-14 months"},
+            "product": {"min_months": 10, "max_months": 13, "timeline_text": "10-13 months"},
+            "service": {"min_months": 9, "max_months": 12, "timeline_text": "9-12 months"},
+            "startups": {"min_months": 11, "max_months": 14, "timeline_text": "11-14 months"},
+            "any-tech": {"min_months": 11, "max_months": 14, "timeline_text": "11-14 months"}
+          }
+        }
+      },
+      "job_recommendations": {
+        "stepping_stone": {
+          "key_focus": "Build frontend fundamentals with real-world project experience",
+          "milestones": [
+            "Month 1-2: Master HTML, CSS, JavaScript fundamentals",
+            "Month 2-3: Learn React/Vue and build 3-4 interactive projects",
+            "Month 3-4: Create responsive, accessible web applications",
+            "Month 4-5: Prepare for junior frontend developer interviews"
+          ]
+        },
+        "target": {
+          "key_focus": "Become mid-level frontend engineer with modern tooling expertise",
+          "milestones": [
+            "Month 1-2: Master modern React patterns (hooks, context, testing)",
+            "Month 2-4: Build production-grade frontend applications",
+            "Month 4-6: Learn state management, performance optimization, accessibility",
+            "Month 6-8: Prepare for mid-level frontend engineer interviews"
+          ]
+        },
+        "alternative": {
+          "key_focus": "Transition to full-stack development for broader opportunities",
+          "milestones": [
+            "Month 1-3: Master backend fundamentals (Node.js, Express, APIs)",
+            "Month 3-6: Build full-stack applications (React + Node/Python)",
+            "Month 6-10: Learn advanced patterns (microservices, databases, scaling)",
+            "Month 10-12: Interview prep for full-stack engineer roles"
+          ]
         }
       }
     },
@@ -286,6 +158,7 @@
     "switcher_early_fullstack": {
       "id": "switcher_early_fullstack",
       "label": "Career Switcher - Early Full Stack",
+      "description": "Non-tech background, 0-2 years experience, targeting full-stack roles",
       "matching_criteria": {
         "background": ["non-tech"],
         "experience": ["0", "0-2"],
@@ -294,19 +167,446 @@
       },
       "timeline_config": {
         "stepping_stone": {
-          "min_months": 7,
-          "max_months": 10,
-          "timeline_text": "7-10 months"
+          "base": {"min_months": 7, "max_months": 10, "timeline_text": "7-10 months"},
+          "company_modifiers": {
+            "faang": {"min_months": 9, "max_months": 12, "timeline_text": "9-12 months"},
+            "unicorns": {"min_months": 8, "max_months": 11, "timeline_text": "8-11 months"},
+            "product": {"min_months": 7, "max_months": 10, "timeline_text": "7-10 months"},
+            "service": {"min_months": 6, "max_months": 9, "timeline_text": "6-9 months"},
+            "startups": {"min_months": 7, "max_months": 10, "timeline_text": "7-10 months"},
+            "any-tech": {"min_months": 7, "max_months": 10, "timeline_text": "7-10 months"}
+          }
         },
         "target": {
-          "min_months": 10,
-          "max_months": 13,
-          "timeline_text": "10-13 months"
+          "base": {"min_months": 10, "max_months": 13, "timeline_text": "10-13 months"},
+          "company_modifiers": {
+            "faang": {"min_months": 13, "max_months": 17, "timeline_text": "13-17 months"},
+            "unicorns": {"min_months": 11, "max_months": 15, "timeline_text": "11-15 months"},
+            "product": {"min_months": 10, "max_months": 13, "timeline_text": "10-13 months"},
+            "service": {"min_months": 9, "max_months": 12, "timeline_text": "9-12 months"},
+            "startups": {"min_months": 10, "max_months": 13, "timeline_text": "10-13 months"},
+            "any-tech": {"min_months": 10, "max_months": 13, "timeline_text": "10-13 months"}
+          }
         },
         "alternative": {
-          "min_months": 13,
-          "max_months": 16,
-          "timeline_text": "13-16 months"
+          "base": {"min_months": 13, "max_months": 16, "timeline_text": "13-16 months"},
+          "company_modifiers": {
+            "faang": {"min_months": 15, "max_months": 19, "timeline_text": "15-19 months"},
+            "unicorns": {"min_months": 13, "max_months": 16, "timeline_text": "13-16 months"},
+            "product": {"min_months": 12, "max_months": 15, "timeline_text": "12-15 months"},
+            "service": {"min_months": 11, "max_months": 14, "timeline_text": "11-14 months"},
+            "startups": {"min_months": 13, "max_months": 16, "timeline_text": "13-16 months"},
+            "any-tech": {"min_months": 13, "max_months": 16, "timeline_text": "13-16 months"}
+          }
+        }
+      },
+      "job_recommendations": {
+        "stepping_stone": {
+          "key_focus": "Build both frontend and backend fundamentals simultaneously",
+          "milestones": [
+            "Month 1-2: Master frontend basics (HTML, CSS, JavaScript/React)",
+            "Month 2-3: Master backend basics (Node.js/Python, REST APIs, databases)",
+            "Month 3-5: Build 2-3 full-stack applications (MERN/LAMP stack)",
+            "Month 5-6: Prepare for junior full-stack developer interviews"
+          ]
+        },
+        "target": {
+          "key_focus": "Become proficient full-stack engineer with production experience",
+          "milestones": [
+            "Month 1-3: Master modern full-stack patterns (React, Node, PostgreSQL)",
+            "Month 3-6: Build production-grade full-stack applications",
+            "Month 6-9: Learn DevOps basics, deployment, scaling, and optimization",
+            "Month 9-11: Prepare for mid-level full-stack engineer interviews"
+          ]
+        },
+        "alternative": {
+          "key_focus": "Specialize in data-driven full-stack development with analytics",
+          "milestones": [
+            "Month 1-4: Master full-stack fundamentals (frontend + backend)",
+            "Month 4-7: Learn data analytics and SQL (databases, queries, optimization)",
+            "Month 7-10: Build full-stack applications with analytics dashboards",
+            "Month 10-13: Prepare for data-focused full-stack engineer roles"
+          ]
+        }
+      }
+    },
+
+    "tech_entry_backend": {
+      "id": "tech_entry_backend",
+      "label": "Tech Entry-Level Backend Engineer",
+      "description": "Tech background, 0-2 years experience, targeting backend roles",
+      "matching_criteria": {
+        "background": ["tech"],
+        "experience": ["0-2", "2-3"],
+        "targetRole": ["backend", "backend-sde", "backend-dev"],
+        "currentRole": ["swe-product", "swe-service", "qa-support"]
+      },
+      "timeline_config": {
+        "stepping_stone": {
+          "base": {"min_months": 2, "max_months": 3, "timeline_text": "2-3 months"},
+          "company_modifiers": {
+            "faang": {"min_months": 3, "max_months": 4, "timeline_text": "3-4 months"},
+            "unicorns": {"min_months": 2, "max_months": 3, "timeline_text": "2-3 months"},
+            "product": {"min_months": 2, "max_months": 3, "timeline_text": "2-3 months"},
+            "service": {"min_months": 1, "max_months": 2, "timeline_text": "1-2 months"},
+            "startups": {"min_months": 2, "max_months": 3, "timeline_text": "2-3 months"},
+            "any-tech": {"min_months": 2, "max_months": 3, "timeline_text": "2-3 months"}
+          }
+        },
+        "target": {
+          "base": {"min_months": 4, "max_months": 6, "timeline_text": "4-6 months"},
+          "company_modifiers": {
+            "faang": {"min_months": 6, "max_months": 9, "timeline_text": "6-9 months"},
+            "unicorns": {"min_months": 5, "max_months": 7, "timeline_text": "5-7 months"},
+            "product": {"min_months": 4, "max_months": 6, "timeline_text": "4-6 months"},
+            "service": {"min_months": 3, "max_months": 4, "timeline_text": "3-4 months"},
+            "startups": {"min_months": 4, "max_months": 6, "timeline_text": "4-6 months"},
+            "any-tech": {"min_months": 4, "max_months": 6, "timeline_text": "4-6 months"}
+          }
+        },
+        "alternative": {
+          "base": {"min_months": 6, "max_months": 8, "timeline_text": "6-8 months"},
+          "company_modifiers": {
+            "faang": {"min_months": 8, "max_months": 11, "timeline_text": "8-11 months"},
+            "unicorns": {"min_months": 7, "max_months": 9, "timeline_text": "7-9 months"},
+            "product": {"min_months": 6, "max_months": 8, "timeline_text": "6-8 months"},
+            "service": {"min_months": 5, "max_months": 6, "timeline_text": "5-6 months"},
+            "startups": {"min_months": 6, "max_months": 8, "timeline_text": "6-8 months"},
+            "any-tech": {"min_months": 6, "max_months": 8, "timeline_text": "6-8 months"}
+          }
+        }
+      },
+      "job_recommendations": {
+        "stepping_stone": {
+          "key_focus": "Solidify backend fundamentals within your current company",
+          "milestones": [
+            "Week 1-4: Deep dive into your codebase (architecture, patterns, best practices)",
+            "Week 4-8: Lead 2-3 small backend features from design to deployment",
+            "Week 8-12: Master advanced debugging, profiling, and optimization",
+            "Week 12+: Mentor junior engineers and document system architecture"
+          ]
+        },
+        "target": {
+          "key_focus": "Transition to your target backend role with improved interviewing skills",
+          "milestones": [
+            "Month 1: Practice 50+ backend coding problems (databases, APIs, optimization)",
+            "Month 2: Master system design patterns (scalability, reliability, trade-offs)",
+            "Month 3: Build 1-2 impressive portfolio projects showcasing your skills",
+            "Month 4-6: Prepare for interviews at target companies with mock practice"
+          ]
+        },
+        "alternative": {
+          "key_focus": "Explore full-stack development to broaden market appeal",
+          "milestones": [
+            "Month 1-2: Build frontend skills (React, UI/UX principles, testing)",
+            "Month 2-4: Create 2 full-stack applications combining your backend expertise",
+            "Month 4-6: Learn modern full-stack patterns (MERN, microservices, DevOps)",
+            "Month 6+: Interview for full-stack engineer positions"
+          ]
+        }
+      }
+    },
+
+    "tech_mid_backend": {
+      "id": "tech_mid_backend",
+      "label": "Tech Mid-Level Backend Engineer",
+      "description": "Tech background, 3-5 years experience, targeting mid/senior backend roles",
+      "matching_criteria": {
+        "background": ["tech"],
+        "experience": ["3-5", "5-8"],
+        "targetRole": ["backend", "backend-sde"],
+        "currentRole": ["swe-product", "swe-service"]
+      },
+      "timeline_config": {
+        "stepping_stone": {
+          "base": {"min_months": 1, "max_months": 2, "timeline_text": "1-2 months"},
+          "company_modifiers": {
+            "faang": {"min_months": 2, "max_months": 3, "timeline_text": "2-3 months"},
+            "unicorns": {"min_months": 1, "max_months": 2, "timeline_text": "1-2 months"},
+            "product": {"min_months": 1, "max_months": 2, "timeline_text": "1-2 months"},
+            "service": {"min_months": 1, "max_months": 1, "timeline_text": "1 month"},
+            "startups": {"min_months": 1, "max_months": 2, "timeline_text": "1-2 months"},
+            "any-tech": {"min_months": 1, "max_months": 2, "timeline_text": "1-2 months"}
+          }
+        },
+        "target": {
+          "base": {"min_months": 3, "max_months": 4, "timeline_text": "3-4 months"},
+          "company_modifiers": {
+            "faang": {"min_months": 4, "max_months": 6, "timeline_text": "4-6 months"},
+            "unicorns": {"min_months": 3, "max_months": 4, "timeline_text": "3-4 months"},
+            "product": {"min_months": 3, "max_months": 4, "timeline_text": "3-4 months"},
+            "service": {"min_months": 2, "max_months": 3, "timeline_text": "2-3 months"},
+            "startups": {"min_months": 3, "max_months": 4, "timeline_text": "3-4 months"},
+            "any-tech": {"min_months": 3, "max_months": 4, "timeline_text": "3-4 months"}
+          }
+        },
+        "alternative": {
+          "base": {"min_months": 5, "max_months": 6, "timeline_text": "5-6 months"},
+          "company_modifiers": {
+            "faang": {"min_months": 6, "max_months": 8, "timeline_text": "6-8 months"},
+            "unicorns": {"min_months": 5, "max_months": 6, "timeline_text": "5-6 months"},
+            "product": {"min_months": 4, "max_months": 6, "timeline_text": "4-6 months"},
+            "service": {"min_months": 4, "max_months": 5, "timeline_text": "4-5 months"},
+            "startups": {"min_months": 5, "max_months": 6, "timeline_text": "5-6 months"},
+            "any-tech": {"min_months": 5, "max_months": 6, "timeline_text": "5-6 months"}
+          }
+        }
+      },
+      "job_recommendations": {
+        "stepping_stone": {
+          "key_focus": "Strengthen your leadership and system design capabilities",
+          "milestones": [
+            "Week 1-4: Lead architectural decisions for major system components",
+            "Week 4-8: Mentor 1-2 junior engineers and review high-impact code",
+            "Week 8-12: Optimize performance on critical path systems (latency, throughput)",
+            "Week 12+: Present learnings to larger engineering org"
+          ]
+        },
+        "target": {
+          "key_focus": "Master high-level system design and transition to target company",
+          "milestones": [
+            "Month 1: Study advanced backend patterns (microservices, event-driven, CQRS)",
+            "Month 2: Practice system design interviews at target company level",
+            "Month 3: Build 1 impressive full-system project showcasing architecture",
+            "Month 4: Interview and negotiate for senior backend role"
+          ]
+        },
+        "alternative": {
+          "key_focus": "Transition to Tech Lead role with focus on architecture and mentoring",
+          "milestones": [
+            "Month 1-2: Lead cross-team architecture initiatives",
+            "Month 2-3: Mentor 3-5 engineers and improve team capabilities",
+            "Month 3-4: Document system architecture and best practices",
+            "Month 4-6: Interview for Tech Lead / Staff Engineer positions"
+          ]
+        }
+      }
+    },
+
+    "tech_senior_backend": {
+      "id": "tech_senior_backend",
+      "label": "Tech Senior Backend Engineer",
+      "description": "Tech background, 5+ years experience, targeting senior/staff backend roles",
+      "matching_criteria": {
+        "background": ["tech"],
+        "experience": ["5-8", "8+"],
+        "targetRole": ["backend", "backend-sde", "tech-lead"],
+        "currentRole": ["swe-product", "swe-service", "devops"]
+      },
+      "timeline_config": {
+        "stepping_stone": {
+          "base": {"min_months": 1, "max_months": 2, "timeline_text": "1-2 months"},
+          "company_modifiers": {
+            "faang": {"min_months": 1, "max_months": 2, "timeline_text": "1-2 months"},
+            "unicorns": {"min_months": 1, "max_months": 1, "timeline_text": "1 month"},
+            "product": {"min_months": 1, "max_months": 1, "timeline_text": "1 month"},
+            "service": {"min_months": 1, "max_months": 1, "timeline_text": "1 month"},
+            "startups": {"min_months": 1, "max_months": 2, "timeline_text": "1-2 months"},
+            "any-tech": {"min_months": 1, "max_months": 2, "timeline_text": "1-2 months"}
+          }
+        },
+        "target": {
+          "base": {"min_months": 2, "max_months": 3, "timeline_text": "2-3 months"},
+          "company_modifiers": {
+            "faang": {"min_months": 3, "max_months": 4, "timeline_text": "3-4 months"},
+            "unicorns": {"min_months": 2, "max_months": 3, "timeline_text": "2-3 months"},
+            "product": {"min_months": 2, "max_months": 3, "timeline_text": "2-3 months"},
+            "service": {"min_months": 2, "max_months": 2, "timeline_text": "2 months"},
+            "startups": {"min_months": 2, "max_months": 3, "timeline_text": "2-3 months"},
+            "any-tech": {"min_months": 2, "max_months": 3, "timeline_text": "2-3 months"}
+          }
+        },
+        "alternative": {
+          "base": {"min_months": 4, "max_months": 5, "timeline_text": "4-5 months"},
+          "company_modifiers": {
+            "faang": {"min_months": 4, "max_months": 6, "timeline_text": "4-6 months"},
+            "unicorns": {"min_months": 3, "max_months": 4, "timeline_text": "3-4 months"},
+            "product": {"min_months": 3, "max_months": 4, "timeline_text": "3-4 months"},
+            "service": {"min_months": 3, "max_months": 4, "timeline_text": "3-4 months"},
+            "startups": {"min_months": 4, "max_months": 5, "timeline_text": "4-5 months"},
+            "any-tech": {"min_months": 4, "max_months": 5, "timeline_text": "4-5 months"}
+          }
+        }
+      },
+      "job_recommendations": {
+        "stepping_stone": {
+          "key_focus": "Establish leadership presence and influence on engineering direction",
+          "milestones": [
+            "Month 1: Lead multiple architectural initiatives across teams",
+            "Month 2: Mentor 3-5 engineers on career growth and technical mastery",
+            "Month 3: Drive optimization projects (infrastructure, performance, reliability)",
+            "Month 4+: Present technical vision to C-level stakeholders"
+          ]
+        },
+        "target": {
+          "key_focus": "Transition to Staff Engineer role at target company with strategic impact",
+          "milestones": [
+            "Month 1: Deep dive into target company's architecture and challenges",
+            "Month 2: Design solutions for critical infrastructure problems",
+            "Month 3: Present Staff Engineer level work (org-wide initiatives)",
+            "Month 4+: Interview for Staff Engineer / Principal Engineer roles"
+          ]
+        },
+        "alternative": {
+          "key_focus": "Transition to Engineering Manager role with technical credibility",
+          "milestones": [
+            "Month 1-2: Lead high-visibility technical and people initiatives",
+            "Month 2-3: Mentor and develop team of engineers",
+            "Month 3-4: Demonstrate strategic thinking and business impact",
+            "Month 4+: Interview for Engineering Manager / Director roles"
+          ]
+        }
+      }
+    },
+
+    "tech_entry_frontend": {
+      "id": "tech_entry_frontend",
+      "label": "Tech Entry-Level Frontend Engineer",
+      "description": "Tech background, 0-2 years experience, targeting frontend roles",
+      "matching_criteria": {
+        "background": ["tech"],
+        "experience": ["0-2", "2-3"],
+        "targetRole": ["frontend", "frontend-sde", "frontend-dev"],
+        "currentRole": ["swe-product", "swe-service"]
+      },
+      "timeline_config": {
+        "stepping_stone": {
+          "base": {"min_months": 2, "max_months": 3, "timeline_text": "2-3 months"},
+          "company_modifiers": {
+            "faang": {"min_months": 3, "max_months": 4, "timeline_text": "3-4 months"},
+            "unicorns": {"min_months": 2, "max_months": 3, "timeline_text": "2-3 months"},
+            "product": {"min_months": 2, "max_months": 3, "timeline_text": "2-3 months"},
+            "service": {"min_months": 1, "max_months": 2, "timeline_text": "1-2 months"},
+            "startups": {"min_months": 2, "max_months": 3, "timeline_text": "2-3 months"},
+            "any-tech": {"min_months": 2, "max_months": 3, "timeline_text": "2-3 months"}
+          }
+        },
+        "target": {
+          "base": {"min_months": 3, "max_months": 5, "timeline_text": "3-5 months"},
+          "company_modifiers": {
+            "faang": {"min_months": 5, "max_months": 7, "timeline_text": "5-7 months"},
+            "unicorns": {"min_months": 4, "max_months": 6, "timeline_text": "4-6 months"},
+            "product": {"min_months": 3, "max_months": 5, "timeline_text": "3-5 months"},
+            "service": {"min_months": 2, "max_months": 4, "timeline_text": "2-4 months"},
+            "startups": {"min_months": 3, "max_months": 5, "timeline_text": "3-5 months"},
+            "any-tech": {"min_months": 3, "max_months": 5, "timeline_text": "3-5 months"}
+          }
+        },
+        "alternative": {
+          "base": {"min_months": 5, "max_months": 7, "timeline_text": "5-7 months"},
+          "company_modifiers": {
+            "faang": {"min_months": 7, "max_months": 9, "timeline_text": "7-9 months"},
+            "unicorns": {"min_months": 6, "max_months": 8, "timeline_text": "6-8 months"},
+            "product": {"min_months": 5, "max_months": 7, "timeline_text": "5-7 months"},
+            "service": {"min_months": 4, "max_months": 5, "timeline_text": "4-5 months"},
+            "startups": {"min_months": 5, "max_months": 7, "timeline_text": "5-7 months"},
+            "any-tech": {"min_months": 5, "max_months": 7, "timeline_text": "5-7 months"}
+          }
+        }
+      },
+      "job_recommendations": {
+        "stepping_stone": {
+          "key_focus": "Solidify frontend fundamentals and UI/UX skills",
+          "milestones": [
+            "Week 1-4: Lead 2-3 UI improvements across product",
+            "Week 4-8: Learn advanced React patterns (custom hooks, performance optimization)",
+            "Week 8-12: Build responsive, accessible UI components for production",
+            "Week 12+: Mentor junior frontend engineers"
+          ]
+        },
+        "target": {
+          "key_focus": "Master modern frontend stack and interview preparation",
+          "milestones": [
+            "Month 1: Practice 30+ frontend coding problems (algorithms, DOM, React)",
+            "Month 2: Master system design for web applications (scalability, UX)",
+            "Month 3: Build 2 impressive full-featured frontend projects",
+            "Month 4-5: Prepare for interviews at target companies with mock practice"
+          ]
+        },
+        "alternative": {
+          "key_focus": "Explore full-stack development combining frontend expertise with backend",
+          "milestones": [
+            "Month 1-2: Learn backend basics (Node.js, Express, databases)",
+            "Month 2-4: Build 2 full-stack applications with your frontend strength",
+            "Month 4-6: Master modern full-stack patterns (MERN, testing, DevOps)",
+            "Month 6+: Interview for full-stack engineer positions"
+          ]
+        }
+      }
+    },
+
+    "tech_mid_frontend": {
+      "id": "tech_mid_frontend",
+      "label": "Tech Mid-Level Frontend Engineer",
+      "description": "Tech background, 3-5 years experience, targeting senior frontend roles",
+      "matching_criteria": {
+        "background": ["tech"],
+        "experience": ["3-5", "5-8"],
+        "targetRole": ["frontend", "frontend-sde"],
+        "currentRole": ["swe-product", "swe-service"]
+      },
+      "timeline_config": {
+        "stepping_stone": {
+          "base": {"min_months": 1, "max_months": 2, "timeline_text": "1-2 months"},
+          "company_modifiers": {
+            "faang": {"min_months": 2, "max_months": 2, "timeline_text": "2 months"},
+            "unicorns": {"min_months": 1, "max_months": 1, "timeline_text": "1 month"},
+            "product": {"min_months": 1, "max_months": 1, "timeline_text": "1 month"},
+            "service": {"min_months": 1, "max_months": 1, "timeline_text": "1 month"},
+            "startups": {"min_months": 1, "max_months": 2, "timeline_text": "1-2 months"},
+            "any-tech": {"min_months": 1, "max_months": 2, "timeline_text": "1-2 months"}
+          }
+        },
+        "target": {
+          "base": {"min_months": 2, "max_months": 4, "timeline_text": "2-4 months"},
+          "company_modifiers": {
+            "faang": {"min_months": 3, "max_months": 5, "timeline_text": "3-5 months"},
+            "unicorns": {"min_months": 2, "max_months": 3, "timeline_text": "2-3 months"},
+            "product": {"min_months": 2, "max_months": 4, "timeline_text": "2-4 months"},
+            "service": {"min_months": 2, "max_months": 3, "timeline_text": "2-3 months"},
+            "startups": {"min_months": 2, "max_months": 4, "timeline_text": "2-4 months"},
+            "any-tech": {"min_months": 2, "max_months": 4, "timeline_text": "2-4 months"}
+          }
+        },
+        "alternative": {
+          "base": {"min_months": 4, "max_months": 6, "timeline_text": "4-6 months"},
+          "company_modifiers": {
+            "faang": {"min_months": 5, "max_months": 7, "timeline_text": "5-7 months"},
+            "unicorns": {"min_months": 4, "max_months": 5, "timeline_text": "4-5 months"},
+            "product": {"min_months": 4, "max_months": 6, "timeline_text": "4-6 months"},
+            "service": {"min_months": 3, "max_months": 4, "timeline_text": "3-4 months"},
+            "startups": {"min_months": 4, "max_months": 6, "timeline_text": "4-6 months"},
+            "any-tech": {"min_months": 4, "max_months": 6, "timeline_text": "4-6 months"}
+          }
+        }
+      },
+      "job_recommendations": {
+        "stepping_stone": {
+          "key_focus": "Lead frontend initiatives and architecture decisions",
+          "milestones": [
+            "Week 1-4: Lead redesign of critical user-facing features",
+            "Week 4-8: Mentor 1-2 junior frontend engineers",
+            "Week 8-12: Improve application performance and accessibility",
+            "Week 12+: Drive adoption of modern frontend practices across org"
+          ]
+        },
+        "target": {
+          "key_focus": "Master system design for large-scale frontend applications",
+          "milestones": [
+            "Month 1: Study large-scale frontend patterns (state management, performance)",
+            "Month 2: Practice system design interviews for frontend roles",
+            "Month 3: Build complex application showcasing advanced patterns",
+            "Month 4: Interview for senior frontend engineer roles"
+          ]
+        },
+        "alternative": {
+          "key_focus": "Transition to full-stack or platform engineering roles",
+          "milestones": [
+            "Month 1-2: Lead infrastructure improvements for frontend (CI/CD, testing)",
+            "Month 2-3: Build tooling to improve developer experience",
+            "Month 3-4: Master DevOps and infrastructure as code (Kubernetes, Terraform)",
+            "Month 4-6: Interview for platform/full-stack engineer roles"
+          ]
         }
       }
     },
@@ -314,6 +614,7 @@
     "switcher_advanced_backend": {
       "id": "switcher_advanced_backend",
       "label": "Career Switcher - Advanced Backend",
+      "description": "Non-tech background, 2-5 years experience, targeting backend roles",
       "matching_criteria": {
         "background": ["non-tech"],
         "experience": ["2-3", "3-5", "5-8"],
@@ -322,19 +623,66 @@
       },
       "timeline_config": {
         "stepping_stone": {
-          "min_months": 3,
-          "max_months": 5,
-          "timeline_text": "3-5 months"
+          "base": {"min_months": 3, "max_months": 5, "timeline_text": "3-5 months"},
+          "company_modifiers": {
+            "faang": {"min_months": 5, "max_months": 7, "timeline_text": "5-7 months"},
+            "unicorns": {"min_months": 4, "max_months": 6, "timeline_text": "4-6 months"},
+            "product": {"min_months": 3, "max_months": 5, "timeline_text": "3-5 months"},
+            "service": {"min_months": 2, "max_months": 4, "timeline_text": "2-4 months"},
+            "startups": {"min_months": 3, "max_months": 5, "timeline_text": "3-5 months"},
+            "any-tech": {"min_months": 3, "max_months": 5, "timeline_text": "3-5 months"}
+          }
         },
         "target": {
-          "min_months": 6,
-          "max_months": 9,
-          "timeline_text": "6-9 months"
+          "base": {"min_months": 6, "max_months": 9, "timeline_text": "6-9 months"},
+          "company_modifiers": {
+            "faang": {"min_months": 8, "max_months": 12, "timeline_text": "8-12 months"},
+            "unicorns": {"min_months": 6, "max_months": 9, "timeline_text": "6-9 months"},
+            "product": {"min_months": 6, "max_months": 9, "timeline_text": "6-9 months"},
+            "service": {"min_months": 5, "max_months": 7, "timeline_text": "5-7 months"},
+            "startups": {"min_months": 6, "max_months": 9, "timeline_text": "6-9 months"},
+            "any-tech": {"min_months": 6, "max_months": 9, "timeline_text": "6-9 months"}
+          }
         },
         "alternative": {
-          "min_months": 9,
-          "max_months": 12,
-          "timeline_text": "9-12 months"
+          "base": {"min_months": 9, "max_months": 12, "timeline_text": "9-12 months"},
+          "company_modifiers": {
+            "faang": {"min_months": 11, "max_months": 15, "timeline_text": "11-15 months"},
+            "unicorns": {"min_months": 9, "max_months": 12, "timeline_text": "9-12 months"},
+            "product": {"min_months": 8, "max_months": 11, "timeline_text": "8-11 months"},
+            "service": {"min_months": 7, "max_months": 10, "timeline_text": "7-10 months"},
+            "startups": {"min_months": 9, "max_months": 12, "timeline_text": "9-12 months"},
+            "any-tech": {"min_months": 9, "max_months": 12, "timeline_text": "9-12 months"}
+          }
+        }
+      },
+      "job_recommendations": {
+        "stepping_stone": {
+          "key_focus": "Leverage your industry experience to master backend engineering",
+          "milestones": [
+            "Month 1: Build domain-specific backend applications using your business knowledge",
+            "Month 2-3: Master backend patterns in your target industry",
+            "Month 3-4: Create 2-3 backend projects showcasing domain expertise",
+            "Month 4-5: Prepare for interviews as an experienced career switcher"
+          ]
+        },
+        "target": {
+          "key_focus": "Establish credibility as mid-level backend engineer at target company",
+          "milestones": [
+            "Month 1-2: Deep dive into system design and advanced backend patterns",
+            "Month 2-4: Build production-grade systems leveraging your domain knowledge",
+            "Month 4-6: Practice system design interviews at target company level",
+            "Month 6-9: Transition to mid-level backend engineer role"
+          ]
+        },
+        "alternative": {
+          "key_focus": "Explore data-driven backend or product-focused engineering roles",
+          "milestones": [
+            "Month 1-3: Combine backend skills with analytics (data pipelines, ML APIs)",
+            "Month 3-6: Build data-driven backend applications",
+            "Month 6-9: Master analytics engineering and metrics tracking",
+            "Month 9-12: Interview for data engineering or product backend roles"
+          ]
         }
       }
     },
@@ -342,6 +690,7 @@
     "switcher_advanced_frontend": {
       "id": "switcher_advanced_frontend",
       "label": "Career Switcher - Advanced Frontend",
+      "description": "Non-tech background, 2-5 years experience, targeting frontend roles",
       "matching_criteria": {
         "background": ["non-tech"],
         "experience": ["2-3", "3-5", "5-8"],
@@ -350,19 +699,66 @@
       },
       "timeline_config": {
         "stepping_stone": {
-          "min_months": 3,
-          "max_months": 5,
-          "timeline_text": "3-5 months"
+          "base": {"min_months": 3, "max_months": 5, "timeline_text": "3-5 months"},
+          "company_modifiers": {
+            "faang": {"min_months": 4, "max_months": 6, "timeline_text": "4-6 months"},
+            "unicorns": {"min_months": 3, "max_months": 5, "timeline_text": "3-5 months"},
+            "product": {"min_months": 3, "max_months": 5, "timeline_text": "3-5 months"},
+            "service": {"min_months": 2, "max_months": 4, "timeline_text": "2-4 months"},
+            "startups": {"min_months": 3, "max_months": 5, "timeline_text": "3-5 months"},
+            "any-tech": {"min_months": 3, "max_months": 5, "timeline_text": "3-5 months"}
+          }
         },
         "target": {
-          "min_months": 5,
-          "max_months": 8,
-          "timeline_text": "5-8 months"
+          "base": {"min_months": 5, "max_months": 8, "timeline_text": "5-8 months"},
+          "company_modifiers": {
+            "faang": {"min_months": 7, "max_months": 11, "timeline_text": "7-11 months"},
+            "unicorns": {"min_months": 5, "max_months": 8, "timeline_text": "5-8 months"},
+            "product": {"min_months": 5, "max_months": 8, "timeline_text": "5-8 months"},
+            "service": {"min_months": 4, "max_months": 6, "timeline_text": "4-6 months"},
+            "startups": {"min_months": 5, "max_months": 8, "timeline_text": "5-8 months"},
+            "any-tech": {"min_months": 5, "max_months": 8, "timeline_text": "5-8 months"}
+          }
         },
         "alternative": {
-          "min_months": 8,
-          "max_months": 11,
-          "timeline_text": "8-11 months"
+          "base": {"min_months": 8, "max_months": 11, "timeline_text": "8-11 months"},
+          "company_modifiers": {
+            "faang": {"min_months": 10, "max_months": 14, "timeline_text": "10-14 months"},
+            "unicorns": {"min_months": 8, "max_months": 11, "timeline_text": "8-11 months"},
+            "product": {"min_months": 7, "max_months": 10, "timeline_text": "7-10 months"},
+            "service": {"min_months": 6, "max_months": 9, "timeline_text": "6-9 months"},
+            "startups": {"min_months": 8, "max_months": 11, "timeline_text": "8-11 months"},
+            "any-tech": {"min_months": 8, "max_months": 11, "timeline_text": "8-11 months"}
+          }
+        }
+      },
+      "job_recommendations": {
+        "stepping_stone": {
+          "key_focus": "Bridge design or product knowledge with frontend engineering skills",
+          "milestones": [
+            "Month 1: Combine your design/product expertise with React development",
+            "Month 2-3: Build 2-3 frontend projects using your domain knowledge",
+            "Month 3-4: Master modern design systems and component architecture",
+            "Month 4-5: Prepare for interviews highlighting your unique perspective"
+          ]
+        },
+        "target": {
+          "key_focus": "Establish mid-level frontend engineer role leveraging domain expertise",
+          "milestones": [
+            "Month 1-2: Master advanced React and JavaScript patterns",
+            "Month 2-4: Build production applications combining your domain knowledge",
+            "Month 4-5: Practice system design interviews for frontend roles",
+            "Month 5-8: Transition to mid-level frontend engineer"
+          ]
+        },
+        "alternative": {
+          "key_focus": "Explore product engineering or design-focused development roles",
+          "milestones": [
+            "Month 1-3: Build full-stack applications combining frontend with backend",
+            "Month 3-6: Create data visualization and analytics dashboards",
+            "Month 6-8: Learn product strategy and metrics-driven development",
+            "Month 8-11: Interview for product engineer or design-focused roles"
+          ]
         }
       }
     }
@@ -370,13 +766,11 @@
 
   "matching_algorithm": {
     "description": "Algorithm to select best matching persona from quiz responses",
-    "process": [
-      "1. Calculate match score for each persona based on matching_criteria",
-      "2. Weight criteria: targetRole (35%), experience (25%), background (30%), currentRole (10%)",
-      "3. Exact matches = 1.0, partial matches = 0.5, no match = 0",
-      "4. Select persona with highest score",
-      "5. If tie: prefer more specific match (more matching criteria met)",
-      "6. Fallback: match on targetRole + background if needed"
-    ]
+    "weights": {
+      "targetRole": 0.35,
+      "experience": 0.25,
+      "background": 0.30,
+      "currentRole": 0.10
+    }
   }
 }

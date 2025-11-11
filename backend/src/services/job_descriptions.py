@@ -1,6 +1,6 @@
 from typing import Any, Dict, List
 from src.utils.label_mappings import get_role_label, get_company_label
-from src.services.persona_matcher import get_matching_persona, get_timeline_config
+from src.services.persona_matcher import get_matching_persona, get_timeline_config, get_job_recommendations
 
 
 # ===========================================================================================
@@ -59,6 +59,25 @@ COMPANY_DIFFICULTY = {
     "evaluating": 5,
     "not-sure": 5,
 }
+
+# Map target company options to persona company types
+COMPANY_TYPE_MAPPING = {
+    "faang": "faang",
+    "faang-longterm": "faang",
+    "unicorns": "unicorns",
+    "product": "product",
+    "service": "service",
+    "better-service": "service",
+    "startups": "startups",
+    "any-tech": "any-tech",
+    "evaluating": "startups",
+    "not-sure": "any-tech",
+}
+
+
+def _get_company_type(target_company: str) -> str:
+    """Map target company option to persona company type"""
+    return COMPANY_TYPE_MAPPING.get(target_company, "any-tech")
 
 
 # ===========================================================================================
@@ -261,22 +280,25 @@ def _generate_personalized_milestones(
 
 def _estimate_timeline(
     persona_id: str,
-    card_type: str
+    card_type: str,
+    target_company: str = "any-tech"
 ) -> Dict[str, Any]:
     """
-    Get timeline for persona and card type using persona-based config.
+    Get timeline for persona, card type, and company type using persona-based config.
 
-    No more hardcoded values or calculations - all timelines are
-    based on persona matching and defined in personas.json
+    All timelines are persona-specific and company-aware,
+    defined in personas.json with company modifiers.
 
     Args:
-        persona_id: Matched persona ID (e.g., 'tech_entry_backend')
+        persona_id: Matched persona ID (e.g., 'switcher_early_backend')
         card_type: 'stepping_stone', 'target', or 'alternative'
+        target_company: Target company value (maps to company type)
 
     Returns:
         Dict with: min_months, max_months, timeline_text
     """
-    return get_timeline_config(persona_id, card_type)
+    company_type = _get_company_type(target_company)
+    return get_timeline_config(persona_id, card_type, company_type)
 
 
 # ===========================================================================================
@@ -464,13 +486,17 @@ def generate_job_opportunities(background: str, quiz_responses: Dict[str, Any]) 
     if not is_exploring:
         # CARD 1: TARGET ROLE (their actual target)
         title = _format_job_title(target_role, target_company)
-        milestones = _generate_personalized_milestones(background, quiz_responses, target_role, "target")
-        timeline = _estimate_timeline(persona_id, "target")
+        timeline = _estimate_timeline(persona_id, "target", target_company)
+
+        # Get hardcoded recommendations from persona config
+        recommendations = get_job_recommendations(persona_id, "target")
+        key_focus = recommendations.get("key_focus", _get_key_focus(background, quiz_responses, "target"))
+        milestones = recommendations.get("milestones", _generate_personalized_milestones(background, quiz_responses, target_role, "target"))
 
         cards.append(_create_job_card(
             title=title,
             role=target_role,
-            key_focus=_get_key_focus(background, quiz_responses, "target"),
+            key_focus=key_focus,
             milestones=milestones,
             min_months=timeline["min_months"],
             max_months=timeline["max_months"]
@@ -481,13 +507,17 @@ def generate_job_opportunities(background: str, quiz_responses: Dict[str, Any]) 
         stepping_company = "startups" if target_company_difficulty > 6 else target_company
 
         title = _format_job_title(stepping_role, stepping_company)
-        milestones = _generate_personalized_milestones(background, quiz_responses, stepping_role, "stepping_stone")
-        timeline = _estimate_timeline(persona_id, "stepping_stone")
+        timeline = _estimate_timeline(persona_id, "stepping_stone", stepping_company)
+
+        # Get hardcoded recommendations
+        recommendations = get_job_recommendations(persona_id, "stepping_stone")
+        key_focus = recommendations.get("key_focus", "Build fundamentals and get hands-on experience")
+        milestones = recommendations.get("milestones", _generate_personalized_milestones(background, quiz_responses, stepping_role, "stepping_stone"))
 
         cards.append(_create_job_card(
             title=title,
             role=stepping_role,
-            key_focus="Build fundamentals and get hands-on experience",
+            key_focus=key_focus,
             milestones=milestones,
             min_months=timeline["min_months"],
             max_months=timeline["max_months"]
@@ -498,13 +528,17 @@ def generate_job_opportunities(background: str, quiz_responses: Dict[str, Any]) 
         alt_company = target_company  # Same difficulty level as target
 
         title = _format_job_title(alt_role, alt_company)
-        milestones = _generate_personalized_milestones(background, quiz_responses, alt_role, "alternative")
-        timeline = _estimate_timeline(persona_id, "alternative")
+        timeline = _estimate_timeline(persona_id, "alternative", alt_company)
+
+        # Get hardcoded recommendations
+        recommendations = get_job_recommendations(persona_id, "alternative")
+        key_focus = recommendations.get("key_focus", f"Explore alternative specialization: {get_role_label(alt_role)}")
+        milestones = recommendations.get("milestones", _generate_personalized_milestones(background, quiz_responses, alt_role, "alternative"))
 
         cards.append(_create_job_card(
             title=title,
             role=alt_role,
-            key_focus=f"Explore alternative specialization: {get_role_label(alt_role)}",
+            key_focus=key_focus,
             milestones=milestones,
             min_months=timeline["min_months"],
             max_months=timeline["max_months"]
@@ -517,13 +551,17 @@ def generate_job_opportunities(background: str, quiz_responses: Dict[str, Any]) 
         entry_company = "startups" if background == "non-tech" else target_company
 
         title = _format_job_title(entry_role, entry_company)
-        milestones = _generate_personalized_milestones(background, quiz_responses, entry_role, "stepping_stone")
-        timeline = _estimate_timeline(persona_id, "stepping_stone")
+        timeline = _estimate_timeline(persona_id, "stepping_stone", entry_company)
+
+        # Get hardcoded recommendations
+        recommendations = get_job_recommendations(persona_id, "stepping_stone")
+        key_focus = recommendations.get("key_focus", "Get your first role quickly with fundamentals")
+        milestones = recommendations.get("milestones", _generate_personalized_milestones(background, quiz_responses, entry_role, "stepping_stone"))
 
         cards.append(_create_job_card(
             title=title,
             role=entry_role,
-            key_focus="Get your first role quickly with fundamentals",
+            key_focus=key_focus,
             milestones=milestones,
             min_months=timeline["min_months"],
             max_months=timeline["max_months"]
@@ -531,13 +569,17 @@ def generate_job_opportunities(background: str, quiz_responses: Dict[str, Any]) 
 
         # CARD 2: BIGGER GOAL (full target role for long-term)
         title = _format_job_title(target_role, target_company)
-        milestones = _generate_personalized_milestones(background, quiz_responses, target_role, "target")
-        timeline = _estimate_timeline(persona_id, "target")
+        timeline = _estimate_timeline(persona_id, "target", target_company)
+
+        # Get hardcoded recommendations
+        recommendations = get_job_recommendations(persona_id, "target")
+        key_focus = recommendations.get("key_focus", "Long-term growth path in your area of interest")
+        milestones = recommendations.get("milestones", _generate_personalized_milestones(background, quiz_responses, target_role, "target"))
 
         cards.append(_create_job_card(
             title=title,
             role=target_role,
-            key_focus="Long-term growth path in your area of interest",
+            key_focus=key_focus,
             milestones=milestones,
             min_months=timeline["min_months"],
             max_months=timeline["max_months"]

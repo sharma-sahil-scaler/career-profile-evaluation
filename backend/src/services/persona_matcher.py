@@ -105,9 +105,15 @@ def get_matching_persona(
     return best_persona_id, best_persona
 
 
-def get_timeline_config(persona_id: str, card_type: str) -> Dict[str, Any]:
+def get_timeline_config(
+    persona_id: str,
+    card_type: str,
+    company_type: str = "any-tech"
+) -> Dict[str, Any]:
     """
-    Get timeline config for persona and card type (stepping_stone, target, alternative)
+    Get timeline config for persona, card type, and company type
+
+    Company types: faang, unicorns, product, service, startups, any-tech
 
     Returns:
         Dict with min_months, max_months, timeline_text
@@ -118,14 +124,51 @@ def get_timeline_config(persona_id: str, card_type: str) -> Dict[str, Any]:
 
     persona = personas.get(persona_id, {})
     timeline_config = persona.get("timeline_config", {})
-    timeline = timeline_config.get(card_type, {})
+    card_timeline = timeline_config.get(card_type, {})
+
+    # Try to get company-type specific timeline
+    company_modifiers = card_timeline.get("company_modifiers", {})
+    if company_type in company_modifiers:
+        return company_modifiers[company_type]
+
+    # Fallback to base timeline
+    base_timeline = card_timeline.get("base", {})
+    if base_timeline:
+        return base_timeline
+
+    # Ultimate fallback if not found
+    return {
+        "min_months": 3,
+        "max_months": 6,
+        "timeline_text": "3-6 months"
+    }
+
+
+def get_job_recommendations(persona_id: str, card_type: str) -> Dict[str, Any]:
+    """
+    Get hardcoded job recommendations for persona and card type
+
+    Returns:
+        Dict with key_focus and milestones
+    """
+
+    personas_config = load_personas()
+    personas = personas_config.get("persona_definitions", {})
+
+    persona = personas.get(persona_id, {})
+    recommendations = persona.get("job_recommendations", {})
+    card_recommendation = recommendations.get(card_type, {})
 
     # Fallback if not found
-    if not timeline:
+    if not card_recommendation:
         return {
-            "min_months": 3,
-            "max_months": 6,
-            "timeline_text": "3-6 months"
+            "key_focus": "Build your skills and prepare for the target role",
+            "milestones": [
+                "Focus on mastering core technical skills",
+                "Build portfolio projects",
+                "Practice interviews",
+                "Prepare to transition"
+            ]
         }
 
-    return timeline
+    return card_recommendation
