@@ -8,3 +8,7 @@ node_modules
 
 # Environment variables
 .env
+
+# Local testing only - test databases
+/tmp/mock_scaler_test.db
+*.db
