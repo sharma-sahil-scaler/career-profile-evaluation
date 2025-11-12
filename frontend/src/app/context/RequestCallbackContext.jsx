@@ -9,6 +9,8 @@ import React, {
 import RequestCallbackModal from "../components/RequestCallbackModal";
 import { apiRequest } from "../../utils/api";
 import tracker from "../../utils/tracker";
+import attribution from "../../utils/attribution";
+import { generateJWT } from "../../utils/api";
 
 const RequestCallbackContext = createContext({
   open: () => {},
@@ -24,6 +26,10 @@ const SUBMISSION_STATUS = {
   LOADING: "loading",
   SUCCESS: "success",
   ERROR: "error",
+};
+
+const PROGRAMS_MAPPING = {
+  academy: "software_development",
 };
 
 export const RequestCallbackProvider = ({ children }) => {
@@ -53,6 +59,14 @@ export const RequestCallbackProvider = ({ children }) => {
   }, []);
 
   const updateField = useCallback((field, value) => {
+    if (value) {
+      tracker.click({
+        click_type: "form_input_filled",
+        custom: {
+          field: field,
+        },
+      });
+    }
     setFormState((prev) => ({
       ...prev,
       [field]: value,
@@ -63,20 +77,29 @@ export const RequestCallbackProvider = ({ children }) => {
     setSubmissionStatus(SUBMISSION_STATUS.LOADING);
     setErrorMessage("");
 
-    console.log("clickSource", clickSource);
+    attribution.setAttribution("cpe_requested_callback", {
+      program:
+        PROGRAMS_MAPPING[formState.program] ||
+        formState.program ||
+        "software_development",
+    });
     try {
-      await apiRequest("POST", "/request-callback", {
-        attributions: {
-          intent: "career_profile_tool_rcb",
-          platform: "desktop",
-          product: "career_profile_tool",
-          program: formState.program || "software_development",
+      const jwt = await generateJWT();
+      await apiRequest(
+        "POST",
+        "/api/v3/callbacks",
+        {
+          program: formState.program || "academy",
+          rcb_prams: {
+            attributions: attribution.getAttribution(),
+          },
         },
-        user: {
-          program: formState.program || "Career Profile Evaluation",
-          position: formState.jobTitle || "",
-        },
-      });
+        {
+          headers: {
+            "X-User-Token": jwt,
+          },
+        }
+      );
 
       tracker.click({
         click_type: "rcb_form_submitted",
@@ -127,3 +150,8 @@ export const RequestCallbackProvider = ({ children }) => {
 };
 
 export const useRequestCallback = () => useContext(RequestCallbackContext);
+
+
+
+
+  

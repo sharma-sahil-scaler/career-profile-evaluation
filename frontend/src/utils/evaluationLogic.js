@@ -3,6 +3,7 @@ import { apiRequest } from './api';
 import attribution from './attribution';
 import { getURLWithUTMParams } from './url';
 import { generateJWT } from './api';
+import tracker from './tracker';
 
 const deriveCurrentCompany = (currentRole) => {
   const roleToCompanyMap = {
@@ -206,10 +207,13 @@ export const evaluateProfile = async (
         }
       }
     );
-
+    tracker.click({
+      click_type: "profile_evaluation_detail_submitted",
+    });
   } catch(e) {
 
   }
+
 
   return data.profile_evaluation;
 };
