@@ -8,13 +8,3 @@ node_modules
 
 # Environment variables
 .env
-
-# Local testing only - test databases
-/tmp/mock_scaler_test.db
-*.db
-
-# Local development only - nginx and docker configs
-frontend/nginx.conf
-docker-compose.yml
-mock_scaler_backend.py
-mock_auth_server.py
