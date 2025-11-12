@@ -1,14 +1,20 @@
-import { BriefcaseMetal, ChartLine, CheckCircle, MagnifyingGlass, Phone, Sparkle, Target } from 'phosphor-react';
-import React, { useEffect, useState, useCallback
-
-} from 'react';
-import { useNavigate } from 'react-router-dom';
-import styled, { createGlobalStyle, keyframes } from 'styled-components';
-import { useRequestCallback } from '../app/context/RequestCallbackContext';
-import { useProfile } from '../context/ProfileContext';
-import { evaluateProfile } from '../utils/evaluationLogic';
-import ProfileMatchHeroV2 from './results/ProfileMatchHeroV2';
-import tracker from '../utils/tracker';
+import {
+  BriefcaseMetal,
+  ChartLine,
+  CheckCircle,
+  MagnifyingGlass,
+  Phone,
+  Sparkle,
+  Target,
+} from "phosphor-react";
+import React, { useEffect, useState, useCallback } from "react";
+import { useNavigate } from "react-router-dom";
+import styled, { createGlobalStyle, keyframes } from "styled-components";
+import { useRequestCallback } from "../app/context/RequestCallbackContext";
+import { useProfile } from "../context/ProfileContext";
+import { evaluateProfile } from "../utils/evaluationLogic";
+import ProfileMatchHeroV2 from "./results/ProfileMatchHeroV2";
+import tracker from "../utils/tracker";
 
 const PrintStyles = createGlobalStyle`
   @media print {
@@ -117,7 +123,7 @@ const ProgressBarFill = styled.div`
   height: 100%;
   background: linear-gradient(90deg, #c71f69 0%, #e11d48 100%);
   transition: width 0.3s ease;
-  width: ${props => props.progress}%;
+  width: ${(props) => props.progress}%;
 `;
 
 const LoadingSubtext = styled.div`
@@ -183,7 +189,7 @@ const FloatingCTA = styled.button`
   text-transform: uppercase;
   cursor: pointer;
   box-shadow: 0 8px 24px rgba(199, 31, 105, 0.35);
-  z-index: 1000;
+  z-index: 100;
   transition: all 0.3s ease;
   white-space: nowrap;
   width: auto;
@@ -220,7 +226,7 @@ const ResultsPage = () => {
     goals,
     background,
     evaluationResults,
-    setEvaluationResults
+    setEvaluationResults,
   } = useProfile();
   const { open: openCallbackModal } = useRequestCallback();
   const [isLoading, setIsLoading] = useState(false);
@@ -230,12 +236,36 @@ const ResultsPage = () => {
   const [loadingStep, setLoadingStep] = useState(0);
 
   const loadingSteps = [
-    { icon: <MagnifyingGlass size={28} weight="bold" />, text: 'Evaluating your profile...', subtext: 'Analyzing your skills and experience' },
-    { icon: <CheckCircle size={28} weight="bold" />, text: 'Making sure your profile is thoroughly checked...', subtext: 'Cross-referencing with industry standards' },
-    { icon: <BriefcaseMetal size={28} weight="bold" />, text: 'Bringing up relevant jobs...', subtext: 'Finding opportunities that match your profile' },
-    { icon: <Target size={28} weight="bold" />, text: 'Predicting your career readiness score...', subtext: 'Calculating your success likelihood' },
-    { icon: <ChartLine size={28} weight="bold" />, text: 'Generating personalized insights...', subtext: 'Almost there!' },
-    { icon: <Sparkle size={28} weight="bold" />, text: 'Finalizing your report...', subtext: 'Preparing your results' }
+    {
+      icon: <MagnifyingGlass size={28} weight="bold" />,
+      text: "Evaluating your profile...",
+      subtext: "Analyzing your skills and experience",
+    },
+    {
+      icon: <CheckCircle size={28} weight="bold" />,
+      text: "Making sure your profile is thoroughly checked...",
+      subtext: "Cross-referencing with industry standards",
+    },
+    {
+      icon: <BriefcaseMetal size={28} weight="bold" />,
+      text: "Bringing up relevant jobs...",
+      subtext: "Finding opportunities that match your profile",
+    },
+    {
+      icon: <Target size={28} weight="bold" />,
+      text: "Predicting your career readiness score...",
+      subtext: "Calculating your success likelihood",
+    },
+    {
+      icon: <ChartLine size={28} weight="bold" />,
+      text: "Generating personalized insights...",
+      subtext: "Almost there!",
+    },
+    {
+      icon: <Sparkle size={28} weight="bold" />,
+      text: "Finalizing your report...",
+      subtext: "Preparing your results",
+    },
   ];
 
   useEffect(() => {
@@ -244,7 +274,7 @@ const ResultsPage = () => {
       setLoadingStep(0);
 
       const progressInterval = setInterval(() => {
-        setLoadingProgress(prev => {
+        setLoadingProgress((prev) => {
           if (prev >= 95) {
             clearInterval(progressInterval);
             return 95;
@@ -254,7 +284,7 @@ const ResultsPage = () => {
       }, 150);
 
       const stepInterval = setInterval(() => {
-        setLoadingStep(prev => {
+        setLoadingStep((prev) => {
           if (prev >= loadingSteps.length - 1) {
             clearInterval(stepInterval);
             return prev;
@@ -272,7 +302,7 @@ const ResultsPage = () => {
 
   useEffect(() => {
     if (!quizResponses || !goals || !background) {
-      navigate('/', { replace: true });
+      navigate("/", { replace: true });
       return;
     }
   }, [quizResponses, goals, background, navigate]);
@@ -300,9 +330,16 @@ const ResultsPage = () => {
         );
 
         if (isMounted) {
-          if (results && typeof results === 'object' && Object.keys(results).length > 0) {
+          if (
+            results &&
+            typeof results === "object" &&
+            Object.keys(results).length > 0
+          ) {
             const elapsedTime = Date.now() - startTime;
-            const remainingTime = Math.max(0, MINIMUM_LOADING_TIME - elapsedTime);
+            const remainingTime = Math.max(
+              0,
+              MINIMUM_LOADING_TIME - elapsedTime
+            );
 
             setTimeout(() => {
               if (isMounted) {
@@ -311,11 +348,11 @@ const ResultsPage = () => {
               }
             }, remainingTime);
           } else {
-            throw new Error('Evaluation service returned an empty response.');
+            throw new Error("Evaluation service returned an empty response.");
           }
         }
       } catch (err) {
-        if (err.name === 'AbortError') {
+        if (err.name === "AbortError") {
           return;
         }
         if (isMounted) {
@@ -324,7 +361,7 @@ const ResultsPage = () => {
 
           setTimeout(() => {
             if (isMounted) {
-              setError(err.message || 'Failed to fetch evaluation results.');
+              setError(err.message || "Failed to fetch evaluation results.");
               setIsLoading(false);
             }
           }, remainingTime);
@@ -338,21 +375,28 @@ const ResultsPage = () => {
       isMounted = false;
       controller.abort();
     };
-  }, [quizResponses, goals, background, setEvaluationResults, retryCount, evaluationResults]);
+  }, [
+    quizResponses,
+    goals,
+    background,
+    setEvaluationResults,
+    retryCount,
+    evaluationResults,
+  ]);
 
   const handleReEvaluate = () => {
     setEvaluationResults(null);
-    navigate('/');
+    navigate("/");
   };
 
   const handleRCBClick = useCallback(() => {
     tracker.click({
-      click_type: 'rcb_btn_clicked',
+      click_type: "rcb_btn_clicked",
       custom: {
-        source: 'results_page_floating_cta'
-      }
+        source: "results_page_floating_cta",
+      },
     });
-    openCallbackModal?.({ source: 'results_page_floating_cta' });
+    openCallbackModal?.({ source: "results_page_floating_cta" });
   }, [openCallbackModal]);
 
   if (isLoading) {
@@ -362,9 +406,7 @@ const ResultsPage = () => {
         <Container>
           <LoadingContainer>
             <LoadingContent>
-              <LoadingIcon>
-                {currentStep.icon}
-              </LoadingIcon>
+              <LoadingIcon>{currentStep.icon}</LoadingIcon>
               <div>
                 <LoadingText>{currentStep.text}</LoadingText>
                 <LoadingSubtext>{currentStep.subtext}</LoadingSubtext>
@@ -386,7 +428,9 @@ const ResultsPage = () => {
           <ErrorContainer>
             <ErrorTitle>We ran into a problem</ErrorTitle>
             <ErrorMessage>{error}</ErrorMessage>
-            <PrimaryButton onClick={handleReEvaluate}>Re-Evaluate</PrimaryButton>
+            <PrimaryButton onClick={handleReEvaluate}>
+              Re-Evaluate
+            </PrimaryButton>
           </ErrorContainer>
         </Container>
       </ResultsContainer>
