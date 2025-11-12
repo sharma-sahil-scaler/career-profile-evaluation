@@ -418,16 +418,6 @@ const NavigationBar = ({
     navigate?.('/quiz');
   }, [resetProfile, navigate]);
 
-  const handleGoToDashboard = useCallback(() => {
-    tracker.click({
-      click_type: 'go_to_dashboard_btn_clicked',
-      custom: {
-        source: 'navbar'
-      }
-    });
-    window.location.href = '/';
-  }, []);
-
   return (
     <StickyWrapper>
       {isResultsPage && (
@@ -493,12 +483,6 @@ const NavigationBar = ({
                 <TextReEvaluateButton onClick={handleReEvaluate}>
                   Re-evaluate
                 </TextReEvaluateButton>
-                <DesktopDashboardButton onClick={handleGoToDashboard}>
-                  Go to Free Dashboard
-                </DesktopDashboardButton>
-                <OutlineCTAButton onClick={handleGoToDashboard}>
-                  Go to Dashboard
-                </OutlineCTAButton>
                 <IconButton onClick={handleReEvaluate} title="Re-evaluate">
                   <ArrowClockwise size={20} weight="bold" />
                 </IconButton>
