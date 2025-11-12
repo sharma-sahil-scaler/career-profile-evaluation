@@ -861,21 +861,6 @@ const FinalModeQuiz = ({ onProgressChange }) => {
     window.scrollTo({ top: 0, behavior: 'smooth' });
   }, [currentStep, clearQuizResponses, setBackground, navigate]);
 
-  // TODO: Developers - Redirect user to free dashboard on skip
-  // This will be used when user clicks "Skip Evaluation" button
-  // Should redirect to the free dashboard/home page or a "skip confirmation" page
-  const handleSkip = useCallback(() => {
-    tracker.click({
-      click_type: 'quiz_skip_evaluation_clicked',
-      custom: {
-        source: 'final_mode_quiz',
-        currentStep: currentStep
-      }
-    });
-    // Redirect to free dashboard
-    window.location.href = '/';
-  }, [currentStep]);
-
   const canProceed = useCallback(() => {
     if (currentStep === 0) {
       return !!background;
@@ -1191,9 +1176,6 @@ const FinalModeQuiz = ({ onProgressChange }) => {
           <StickyMobileCTA onClick={handleMobileContinue}>
             Continue
           </StickyMobileCTA>
-          <SkipButton onClick={handleSkip}>
-            Skip Evaluation
-          </SkipButton>
         </MobileButtonsContainer>
       </MobileWelcomeScreen>
     );
@@ -1228,15 +1210,6 @@ const FinalModeQuiz = ({ onProgressChange }) => {
                 </LastStepNavButton>
               )}
 
-              {/* Skip Evaluation button - only visible on first step */}
-              {currentStep === 0 && (
-                <>
-                  <NavDivider />
-                  <SkipButton onClick={handleSkip}>
-                    Skip Evaluation
-                  </SkipButton>
-                </>
-              )}
             </DesktopNavigation>
 
             <CarouselDotsContainer>
