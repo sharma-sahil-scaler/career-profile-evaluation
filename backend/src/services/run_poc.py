@@ -13,11 +13,11 @@ from src.repositories.cache_repository import CacheRepository
 from src.models import FullProfileEvaluationResponse, enrich_full_profile_evaluation
 from src.models.models_raw import FullProfileEvaluationResponseRaw
 from src.services.quick_wins_logic import generate_quick_wins
-from src.services.job_descriptions import generate_job_opportunities
+from src.services.job_descriptions import generate_job_opportunities, generate_recommended_roles
 from src.services.scoring_logic import calculate_profile_strength
+from src.services.interview_readiness_logic import calculate_interview_readiness
 from src.services.tools_logic import generate_tool_recommendations
 from src.services.profile_notes_logic import generate_profile_strength_notes
-from src.services.timeline_logic import calculate_timeline_to_role, calculate_alternative_paths
 from src.services.current_profile_summary import generate_current_profile_summary
 from src.services.peer_comparison_logic import generate_peer_group_description, calculate_potential_percentile
 from src.utils.label_mappings import get_role_label, get_company_label
@@ -54,12 +54,137 @@ def _normalise_payload(payload: Dict[str, Any]) -> Dict[str, Any]:
     return json.loads(json.dumps(payload, sort_keys=True))
 
 
+def _filter_and_rerank_roles(
+    recommended_roles: list,
+    current_role: str,
+    target_role: str,
+    experience: str
+) -> list:
+    """
+    Filter and rerank recommended roles based on:
+    1. Current role domain (DevOps users should see DevOps-relevant roles)
+    2. Target role (Data Analytics users should see data-focused roles)
+    3. Experience level (8+ years should see Staff/Principal/EM roles)
+    """
+    if not recommended_roles:
+        return recommended_roles
+
+    # Score each role based on how well it matches user profile
+    scored_roles = []
+
+    for role in recommended_roles:
+        score = 0
+        title_lower = role.get("title", "").lower()
+        seniority_raw = role.get("seniority", "")
+        # Convert Enum to string if needed
+        seniority = str(seniority_raw).lower() if seniority_raw else ""
+
+        # 1. TARGET ROLE MATCHING (HIGHEST PRIORITY - user's explicit choice)
+        if target_role:
+            target_lower = target_role.lower()
+
+            # Data Analytics/ML target → Data Engineer, Data Analyst, ML Engineer (NOT generic engineer roles)
+            if "data" in target_lower or "ml" in target_lower or "analytics" in target_lower:
+                if any(x in title_lower for x in ["data engineer", "data analyst", "ml engineer", "machine learning", "analytics engineer"]):
+                    score += 30  # HIGHEST - user's explicit target
+
+            # Backend target → Backend, Full-Stack, Senior Backend
+            if "backend" in target_lower:
+                if any(x in title_lower for x in ["backend", "api", "full-stack"]):
+                    score += 25  # HIGHEST - user's explicit target
+
+            # Frontend target → Frontend, Full-Stack
+            if "frontend" in target_lower:
+                if any(x in title_lower for x in ["frontend", "full-stack", "react", "angular", "vue"]):
+                    score += 25  # HIGHEST - user's explicit target
+
+            # DevOps/SRE target → DevOps, SRE, Cloud, Infrastructure
+            if "devops" in target_lower or "sre" in target_lower or "infrastructure" in target_lower:
+                if any(x in title_lower for x in ["devops", "sre", "cloud", "infrastructure", "platform", "reliability engineer", "site reliability"]):
+                    score += 30  # HIGHEST - user's explicit target
+
+            # Tech Lead/Manager target → Tech Lead, Manager, Director
+            if "tech-lead" in target_lower or "lead" in target_lower or "manager" in target_lower:
+                if any(x in title_lower for x in ["tech lead", "engineering manager", "director", "manager"]):
+                    score += 30  # HIGHEST - user's explicit target
+
+            # Staff/Principal target → Staff, Principal, Architect
+            if "staff" in target_lower or "principal" in target_lower or "architect" in target_lower:
+                if any(x in title_lower for x in ["staff", "principal", "architect"]):
+                    score += 30  # HIGHEST - user's explicit target
+
+        # 2. CURRENT ROLE DOMAIN MATCHING (secondary priority)
+        if current_role:
+            current_lower = current_role.lower()
+
+            # DevOps users → DevOps/SRE/Platform/Infrastructure roles
+            if "devops" in current_lower or "infra" in current_lower or "cloud" in current_lower:
+                if any(x in title_lower for x in ["devops", "sre", "cloud", "infrastructure", "platform", "reliability engineer", "site reliability"]):
+                    score += 15  # Good match (but lower than target role)
+
+            # QA/Support users → QA Automation, Test Engineer, Backend roles
+            if "qa" in current_lower or "support" in current_lower:
+                if any(x in title_lower for x in ["qa", "automation", "test", "backend", "engineer"]):
+                    score += 12  # Good match
+
+            # SWE-Product users → Backend, Full-Stack, Senior roles (stay in product world)
+            if "product" in current_lower:
+                if any(x in title_lower for x in ["backend", "fullstack", "full-stack", "senior", "staff"]):
+                    score += 12  # Good match
+
+            # SWE-Service users → can transition to Product roles
+            if "service" in current_lower:
+                if any(x in title_lower for x in ["backend", "fullstack", "senior"]):
+                    score += 10  # Moderate match
+
+        # 3. EXPERIENCE LEVEL MATCHING (third priority)
+        if experience:
+            # 8+ years → Staff, Principal, Engineering Manager, Architect, Tech Lead
+            if experience == "8+":
+                if any(x in title_lower for x in ["staff", "principal", "engineering manager", "architect", "tech lead", "director"]) or \
+                   any(x in seniority for x in ["staff", "principal", "principal engineer", "engineering manager", "director"]):
+                    score += 18  # Strong match for senior roles
+                # Regular engineer roles should be lower priority
+                elif any(x in title_lower for x in ["senior", "lead"]) or \
+                     "senior" in seniority or "principal" in seniority:
+                    score += 10
+
+            # 5-8 years → Senior, Tech Lead, Staff (if strong coding)
+            elif experience == "5-8":
+                if any(x in title_lower for x in ["senior", "tech lead", "staff", "architect"]) or \
+                   any(x in seniority for x in ["senior", "staff", "architect", "tech lead"]):
+                    score += 15
+
+            # 3-5 years → Mid-level, Senior (lower-bound)
+            elif experience == "3-5":
+                if any(x in title_lower for x in ["senior", "mid-level", "sde-2"]) or \
+                   any(x in seniority for x in ["mid-senior", "senior", "mid-level"]):
+                    score += 10
+
+            # 0-2 years → Junior, Entry-level, SDE-1
+            elif experience in ["0-2", "0"]:
+                if any(x in title_lower for x in ["junior", "entry", "sde-1", "graduate", "intern"]) or \
+                   any(x in seniority for x in ["junior", "entry-level"]):
+                    score += 12
+
+        # 4. GENERAL RELEVANCE BOOST (baseline for all roles)
+        if any(x in title_lower for x in ["engineer", "developer", "architect", "lead"]):
+            score += 5  # All technical roles get small boost
+
+        scored_roles.append((role, score))
+
+    # Sort by score (descending) and return just the roles
+    sorted_roles = sorted(scored_roles, key=lambda x: x[1], reverse=True)
+    return [role for role, score in sorted_roles]
+
+
 def call_openai_structured(
     *,
     api_key: Optional[str],
     openai_model: str,
     input_payload: Dict[str, Any],
     calculated_profile_score: int,
+    calculated_interview_readiness: Dict[str, Any],
     target_company_label: str,
 ) -> FullProfileEvaluationResponse:
     client = OpenAI(api_key=api_key) if api_key else OpenAI()
@@ -71,17 +196,21 @@ def call_openai_structured(
         "or remote roles with Indian/global companies. Tailor all recommendations to be realistic and relevant for the Indian market.\n\n"
         f"CRITICAL: SCORE CONSISTENCY RULES\n"
         f"The user's profile_strength_score has been calculated as {calculated_profile_score}/100.\n"
-        f"ALL other percentage scores MUST be consistent with this baseline:\n\n"
+        f"The user's interview readiness has been independently calculated based on their practice, experience, and preparation.\n"
+        f"ALL percentage scores MUST be consistent with these calculated baselines:\n\n"
         f"1. peer_comparison.metrics.profile_strength_percent: MUST be {calculated_profile_score} (exact match)\n"
-        f"2. interview_readiness.technical_interview_percent: {max(0, calculated_profile_score - 10)} to {min(100, calculated_profile_score + 10)}\n"
-        f"   - Higher if problemSolving >= '51-100'\n"
-        f"   - Lower if problemSolving == '0-10'\n"
-        f"3. interview_readiness.hr_behavioral_percent: {max(0, calculated_profile_score - 10)} to {min(100, calculated_profile_score + 5)}\n"
-        f"   - Lower if mockInterviews == 'never'\n"
+        f"2. interview_readiness.technical_interview_percent: MUST be {calculated_interview_readiness['technical_interview_percent']} (calculated independently, NOT dependent on profile_strength_score)\n"
+        f"3. interview_readiness.hr_behavioral_percent: MUST be {calculated_interview_readiness['hr_behavioral_percent']} (based on soft skills and experience)\n"
+        f"   NOTE: Interview readiness is based on quiz responses (problemSolving, systemDesign, portfolio, experience)\n"
+        f"   It can be higher or lower than profile_strength_score - they measure different things!\n\n"
         f"4. peer_comparison.percentile: {max(0, calculated_profile_score - 5)} to {min(100, calculated_profile_score + 5)}\n"
         f"5. success_likelihood.score_percent: {max(0, calculated_profile_score - 10)} to {min(100, calculated_profile_score + 5)}\n"
-        f"   - CANNOT significantly exceed profile_strength_score\n\n"
-        f"LOGIC CHECK: If profile is {calculated_profile_score}% strong, success likelihood cannot be much higher!\n\n"
+        f"   - Should be reasonable given profile_strength_score\n\n"
+        f"IMPORTANT DISTINCTION:\n"
+        f"- profile_strength_score ({calculated_profile_score}%): Overall career strength (experience, skills, track record)\n"
+        f"- interview_readiness ({calculated_interview_readiness['technical_interview_percent']}%): Specifically how prepared they are for technical interviews\n"
+        f"- A person can have high interview readiness but lower profile strength (new grad who practices hard)\n"
+        f"- A person can have strong profile but lower interview readiness (experienced but not interview-prepped)\n\n"
         f"CRITICAL: USE ACTUAL TARGET COMPANY IN ALL TEXT\n"
         f"The user selected target company: '{target_company_label}'\n\n"
         f"When generating ANY text field (areas_to_develop, technical_notes, success_likelihood.notes, peer_comparison.summary):\n"
@@ -329,17 +458,8 @@ def call_openai_structured(
         "   - Combine related suggestions when appropriate\n"
         "   - Ensure actionable items that can be completed in 1-4 weeks\n"
         "   - Use the exact wording provided above, but adapt if multiple conditions apply\n\n"
-        "CRITICAL RULES FOR opportunities_you_qualify_for:\n"
-        "- List 5-7 realistic job opportunities with SPECIFIC company names from Indian market\n"
-        "- Match experience level: Junior roles for 0-2 years, Mid/Senior for 3-5, Senior/Staff for 5+\n"
-        "- Include mix of: Product companies, Unicorns, Well-funded startups, Service-based (if experience < 2 years)\n"
-        "- KEEP DESCRIPTIONS CRISP: Maximum 8-10 words per opportunity\n"
-        "- Format: '[ROLE] at [SPECIFIC COMPANY] - [BRIEF REQUIREMENT]'\n"
-        "  Examples:\n"
-        "  - 'Senior Backend Engineer at Razorpay - Payment systems expertise'\n"
-        "  - 'Staff Engineer at CRED - Microservices architecture experience'\n"
-        "  - 'SDE-2 at Flipkart - E-commerce domain knowledge'\n"
-        "  - 'Tech Lead at PhonePe - Proven scaling experience'\n\n"
+        "NOTE: opportunities_you_qualify_for is generated using intelligent logic based on user profile.\n"
+        "Do NOT include this field in your response - it will be populated by the backend.\n\n"
         "VALIDATION CHECKLIST (Internal - Review Before Finalizing):\n"
         "☑ Does EVERY recommended role match experience level?\n"
         "☑ Does systemDesign='multiple' lead to senior/staff roles?\n"
@@ -348,8 +468,6 @@ def call_openai_structured(
         "☑ Are recommended_tools SPECIFIC professional tools (Postman, Docker, Terraform, etc)?\n"
         "☑ Are quick_wins using the EXACT wording from the decision tree above?\n"
         "☑ Are quick_wins DETAILED with specific actions (not generic 'practice more')?\n"
-        "☑ Are opportunities REALISTIC with REAL Indian company names?\n"
-        "☑ Are opportunity descriptions CRISP (max 8-10 words)?\n"
         "☑ Does targetRole align with top 3 recommendations?\n"
         "☑ Zero non-technical roles in the entire response?\n\n"
         "CRITICAL: FORMAT FOR experience_benchmark:\n"
@@ -506,6 +624,9 @@ def run_poc(
     scoring_result = calculate_profile_strength(background, quiz_responses)
     calculated_score = scoring_result["score"]
 
+    # Calculate interview readiness independently (not dependent on profile strength score)
+    interview_readiness_result = calculate_interview_readiness(background, quiz_responses)
+
     from src.utils.label_mappings import get_company_label
     target_company = quiz_responses.get("targetCompany", "")
     target_company_label = quiz_responses.get("targetCompanyLabel") or get_company_label(target_company)
@@ -515,6 +636,7 @@ def run_poc(
         openai_model=model_name,
         input_payload=payload,
         calculated_profile_score=calculated_score,
+        calculated_interview_readiness=interview_readiness_result,
         target_company_label=target_company_label,
     )
 
@@ -523,10 +645,19 @@ def run_poc(
     hardcoded_tools = generate_tool_recommendations(background, quiz_responses)
     result_dict = result.model_dump()
     result_dict["profile_evaluation"]["profile_strength_score"] = scoring_result["score"]
+
+    # Override interview readiness with calculated values (independent of profile_strength_score)
+    interview_readiness = result_dict["profile_evaluation"]["interview_readiness"]
+    interview_readiness["technical_interview_percent"] = interview_readiness_result["technical_interview_percent"]
+    interview_readiness["hr_behavioral_percent"] = interview_readiness_result["hr_behavioral_percent"]
+
     personalized_notes = generate_profile_strength_notes(background, quiz_responses, scoring_result["score"])
 
-    if scoring_result["has_contradictions"]:
-        personalized_notes = f"{scoring_result['contradiction_note']} {personalized_notes}"
+    # Check if there are contradictions in the profile (optional feature)
+    if scoring_result.get("has_contradictions", False):
+        contradiction_note = scoring_result.get("contradiction_note", "")
+        if contradiction_note:
+            personalized_notes = f"{contradiction_note} {personalized_notes}"
 
     result_dict["profile_evaluation"]["profile_strength_notes"] = personalized_notes
 
@@ -550,70 +681,28 @@ def run_poc(
 
     target_role = quiz_responses.get("targetRole", "")
     target_company = quiz_responses.get("targetCompany", "")
+    current_role = quiz_responses.get("currentRole", "")
+    experience = quiz_responses.get("experience", "")
     recommended_roles = result_dict["profile_evaluation"]["recommended_roles_based_on_interests"]
 
-    target_role_timeline = None
-    target_role_index = None
+    # Filter and rerank roles based on current role, target role, and experience
+    recommended_roles = _filter_and_rerank_roles(
+        recommended_roles,
+        current_role,
+        target_role,
+        experience
+    )
 
-    if target_role:
-        target_lower = target_role.lower()
-        for idx, role in enumerate(recommended_roles):
-            role_title = role.get("title", "").lower()
-            if target_lower in role_title or role_title in target_lower:
-                target_role_index = idx
-                break
+    # Use v3 system: Generate recommended roles with timeline, copy, goals, and action items
+    recommended_roles_v3 = generate_recommended_roles(
+        background=background,
+        quiz_responses=quiz_responses
+    )
 
-    if target_role:
-        target_role_timeline_data = calculate_timeline_to_role(target_role, quiz_responses)
-        display_title = quiz_responses.get("targetRoleLabel", target_role)
-        target_role_timeline = {
-            "title": display_title,
-            "seniority": recommended_roles[0]["seniority"] if recommended_roles else "Mid-Senior",
-            "reason": f"Your stated target role - {target_role_timeline_data['key_gap']}",
-            "timeline_text": target_role_timeline_data["timeline_text"],
-            "min_months": target_role_timeline_data["min_months"],
-            "max_months": target_role_timeline_data["max_months"],
-            "key_gap": target_role_timeline_data["key_gap"],
-            "milestones": target_role_timeline_data["milestones"],
-            "confidence": target_role_timeline_data["confidence"]
-        }
+    # Convert to dict format for result_dict
+    recommended_roles_dicts = [role.model_dump() for role in recommended_roles_v3]
 
-    seen_titles = set()
-    deduplicated_roles = []
-    for role in recommended_roles:
-        role_title = role.get("title", "").strip().lower()
-        if role_title and role_title not in seen_titles:
-            seen_titles.add(role_title)
-            deduplicated_roles.append(role)
-
-    recommended_roles = deduplicated_roles
-
-    for role in recommended_roles:
-        role_timeline = calculate_timeline_to_role(role["title"], quiz_responses)
-        role["timeline_text"] = role_timeline["timeline_text"]
-        role["min_months"] = role_timeline["min_months"]
-        role["max_months"] = role_timeline["max_months"]
-        role["key_gap"] = role_timeline["key_gap"]
-        role["milestones"] = role_timeline["milestones"]
-        role["confidence"] = role_timeline["confidence"]
-
-    if target_role_index is not None and target_role_index > 0:
-        target_role_obj = recommended_roles.pop(target_role_index)
-        recommended_roles.insert(0, target_role_obj)
-    elif target_role_timeline is not None:
-        target_role_display = target_role_timeline.get("title", "").strip().lower()
-        existing_titles = [r["title"].strip().lower() for r in recommended_roles]
-        if target_role_display not in existing_titles:
-            recommended_roles.insert(0, target_role_timeline)
-    seen_titles_final = set()
-    final_deduplicated_roles = []
-    for role in recommended_roles:
-        role_title = role.get("title", "").strip().lower()
-        if role_title and role_title not in seen_titles_final:
-            seen_titles_final.add(role_title)
-            final_deduplicated_roles.append(role)
-
-    result_dict["profile_evaluation"]["recommended_roles_based_on_interests"] = final_deduplicated_roles[:5]
+    result_dict["profile_evaluation"]["recommended_roles_based_on_interests"] = recommended_roles_dicts[:3]
 
     result = FullProfileEvaluationResponse.model_validate(result_dict)
 
