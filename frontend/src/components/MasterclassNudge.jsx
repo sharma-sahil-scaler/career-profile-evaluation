@@ -16,11 +16,16 @@ const MasterclassNudge = ({ eventId }) => {
     error: eventError
   } = useStore($eventStore);
   const { data } = useStore($initialData);
-  const {
-    userData: { timezone } = {}
-  } = data?.userData ?? {};
+  const { userData: { timezone } = {} } = data?.userData ?? {};
 
-  const { allSocialProfiles, slug, title, startTime, endTime, qrLink } = eventData || {};
+  const {
+    all_social_profiles: allSocialProfiles,
+    slug,
+    title,
+    start_time: startTime,
+    end_time: endTime,
+    qrLink
+  } = eventData || {};
   const eventTime = fetchEventTime(startTime, endTime);
   const whatsappQrLink = fetchWhatsappData(allSocialProfiles)?.[0]?.link;
   const handleAddToCalendar = useCallback(() => {
