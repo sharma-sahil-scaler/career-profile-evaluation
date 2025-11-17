@@ -11,16 +11,9 @@ const AppRoutes = ({ quizMode, onQuizProgressChange }) => {
   const nudgeId =
     searchParams.get('show_nudge') || searchParams.get('event_id');
 
-  const [isNudgeVisible, setIsNudgeVisible] = useState(!!nudgeId);
-
   return (
     <>
-      <NudgeModal
-        visible={isNudgeVisible}
-        onClose={() => setIsNudgeVisible(false)}
-      >
-        <MasterclassNudge eventId={nudgeId} />
-      </NudgeModal>
+      {nudgeId && <MasterclassNudge eventId={nudgeId} />}
 
       <Routes>
         <Route path="/" element={<Navigate to="/quiz" replace />} />

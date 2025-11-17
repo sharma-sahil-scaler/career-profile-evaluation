@@ -53,11 +53,9 @@ const MasterclassNudge = ({ eventId }) => {
       <ThankyouPage
         visible
         flow="slideFlow"
-        wrapperClassName=""
-        containerClassName=""
         onClose={handleClose}
-        eventTitle="Masterclass Nudge"
-        eventDate="2025-11-17"
+        eventTitle={title}
+        eventDate={startTime}
         onAddtoCalendar={handleAddToCalendar}
         onEventGroupComplete={handleEventGroupComplete}
         onRedirect={handleRedirection}

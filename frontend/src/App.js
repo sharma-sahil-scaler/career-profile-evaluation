@@ -12,6 +12,9 @@ import LoggedOutScreen from './app/screens/LoggedOutScreen';
 import { RequestCallbackProvider } from './app/context/RequestCallbackContext';
 import useGTMSectionTracking from './hooks/useGTMSectionTracking';
 
+import '@vectord/ui/dist/style.css';
+import '@vectord/fp-styles';
+
 function AppContent() {
   const [quizProgress, setQuizProgress] = useState(0);
   const [quizMode, setQuizMode] = useState('final');

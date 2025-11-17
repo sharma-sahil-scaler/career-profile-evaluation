@@ -83,7 +83,6 @@ const NudgeModal = ({ visible, onClose, children }) => {
     <Overlay onClick={onClose}>
       <ModalContainer onClick={(e) => e.stopPropagation()}>
         <CloseButton onClick={onClose}>&times;</CloseButton>
-        <Title>Welcome to Career Profile Tool</Title>
         <Content>
           {children || (
             <p>This is a simple nudge modal. Add your content here.</p>
