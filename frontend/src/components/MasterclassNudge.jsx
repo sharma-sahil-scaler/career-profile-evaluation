@@ -15,13 +15,15 @@ const MasterclassNudge = ({ eventId }) => {
     loading: isEventLoading,
     error: eventError
   } = useStore($eventStore);
+  console.log('eventData', eventData);
   const { data } = useStore($initialData);
   const {
     userData: { timezone } = {}
   } = data?.userData ?? {};
 
-  const { attributes = {} } = eventData || {};
-  const { startTime, title, slug, endTime, allSocialProfiles, qrLink } = attributes;
+  const { allSocialProfiles, slug, title, startTime, endTime, qrLink } = eventData || {};
+
+  console.log('eventData', eventData);
   const whatsappQrLink = fetchWhatsappData(allSocialProfiles)?.[0]?.link;
   const handleAddToCalendar = useCallback(() => {
     addToCalendar(slug, title, timezone, startTime, endTime);
