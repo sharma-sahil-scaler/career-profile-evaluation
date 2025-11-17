@@ -1,6 +1,6 @@
-import React from "react";
-import PropTypes from "prop-types";
-import styled, { keyframes } from "styled-components";
+import React from 'react';
+import PropTypes from 'prop-types';
+import styled, { keyframes } from 'styled-components';
 
 const fadeIn = keyframes`
   from {
@@ -62,7 +62,7 @@ const StatusScreen = ({
   icon,
   title,
   description,
-  actions,
+  actions
 }) => (
   <Screen>
     <Card>
@@ -78,13 +78,13 @@ StatusScreen.propTypes = {
   icon: PropTypes.node,
   title: PropTypes.string.isRequired,
   description: PropTypes.string,
-  actions: PropTypes.node,
+  actions: PropTypes.node
 };
 
 StatusScreen.defaultProps = {
   icon: null,
-  description: "",
-  actions: null,
+  description: '',
+  actions: null
 };
 
 export default StatusScreen;

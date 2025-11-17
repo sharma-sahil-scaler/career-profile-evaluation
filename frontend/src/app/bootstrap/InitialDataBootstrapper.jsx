@@ -1,19 +1,19 @@
-import { useEffect } from "react";
-import { useStore } from "@nanostores/react";
+import { useEffect } from 'react';
+import { useStore } from '@nanostores/react';
 
-import { $initialData } from "../../store/initial-data";
+import { $initialData } from '../../store/initial-data';
 import {
   getUTMPropagationParams,
-  initializeUtmPropagation,
-} from "../../utils/analytics";
-import { lazyLoadGtm, pushServerEvents } from "../../utils/gtm";
-import tracker from "../../utils/tracker";
-import { getURLWithUTMParams } from "../../utils/url";
-import attribution from "../../utils/attribution";
+  initializeUtmPropagation
+} from '../../utils/analytics';
+import { lazyLoadGtm, pushServerEvents } from '../../utils/gtm';
+import tracker from '../../utils/tracker';
+import { getURLWithUTMParams } from '../../utils/url';
+import attribution from '../../utils/attribution';
 
 const InitialDataBootstrapper = ({
   product,
-  subProduct,
+  subProduct
 }) => {
   const { data, error } = useStore($initialData);
   const { isLoggedIn } = data ?? {};
@@ -36,14 +36,14 @@ const InitialDataBootstrapper = ({
         page_path: url.pathname,
         page_url: url.href,
         query_params: Object.fromEntries(url.searchParams.entries()),
-        utm_propagation_params: getUTMPropagationParams(),
-      },
+        utm_propagation_params: getUTMPropagationParams()
+      }
     };
 
     attribution.setPlatform();
     attribution.setProduct(product);
     tracker.pageview({
-      page_url: pageUrl,
+      page_url: pageUrl
     });
   }, [product, subProduct]);
 

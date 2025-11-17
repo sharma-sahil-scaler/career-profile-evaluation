@@ -13,7 +13,11 @@ export const [createEventFetcherStore] = nanoquery({
   },
   onError: (error) => {
     console.error('Event fetcher error:', error);
-  }
+  },
+  revalidateOnFocus: false,
+  revalidateOnReconnect: false,
+  revalidateInterval: 0,
+  onErrorRetry: null
 });
 
 export const [createQrLinkFetcherStore] = nanoquery({
@@ -37,7 +41,11 @@ export const [createQrLinkFetcherStore] = nanoquery({
   },
   onError: (error) => {
     console.warn('QR link fetcher error (non-critical):', error);
-  }
+  },
+  revalidateOnFocus: false,
+  revalidateOnReconnect: false,
+  revalidateInterval: 0,
+  onErrorRetry: null
 });
 
 export const createEventStore = (id) =>

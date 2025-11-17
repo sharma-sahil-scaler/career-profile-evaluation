@@ -31,7 +31,7 @@ const useGTMSectionTracking = () => {
 
           if (sectionName && !trackedSections.has(sectionName)) {
             tracker.sectionView({
-              section_name: sectionName,
+              section_name: sectionName
             });
 
             trackedSections.add(sectionName);
@@ -47,7 +47,7 @@ const useGTMSectionTracking = () => {
     const options = {
       root: null,
       rootMargin: '0px',
-      threshold: 0.5,
+      threshold: 0.5
     };
 
     observerRef.current = new IntersectionObserver(handleIntersection, options);
@@ -87,7 +87,7 @@ const useGTMSectionTracking = () => {
 
     mutationObserver.observe(document.body, {
       childList: true,
-      subtree: true,
+      subtree: true
     });
 
     return () => {

@@ -3,33 +3,33 @@ import React, {
   useCallback,
   useContext,
   useMemo,
-  useState,
-} from "react";
+  useState
+} from 'react';
 
-import RequestCallbackModal from "../components/RequestCallbackModal";
-import { apiRequest } from "../../utils/api";
-import tracker from "../../utils/tracker";
-import attribution from "../../utils/attribution";
-import { generateJWT } from "../../utils/api";
+import RequestCallbackModal from '../components/RequestCallbackModal';
+import { apiRequest } from '../../utils/api';
+import tracker from '../../utils/tracker';
+import attribution from '../../utils/attribution';
+import { generateJWT } from '../../utils/api';
 
 const RequestCallbackContext = createContext({
-  open: () => {},
+  open: () => {}
 });
 
 const INITIAL_FORM_STATE = {
-  program: "",
-  jobTitle: "",
+  program: '',
+  jobTitle: ''
 };
 
 const SUBMISSION_STATUS = {
-  IDLE: "idle",
-  LOADING: "loading",
-  SUCCESS: "success",
-  ERROR: "error",
+  IDLE: 'idle',
+  LOADING: 'loading',
+  SUCCESS: 'success',
+  ERROR: 'error'
 };
 
 const PROGRAMS_MAPPING = {
-  academy: "software_development",
+  academy: 'software_development'
 };
 
 export const RequestCallbackProvider = ({ children }) => {
@@ -38,15 +38,15 @@ export const RequestCallbackProvider = ({ children }) => {
   const [submissionStatus, setSubmissionStatus] = useState(
     SUBMISSION_STATUS.IDLE
   );
-  const [errorMessage, setErrorMessage] = useState("");
-  const [clickSource, setClickSource] = useState("");
+  const [errorMessage, setErrorMessage] = useState('');
+  const [clickSource, setClickSource] = useState('');
 
   const open = useCallback((initialState = {}) => {
     setFormState({
-      program: initialState.program || "",
-      jobTitle: initialState.jobTitle || "",
+      program: initialState.program || '',
+      jobTitle: initialState.jobTitle || ''
     });
-    setClickSource(initialState.source || "unknown");
+    setClickSource(initialState.source || 'unknown');
     setIsOpen(true);
   }, []);
 
@@ -54,60 +54,60 @@ export const RequestCallbackProvider = ({ children }) => {
     setIsOpen(false);
     setFormState(INITIAL_FORM_STATE);
     setSubmissionStatus(SUBMISSION_STATUS.IDLE);
-    setErrorMessage("");
-    setClickSource("");
+    setErrorMessage('');
+    setClickSource('');
   }, []);
 
   const updateField = useCallback((field, value) => {
     if (value) {
       tracker.click({
-        click_type: "form_input_filled",
+        click_type: 'form_input_filled',
         custom: {
-          field: field,
-        },
+          field: field
+        }
       });
     }
     setFormState((prev) => ({
       ...prev,
-      [field]: value,
+      [field]: value
     }));
   }, []);
 
   const submit = useCallback(async () => {
     setSubmissionStatus(SUBMISSION_STATUS.LOADING);
-    setErrorMessage("");
+    setErrorMessage('');
 
-    attribution.setAttribution("cpe_requested_callback", {
+    attribution.setAttribution('cpe_requested_callback', {
       program:
         PROGRAMS_MAPPING[formState.program] ||
         formState.program ||
-        "software_development",
+        'software_development'
     });
     try {
       const jwt = await generateJWT();
       await apiRequest(
-        "POST",
-        "/api/v3/callbacks",
+        'POST',
+        '/api/v3/callbacks',
         {
-          program: formState.program || "academy",
+          program: formState.program || 'academy',
           rcb_prams: {
-            attributions: attribution.getAttribution(),
-          },
+            attributions: attribution.getAttribution()
+          }
         },
         {
           headers: {
-            "X-User-Token": jwt,
-          },
+            'X-User-Token': jwt
+          }
         }
       );
 
       tracker.click({
-        click_type: "rcb_form_submitted",
+        click_type: 'rcb_form_submitted',
         custom: {
           source: clickSource,
           program: formState.program,
-          job_title: formState.jobTitle || "not_specified",
-        },
+          job_title: formState.jobTitle || 'not_specified'
+        }
       });
 
       setSubmissionStatus(SUBMISSION_STATUS.SUCCESS);
@@ -115,19 +115,19 @@ export const RequestCallbackProvider = ({ children }) => {
         close();
       }, 2000);
     } catch (error) {
-      console.error("Request callback submission failed:", error);
+      console.error('Request callback submission failed:', error);
       setSubmissionStatus(SUBMISSION_STATUS.ERROR);
       const errorMsg =
         error.responseJson?.error ||
         error.message ||
-        "Failed to submit request. Please try again.";
+        'Failed to submit request. Please try again.';
       setErrorMessage(errorMsg);
     }
   }, [close, formState, clickSource]);
 
   const contextValue = useMemo(
     () => ({
-      open,
+      open
     }),
     [open]
   );

@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState } from 'react';
 import { Navigate, Route, Routes, useSearchParams } from 'react-router-dom';
 
 import QuizPage from '../../components/QuizPage';
@@ -12,8 +12,6 @@ const AppRoutes = ({ quizMode, onQuizProgressChange }) => {
     searchParams.get('show_nudge') || searchParams.get('event_id');
 
   const [isNudgeVisible, setIsNudgeVisible] = useState(!!nudgeId);
-
-  console.log('nudgeId', nudgeId);
 
   return (
     <>

@@ -5,16 +5,16 @@ import {
   MagnifyingGlass,
   Phone,
   Sparkle,
-  Target,
-} from "phosphor-react";
-import React, { useEffect, useState, useCallback } from "react";
-import { useNavigate } from "react-router-dom";
-import styled, { createGlobalStyle, keyframes } from "styled-components";
-import { useRequestCallback } from "../app/context/RequestCallbackContext";
-import { useProfile } from "../context/ProfileContext";
-import { evaluateProfile } from "../utils/evaluationLogic";
-import ProfileMatchHeroV2 from "./results/ProfileMatchHeroV2";
-import tracker from "../utils/tracker";
+  Target
+} from 'phosphor-react';
+import React, { useEffect, useState, useCallback } from 'react';
+import { useNavigate } from 'react-router-dom';
+import styled, { createGlobalStyle, keyframes } from 'styled-components';
+import { useRequestCallback } from '../app/context/RequestCallbackContext';
+import { useProfile } from '../context/ProfileContext';
+import { evaluateProfile } from '../utils/evaluationLogic';
+import ProfileMatchHeroV2 from './results/ProfileMatchHeroV2';
+import tracker from '../utils/tracker';
 
 const PrintStyles = createGlobalStyle`
   @media print {
@@ -226,7 +226,7 @@ const ResultsPage = () => {
     goals,
     background,
     evaluationResults,
-    setEvaluationResults,
+    setEvaluationResults
   } = useProfile();
   const { open: openCallbackModal } = useRequestCallback();
   const [isLoading, setIsLoading] = useState(false);
@@ -238,34 +238,34 @@ const ResultsPage = () => {
   const loadingSteps = [
     {
       icon: <MagnifyingGlass size={28} weight="bold" />,
-      text: "Evaluating your profile...",
-      subtext: "Analyzing your skills and experience",
+      text: 'Evaluating your profile...',
+      subtext: 'Analyzing your skills and experience'
     },
     {
       icon: <CheckCircle size={28} weight="bold" />,
-      text: "Making sure your profile is thoroughly checked...",
-      subtext: "Cross-referencing with industry standards",
+      text: 'Making sure your profile is thoroughly checked...',
+      subtext: 'Cross-referencing with industry standards'
     },
     {
       icon: <BriefcaseMetal size={28} weight="bold" />,
-      text: "Bringing up relevant jobs...",
-      subtext: "Finding opportunities that match your profile",
+      text: 'Bringing up relevant jobs...',
+      subtext: 'Finding opportunities that match your profile'
     },
     {
       icon: <Target size={28} weight="bold" />,
-      text: "Predicting your career readiness score...",
-      subtext: "Calculating your success likelihood",
+      text: 'Predicting your career readiness score...',
+      subtext: 'Calculating your success likelihood'
     },
     {
       icon: <ChartLine size={28} weight="bold" />,
-      text: "Generating personalized insights...",
-      subtext: "Almost there!",
+      text: 'Generating personalized insights...',
+      subtext: 'Almost there!'
     },
     {
       icon: <Sparkle size={28} weight="bold" />,
-      text: "Finalizing your report...",
-      subtext: "Preparing your results",
-    },
+      text: 'Finalizing your report...',
+      subtext: 'Preparing your results'
+    }
   ];
 
   useEffect(() => {
@@ -302,7 +302,7 @@ const ResultsPage = () => {
 
   useEffect(() => {
     if (!quizResponses || !goals || !background) {
-      navigate("/", { replace: true });
+      navigate('/', { replace: true });
       return;
     }
   }, [quizResponses, goals, background, navigate]);
@@ -332,7 +332,7 @@ const ResultsPage = () => {
         if (isMounted) {
           if (
             results &&
-            typeof results === "object" &&
+            typeof results === 'object' &&
             Object.keys(results).length > 0
           ) {
             const elapsedTime = Date.now() - startTime;
@@ -348,11 +348,11 @@ const ResultsPage = () => {
               }
             }, remainingTime);
           } else {
-            throw new Error("Evaluation service returned an empty response.");
+            throw new Error('Evaluation service returned an empty response.');
           }
         }
       } catch (err) {
-        if (err.name === "AbortError") {
+        if (err.name === 'AbortError') {
           return;
         }
         if (isMounted) {
@@ -361,7 +361,7 @@ const ResultsPage = () => {
 
           setTimeout(() => {
             if (isMounted) {
-              setError(err.message || "Failed to fetch evaluation results.");
+              setError(err.message || 'Failed to fetch evaluation results.');
               setIsLoading(false);
             }
           }, remainingTime);
@@ -381,22 +381,22 @@ const ResultsPage = () => {
     background,
     setEvaluationResults,
     retryCount,
-    evaluationResults,
+    evaluationResults
   ]);
 
   const handleReEvaluate = () => {
     setEvaluationResults(null);
-    navigate("/");
+    navigate('/');
   };
 
   const handleRCBClick = useCallback(() => {
     tracker.click({
-      click_type: "rcb_btn_clicked",
+      click_type: 'rcb_btn_clicked',
       custom: {
-        source: "results_page_floating_cta",
-      },
+        source: 'results_page_floating_cta'
+      }
     });
-    openCallbackModal?.({ source: "results_page_floating_cta" });
+    openCallbackModal?.({ source: 'results_page_floating_cta' });
   }, [openCallbackModal]);
 
   if (isLoading) {

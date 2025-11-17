@@ -1,2 +1,2 @@
-export { default as NudgeModalContainer } from "./NudgeModalContainer";
-export { default } from "../NudgeModal";
+export { default as NudgeModalContainer } from './NudgeModalContainer';
+export { default } from '../NudgeModal';
