@@ -5,7 +5,7 @@ import { useStore } from '@nanostores/react';
 import { ThankyouPage } from '@vectord/thankyou-page';
 import { $initialData } from '../store/initial-data';
 import { addToCalendar } from '../utils/calendar';
-import { fetchWhatsappData } from '../utils/mcNudge';
+import { fetchEventTime, fetchWhatsappData } from '../utils/mcNudge';
 
 const MasterclassNudge = ({ eventId }) => {
   const [$eventStore] = useState(createEventStore(eventId));
@@ -15,15 +15,13 @@ const MasterclassNudge = ({ eventId }) => {
     loading: isEventLoading,
     error: eventError
   } = useStore($eventStore);
-  console.log('eventData', eventData);
   const { data } = useStore($initialData);
   const {
     userData: { timezone } = {}
   } = data?.userData ?? {};
 
   const { allSocialProfiles, slug, title, startTime, endTime, qrLink } = eventData || {};
-
-  console.log('eventData', eventData);
+  const eventTime = fetchEventTime(startTime, endTime);
   const whatsappQrLink = fetchWhatsappData(allSocialProfiles)?.[0]?.link;
   const handleAddToCalendar = useCallback(() => {
     addToCalendar(slug, title, timezone, startTime, endTime);
@@ -64,6 +62,7 @@ const MasterclassNudge = ({ eventId }) => {
         flow="slideFlow"
         eventTitle={title}
         eventDate={startTime}
+        eventTime={eventTime}
         onAddtoCalendar={handleAddToCalendar}
         onEventGroupComplete={handleEventGroupComplete}
         onRedirect={handleRedirection}

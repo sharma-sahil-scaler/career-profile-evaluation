@@ -14,11 +14,7 @@ const ContentRegion = styled.main`
   flex: 1;
 `;
 
-const AppLayout = ({
-  showNavigation,
-  navigationProps,
-  children
-}) => (
+const AppLayout = ({ showNavigation, navigationProps, children }) => (
   <PageShell>
     {showNavigation && navigationProps && (
       <NavigationBar {...navigationProps} />

@@ -58,12 +58,7 @@ const Actions = styled.div`
   margin-top: 8px;
 `;
 
-const StatusScreen = ({
-  icon,
-  title,
-  description,
-  actions
-}) => (
+const StatusScreen = ({ icon, title, description, actions }) => (
   <Screen>
     <Card>
       {icon}

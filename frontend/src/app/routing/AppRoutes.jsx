@@ -5,7 +5,6 @@ import QuizPage from '../../components/QuizPage';
 import ResultsPage from '../../components/ResultsPage';
 import MasterclassNudge from '../../components/MasterclassNudge';
 
-
 const RoutesComponent = ({ quizMode, onQuizProgressChange }) => {
   return (
     <Routes>
