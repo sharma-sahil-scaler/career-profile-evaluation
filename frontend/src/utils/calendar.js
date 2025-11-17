@@ -9,6 +9,7 @@ function getTimeInCertainFormat(time) {
   return `${year}${month}${day}T${hours}${minutes}${seconds}`;
 }
 
+
 function convertToUserTimeZone(time, userTimeZone) {
   const updatedTimeZone = time?.toLocaleString('default', {
     timeZone: userTimeZone

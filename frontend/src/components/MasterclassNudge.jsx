@@ -18,6 +18,8 @@ const MasterclassNudge = ({ eventId }) => {
   const { data } = useStore($initialData);
   const { userData: { timezone } = {} } = data?.userData ?? {};
 
+  console.log('eventData', eventData);
+
   const {
     all_social_profiles: allSocialProfiles,
     slug,
@@ -27,22 +29,22 @@ const MasterclassNudge = ({ eventId }) => {
     qrLink
   } = eventData || {};
   const eventTime = fetchEventTime(startTime, endTime);
-  const whatsappQrLink = fetchWhatsappData(allSocialProfiles)?.[0]?.link;
+  const whatsappLink = fetchWhatsappData(allSocialProfiles)?.[0]?.link;
   const handleAddToCalendar = useCallback(() => {
     addToCalendar(slug, title, timezone, startTime, endTime);
   }, [slug, title, timezone, startTime, endTime]);
 
   const handleEventGroupComplete = useCallback(() => {
-    window.open(whatsappQrLink, '_blank');
-  }, [whatsappQrLink]);
+    window.open(whatsappLink, '_blank');
+  }, [whatsappLink]);
 
   const handleRedirection = useCallback(() => {
     window.location.href = '/academy/mentee-dashboard/todos';
   }, []);
 
   const handleJoinPc = useCallback(() => {
-    window.open(whatsappQrLink, '_blank');
-  }, [whatsappQrLink]);
+    window.open(whatsappLink, '_blank');
+  }, [whatsappLink]);
 
   const handleUnlockClick = useCallback(() => {
     console.log('unlockClick');
@@ -68,7 +70,7 @@ const MasterclassNudge = ({ eventId }) => {
         onEventGroupComplete={handleEventGroupComplete}
         onRedirect={handleRedirection}
         onJoinPc={handleJoinPc}
-        whatsappQrLink=""
+        whatsappQrLink={qrLink}
         onUnlockClick={handleUnlockClick}
       />
     </div>
