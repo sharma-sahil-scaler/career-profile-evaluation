@@ -1,5 +1,6 @@
 import { nanoquery } from '@nanostores/query';
 import { apiRequest } from '../utils/api';
+import { generateJWT } from '../utils/api';
 
 export const [createEventFetcherStore] = nanoquery({
   fetcher: async (...keys) => {
@@ -9,7 +10,30 @@ export const [createEventFetcherStore] = nanoquery({
       serializer_mode: 'L2'
     });
 
-    return response;
+    const { attributes = {} } = response.data || {};
+    const { slug } = attributes;
+
+    const token = await generateJWT();
+    if (!token) throw new Error('Failed to load JWT');
+
+    const qrLinkResponse = await apiRequest(
+      'POST',
+      `/api/v4/events/${slug}/trackable-social-link`,
+      {
+        provider: 'whatsapp',
+        track_for: 'redirect_link'
+      },
+      {
+        headers: {
+          'X-User-Token': token
+        }
+      }
+    );
+
+    return {
+      ...attributes,
+      qrLink: qrLinkResponse.data
+    };
   },
   onError: (error) => {
     console.error('Event fetcher error:', error);
@@ -20,35 +44,5 @@ export const [createEventFetcherStore] = nanoquery({
   onErrorRetry: null
 });
 
-export const [createQrLinkFetcherStore] = nanoquery({
-  fetcher: async (...keys) => {
-    const [, slug] = keys;
-    const response = await apiRequest(
-      'POST',
-      `/api/v4/events/${slug}/trackable-social-link`,
-      {
-        provider: 'whatsapp',
-        track_for: 'redirect_link',
-        tracking_attributes: {
-          product: 'free_product',
-          sub_product: 'mentee-dashboard',
-          element: 'mc-nudge-qr'
-        }
-      }
-    );
-
-    return response;
-  },
-  onError: (error) => {
-    console.warn('QR link fetcher error (non-critical):', error);
-  },
-  revalidateOnFocus: false,
-  revalidateOnReconnect: false,
-  revalidateInterval: 0,
-  onErrorRetry: null
-});
-
 export const createEventStore = (id) =>
   createEventFetcherStore(`/api/v4/events/${id}`);
-export const createQrLinkStore = (slug) =>
-  createQrLinkFetcherStore(['qr-link', slug]);

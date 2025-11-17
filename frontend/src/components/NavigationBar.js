@@ -252,7 +252,7 @@ const ProgressBarFill = styled.div`
 const StickyWrapper = styled.div`
   position: sticky;
   top: 0;
-  z-index: 1001;
+  z-index: 800;
   overflow: hidden;
 
   @media print {
@@ -346,8 +346,7 @@ const NavigationBar = ({
   const showProgress =
     location.pathname === '/quiz' || location.pathname === '/goals';
   const showModeToggle = location.pathname === '/quiz';
-  const isResultsPage =
-    location.pathname === '/results';
+  const isResultsPage = ['/results/', '/result'].includes(location.pathname);
 
   const [showCSATBanner, setShowCSATBanner] = useState(true);
   const lastScrollYRef = useRef(0);

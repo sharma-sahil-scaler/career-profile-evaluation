@@ -3,6 +3,9 @@ import { createEventStore } from '../store/event';
 import { useStore } from '@nanostores/react';
 
 import { ThankyouPage } from '@vectord/thankyou-page';
+import { $initialData } from '../store/initial-data';
+import { addToCalendar } from '../utils/calendar';
+import { fetchWhatsappData } from '../utils/mcNudge';
 
 const MasterclassNudge = ({ eventId }) => {
   const [$eventStore] = useState(createEventStore(eventId));
@@ -12,25 +15,29 @@ const MasterclassNudge = ({ eventId }) => {
     loading: isEventLoading,
     error: eventError
   } = useStore($eventStore);
+  const { data } = useStore($initialData);
+  const {
+    userData: { timezone } = {}
+  } = data?.userData ?? {};
 
   const { attributes = {} } = eventData || {};
-  const { startTime, title, slug, endTime, allSocialProfiles } = attributes;
-
+  const { startTime, title, slug, endTime, allSocialProfiles, qrLink } = attributes;
+  const whatsappQrLink = fetchWhatsappData(allSocialProfiles)?.[0]?.link;
   const handleAddToCalendar = useCallback(() => {
-    console.log('addToCalendar');
+    addToCalendar(slug, title, timezone, startTime, endTime);
   }, []);
 
   const handleEventGroupComplete = useCallback(() => {
-    console.log('eventGroupComplete');
-  }, []);
+    window.open(whatsappQrLink, '_blank');
+  }, [whatsappQrLink]);
 
   const handleRedirection = useCallback(() => {
-    console.log('redirection');
+    window.location.href = '/academy/mentee-dashboard/todos';
   }, []);
 
   const handleJoinPc = useCallback(() => {
-    console.log('joinPc');
-  }, []);
+    window.open(whatsappQrLink, '_blank');
+  }, [whatsappQrLink]);
 
   const handleUnlockClick = useCallback(() => {
     console.log('unlockClick');
@@ -53,14 +60,13 @@ const MasterclassNudge = ({ eventId }) => {
       <ThankyouPage
         visible
         flow="slideFlow"
-        onClose={handleClose}
         eventTitle={title}
         eventDate={startTime}
         onAddtoCalendar={handleAddToCalendar}
         onEventGroupComplete={handleEventGroupComplete}
         onRedirect={handleRedirection}
         onJoinPc={handleJoinPc}
-        whatsappQrLink="https://www.google.com"
+        whatsappQrLink={qrLink}
         onUnlockClick={handleUnlockClick}
       />
     </div>
