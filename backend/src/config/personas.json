@@ -1,0 +1,2176 @@
+{
+  "metadata": {
+    "version": "3.0.0",
+    "description": "Domain-aware personas with card-specific copy, goals, and milestones. Total: 25 personas (20 tech + 5 non-tech).",
+    "total_personas": 25
+  },
+  "personas": {
+    "_TECH_PERSONAS": {
+      "description": "20 personas: 4 current roles \u00d7 5 experience levels"
+    },
+    "swe_product_junior": {
+      "id": "swe_product_junior",
+      "label": "Product SWE - Junior (0-2 years)",
+      "domain": "tech",
+      "matching_criteria": {
+        "background": "tech",
+        "currentRole": "swe-product",
+        "experience": [
+          "0-2"
+        ]
+      },
+      "base_timeline_months": 8,
+      "description": "You're in product companies with solid fundamentals. Your path is accelerated compared to service engineers.",
+      "cards": {
+        "target": {
+          "copy": "You're already in a product company with strong engineering culture. Focus on mastering your target role and you'll stand out quickly.",
+          "goal": "Become an expert in your target specialization and land your next role within your company or at another top product company.",
+          "action_items": [
+            "Practice coding problems daily (focus on your role's specialization)",
+            "Build 1-2 significant projects that showcase depth in your target area",
+            "Participate in design discussions to understand system-level thinking"
+          ],
+          "milestones": [
+            "Month 1-2: Deep technical preparation - Master your specialization fundamentals",
+            "Month 3-4: Build portfolio projects - Create 1-2 substantial projects showcasing your target skills",
+            "Month 5+: Interview readiness - Polish profile, network, practice interviews, and apply to target roles"
+          ],
+          "timeline_adjustment": 0
+        },
+        "alternative_1_easier_company": {
+          "copy": "If you want an easier entry point while still working on your target role, service companies have a lower interview bar but different engineering practices. Great for building fundamentals before going back to product companies.",
+          "goal": "Get your target role at a company with lower interview difficulty as a stepping stone.",
+          "action_items": [
+            "Focus on coding fundamentals (less emphasis on advanced system design)",
+            "Build 1-2 projects showing practical competence",
+            "Prepare for interviews with less complex system design questions"
+          ],
+          "milestones": [
+            "Month 1-2: Foundation building - Strengthen core technical skills with focused practice",
+            "Month 3: Interview preparation - Prepare for company-specific interview patterns",
+            "Month 4+: Apply and negotiate - Submit applications and work through interview rounds"
+          ],
+          "timeline_adjustment": -2
+        },
+        "alternative_2_different_role": {
+          "copy": "Consider exploring a complementary specialization within your domain. If you're a backend engineer, full-stack could open more doors. If you're frontend, adding backend skills makes you invaluable.",
+          "goal": "Expand your expertise into an adjacent role, increasing your market value and career optionality.",
+          "action_items": [
+            "Learn the fundamentals of the adjacent specialization",
+            "Build a project combining both specializations",
+            "Understand how both specializations work together in production systems"
+          ],
+          "milestones": [
+            "Month 1-2: Learn new specialization - Study fundamentals of the adjacent/alternative role",
+            "Month 3-4: Build cross-specialization projects - Create projects combining both skill sets",
+            "Month 5+: Deepen expertise - Gain depth in new specialization and prepare for interviews"
+          ],
+          "timeline_adjustment": 1
+        }
+      },
+      "role_recommendations": {
+        "target_to_alternative_role": {
+          "backend-sde": "fullstack-sde",
+          "fullstack-sde": "backend-sde",
+          "senior-backend": "senior-fullstack",
+          "senior-fullstack": "senior-backend",
+          "data-ml": "backend-sde",
+          "tech-lead": "senior-backend"
+        }
+      },
+      "timeline_gap_adjustments": {
+        "problem_solving": {
+          "0-10": 4,
+          "11-50": 2,
+          "51-100": 1,
+          "100+": 0
+        },
+        "system_design": {
+          "not-yet": 2,
+          "learning": 1,
+          "once": 0,
+          "multiple": 0
+        },
+        "portfolio": {
+          "none": 2,
+          "inactive": 1,
+          "limited-1-5": 0,
+          "active-5+": 0
+        }
+      }
+    },
+    "swe_product_mid1": {
+      "id": "swe_product_mid1",
+      "label": "Product SWE - Mid (2-3 years)",
+      "domain": "tech",
+      "matching_criteria": {
+        "background": "tech",
+        "currentRole": "swe-product",
+        "experience": [
+          "2-3"
+        ]
+      },
+      "base_timeline_months": 6,
+      "description": "You're mid-level in a product company. Your path to senior or adjacent roles is well-defined.",
+      "cards": {
+        "target": {
+          "copy": "You have solid experience in product companies. Now it's time to deepen expertise in your target specialization or move to a more prestigious company. Your product background gives you an edge.",
+          "goal": "Achieve your target role at a top-tier company or become a specialist in your current domain.",
+          "action_items": [
+            "Master advanced system design concepts relevant to your role",
+            "Lead architectural decisions on your team",
+            "Build 1-2 portfolio projects demonstrating advanced competence",
+            "Prepare for behavioral interviews at FAANG companies"
+          ],
+          "milestones": [
+            "Month 1-2: Deep technical preparation - Master your specialization fundamentals",
+            "Month 3-4: Build portfolio projects - Create 1-2 substantial projects showcasing your target skills",
+            "Month 5+: Interview readiness - Polish profile, network, practice interviews, and apply to target roles"
+          ],
+          "timeline_adjustment": 0
+        },
+        "alternative_1_easier_company": {
+          "copy": "Want a quick win? Service companies value mid-level engineers and will fast-track you. It's a great leverage point to move to FAANG later.",
+          "goal": "Get your target role quickly at a service company to gain seniority, then transition to FAANG.",
+          "action_items": [
+            "Focus on system design at medium scale (not massive scale)",
+            "Refresh coding skills with 20-30 focused problems",
+            "Prepare for service company interview style"
+          ],
+          "milestones": [
+            "Month 1-2: Foundation building - Strengthen core technical skills with focused practice",
+            "Month 3: Interview preparation - Prepare for company-specific interview patterns",
+            "Month 4+: Apply and negotiate - Submit applications and work through interview rounds"
+          ],
+          "timeline_adjustment": -2
+        },
+        "alternative_2_different_role": {
+          "copy": "Broaden your skill set by exploring a complementary role. Many successful senior engineers are full-stack or have expertise in multiple areas.",
+          "goal": "Become a versatile engineer with expertise in multiple specializations.",
+          "action_items": [
+            "Deep dive into the adjacent specialization",
+            "Build a project showcasing both specializations",
+            "Study how top companies combine these roles"
+          ],
+          "milestones": [
+            "Month 1-2: Learn new specialization - Study fundamentals of the adjacent/alternative role",
+            "Month 3-4: Build cross-specialization projects - Create projects combining both skill sets",
+            "Month 5+: Deepen expertise - Gain depth in new specialization and prepare for interviews"
+          ],
+          "timeline_adjustment": 1
+        }
+      },
+      "role_recommendations": {
+        "target_to_alternative_role": {
+          "backend-sde": "fullstack-sde",
+          "fullstack-sde": "backend-sde",
+          "senior-backend": "senior-fullstack",
+          "senior-fullstack": "senior-backend",
+          "data-ml": "backend-sde",
+          "tech-lead": "senior-backend"
+        }
+      },
+      "timeline_gap_adjustments": {
+        "problem_solving": {
+          "0-10": 3,
+          "11-50": 2,
+          "51-100": 1,
+          "100+": 0
+        },
+        "system_design": {
+          "not-yet": 3,
+          "learning": 2,
+          "once": 1,
+          "multiple": 0
+        },
+        "portfolio": {
+          "none": 2,
+          "inactive": 1,
+          "limited-1-5": 0,
+          "active-5+": 0
+        }
+      }
+    },
+    "swe_product_mid2": {
+      "id": "swe_product_mid2",
+      "label": "Product SWE - Mid (3-5 years)",
+      "domain": "tech",
+      "matching_criteria": {
+        "background": "tech",
+        "currentRole": "swe-product",
+        "experience": [
+          "3-5"
+        ]
+      },
+      "base_timeline_months": 6,
+      "description": "You're solid mid-level with real product experience. Your path to senior is clear.",
+      "cards": {
+        "target": {
+          "copy": "With 3-5 years in product companies, you understand how real systems work. Focus on system design mastery and you'll be ready for senior roles anywhere.",
+          "goal": "Transition to a senior engineer role, either at your current company or at a top-tier tech company.",
+          "action_items": [
+            "Master large-scale system design (design 10+ complex systems)",
+            "Own and ship a major project end-to-end",
+            "Develop leadership and mentoring skills",
+            "Build a strong online presence (GitHub, blog, or speaking)"
+          ],
+          "milestones": [
+            "Month 1-2: Deep technical preparation - Master your specialization fundamentals",
+            "Month 3-4: Build portfolio projects - Create 1-2 substantial projects showcasing your target skills",
+            "Month 5+: Interview readiness - Polish profile, network, practice interviews, and apply to target roles"
+          ],
+          "timeline_adjustment": 0
+        },
+        "alternative_1_easier_company": {
+          "copy": "Consider service companies or startups for your target role. You'll likely get senior or lead opportunities faster than at FAANG, then move to FAANG from a position of strength.",
+          "goal": "Get your target role (possibly at higher seniority) at a service company or startup.",
+          "action_items": [
+            "System design at realistic scale (not massive)",
+            "Prepare for startup/service company culture",
+            "Leverage your 3-5 years of experience as an advantage"
+          ],
+          "milestones": [
+            "Month 1-2: Foundation building - Strengthen core technical skills with focused practice",
+            "Month 3: Interview preparation - Prepare for company-specific interview patterns",
+            "Month 4+: Apply and negotiate - Submit applications and work through interview rounds"
+          ],
+          "timeline_adjustment": -2
+        },
+        "alternative_2_different_role": {
+          "copy": "Explore a different specialization. With your 3-5 years of product experience, you have the foundation to transition smoothly.",
+          "goal": "Master a new specialization while leveraging your existing product engineering knowledge.",
+          "action_items": [
+            "Learn the new specialization (books, courses, projects)",
+            "Build 1-2 projects in the new specialization",
+            "Study how the new specialization fits into product ecosystems"
+          ],
+          "milestones": [
+            "Month 1-2: Learn new specialization - Study fundamentals of the adjacent/alternative role",
+            "Month 3-4: Build cross-specialization projects - Create projects combining both skill sets",
+            "Month 5+: Deepen expertise - Gain depth in new specialization and prepare for interviews"
+          ],
+          "timeline_adjustment": 1
+        }
+      },
+      "role_recommendations": {
+        "target_to_alternative_role": {
+          "backend-sde": "fullstack-sde",
+          "fullstack-sde": "backend-sde",
+          "senior-backend": "senior-fullstack",
+          "senior-fullstack": "senior-backend",
+          "data-ml": "backend-sde",
+          "tech-lead": "senior-backend"
+        }
+      },
+      "timeline_gap_adjustments": {
+        "problem_solving": {
+          "0-10": 2,
+          "11-50": 1,
+          "51-100": 0,
+          "100+": 0
+        },
+        "system_design": {
+          "not-yet": 2,
+          "learning": 1,
+          "once": 0,
+          "multiple": 0
+        },
+        "portfolio": {
+          "none": 1,
+          "inactive": 0,
+          "limited-1-5": 0,
+          "active-5+": 0
+        }
+      }
+    },
+    "swe_product_senior": {
+      "id": "swe_product_senior",
+      "label": "Product SWE - Senior (5-8 years)",
+      "domain": "tech",
+      "matching_criteria": {
+        "background": "tech",
+        "currentRole": "swe-product",
+        "experience": [
+          "5-8"
+        ]
+      },
+      "base_timeline_months": 5,
+      "description": "You're senior-level. Your focus should be on FAANG transition or staff engineer path.",
+      "cards": {
+        "target": {
+          "copy": "As a senior engineer with product experience, you're in high demand. FAANG companies actively recruit at your level. Focus on interview prep and you'll land your target role.",
+          "goal": "Transition to your target role at a top-tier company or become a staff engineer at your current company.",
+          "action_items": [
+            "Perfect your system design (at FAANG-level complexity)",
+            "Practice behavioral and culture-fit interviews",
+            "Leverage your experience: you know how real products work",
+            "Network actively in the tech community"
+          ],
+          "milestones": [
+            "Month 1-2: Deep technical preparation - Master your specialization fundamentals",
+            "Month 3-4: Build portfolio projects - Create 1-2 substantial projects showcasing your target skills",
+            "Month 5+: Interview readiness - Polish profile, network, practice interviews, and apply to target roles"
+          ],
+          "timeline_adjustment": 0
+        },
+        "alternative_1_easier_company": {
+          "copy": "Service companies will likely fast-track you to a higher title (Staff/Principal) with less competition. It's a strategic move for career growth.",
+          "goal": "Get a staff or principal-level role at a service company or startup.",
+          "action_items": [
+            "Emphasize your leadership and system design skills",
+            "Discuss your vision for technical direction",
+            "Prepare for technical leadership interviews"
+          ],
+          "milestones": [
+            "Month 1-2: Foundation building - Strengthen core technical skills with focused practice",
+            "Month 3: Interview preparation - Prepare for company-specific interview patterns",
+            "Month 4+: Apply and negotiate - Submit applications and work through interview rounds"
+          ],
+          "timeline_adjustment": -2
+        },
+        "alternative_2_different_role": {
+          "copy": "With your 5+ years of product experience, you can move to adjacent specializations from a position of strength. This broadens your impact.",
+          "goal": "Transition to a complementary specialization while maintaining or increasing seniority.",
+          "action_items": [
+            "Deep dive into the new specialization",
+            "Apply your existing expertise to the new domain",
+            "Position yourself as a bridge between specializations"
+          ],
+          "milestones": [
+            "Month 1-2: Learn new specialization - Study fundamentals of the adjacent/alternative role",
+            "Month 3-4: Build cross-specialization projects - Create projects combining both skill sets",
+            "Month 5+: Deepen expertise - Gain depth in new specialization and prepare for interviews"
+          ],
+          "timeline_adjustment": 1
+        }
+      },
+      "role_recommendations": {
+        "target_to_alternative_role": {
+          "backend-sde": "fullstack-sde",
+          "fullstack-sde": "backend-sde",
+          "senior-backend": "senior-fullstack",
+          "senior-fullstack": "senior-backend",
+          "data-ml": "backend-sde",
+          "tech-lead": "senior-backend"
+        }
+      },
+      "timeline_gap_adjustments": {
+        "problem_solving": {
+          "0-10": 1,
+          "11-50": 0,
+          "51-100": 0,
+          "100+": 0
+        },
+        "system_design": {
+          "not-yet": 1,
+          "learning": 0,
+          "once": 0,
+          "multiple": 0
+        },
+        "portfolio": {
+          "none": 0,
+          "inactive": 0,
+          "limited-1-5": 0,
+          "active-5+": 0
+        }
+      }
+    },
+    "swe_product_expert": {
+      "id": "swe_product_expert",
+      "label": "Product SWE - Expert (8+ years)",
+      "domain": "tech",
+      "matching_criteria": {
+        "background": "tech",
+        "currentRole": "swe-product",
+        "experience": [
+          "8+"
+        ]
+      },
+      "base_timeline_months": 4,
+      "description": "You're at the top. Focus on your specific career goal: FAANG, founder, CTO, or staff engineer path.",
+      "cards": {
+        "target": {
+          "copy": "With 8+ years of experience, you're in the top 1% of engineers. Your target should be a specific company or role that excites you. FAANG companies or high-impact startups are looking for engineers at your level.",
+          "goal": "Land your ideal role that matches your long-term career vision.",
+          "action_items": [
+            "Identify your specific career goal: FAANG, startup, founder, CTO?",
+            "Network strategically at your target companies",
+            "Showcase leadership impact, not just coding skills",
+            "Prepare for high-level technical discussions"
+          ],
+          "milestones": [
+            "Month 1-2: Deep technical preparation - Master your specialization fundamentals",
+            "Month 3-4: Build portfolio projects - Create 1-2 substantial projects showcasing your target skills",
+            "Month 5+: Interview readiness - Polish profile, network, practice interviews, and apply to target roles"
+          ],
+          "timeline_adjustment": 0
+        },
+        "alternative_1_easier_company": {
+          "copy": "With your expertise, you can join any company and make immediate impact. Service companies or high-growth startups offer more equity and leadership opportunities.",
+          "goal": "Get an executive or founder-track role at a high-growth startup.",
+          "action_items": [
+            "Connect with startup founders and investors",
+            "Discuss equity and long-term upside",
+            "Prepare for equity negotiation conversations"
+          ],
+          "milestones": [
+            "Month 1-2: Foundation building - Strengthen core technical skills with focused practice",
+            "Month 3: Interview preparation - Prepare for company-specific interview patterns",
+            "Month 4+: Apply and negotiate - Submit applications and work through interview rounds"
+          ],
+          "timeline_adjustment": -1
+        },
+        "alternative_2_different_role": {
+          "copy": "Consider transitioning to leadership (Staff Engineer, Principal, CTO) or a different specialization. Your 8+ years gives you unique perspective.",
+          "goal": "Transition to a leadership or specialized role with broader organizational impact.",
+          "action_items": [
+            "Develop or deepen leadership skills",
+            "Study organizational dynamics and technical strategy",
+            "Network with other leaders in your target specialization"
+          ],
+          "milestones": [
+            "Month 1-2: Learn new specialization - Study fundamentals of the adjacent/alternative role",
+            "Month 3-4: Build cross-specialization projects - Create projects combining both skill sets",
+            "Month 5+: Deepen expertise - Gain depth in new specialization and prepare for interviews"
+          ],
+          "timeline_adjustment": 0
+        }
+      },
+      "role_recommendations": {
+        "target_to_alternative_role": {
+          "backend-sde": "fullstack-sde",
+          "fullstack-sde": "backend-sde",
+          "senior-backend": "senior-fullstack",
+          "senior-fullstack": "senior-backend",
+          "data-ml": "backend-sde",
+          "tech-lead": "senior-backend"
+        }
+      },
+      "timeline_gap_adjustments": {
+        "problem_solving": {
+          "0-10": 0,
+          "11-50": 0,
+          "51-100": 0,
+          "100+": 0
+        },
+        "system_design": {
+          "not-yet": 0,
+          "learning": 0,
+          "once": 0,
+          "multiple": 0
+        },
+        "portfolio": {
+          "none": 0,
+          "inactive": 0,
+          "limited-1-5": 0,
+          "active-5+": 0
+        }
+      }
+    },
+    "swe_service_junior": {
+      "id": "swe_service_junior",
+      "label": "Service SWE - Junior (0-2 years)",
+      "domain": "tech",
+      "matching_criteria": {
+        "background": "tech",
+        "currentRole": "swe-service",
+        "experience": [
+          "0-2"
+        ]
+      },
+      "base_timeline_months": 8,
+      "description": "You're in service companies (Java/.NET). Your path is longer than product engineers but service companies value depth.",
+      "cards": {
+        "target": {
+          "copy": "Service companies use different tech stacks (Java, .NET) than product companies. Your transition will require learning new paradigms. Start with product company tech stacks or deepen in service domain.",
+          "goal": "Master your target role, either by transitioning to product tech or becoming an expert in service domain.",
+          "action_items": [
+            "Learn product company tech stacks (Python, Go, Node.js) OR deepen in Java/.NET",
+            "Practice system design at web scale",
+            "Build projects showcasing your specialization",
+            "Understand product company culture and practices"
+          ],
+          "milestones": [
+            "Month 1-2: Deep technical preparation - Master your specialization fundamentals",
+            "Month 3-4: Build portfolio projects - Create 1-2 substantial projects showcasing your target skills",
+            "Month 5+: Interview readiness - Polish profile, network, practice interviews, and apply to target roles"
+          ],
+          "timeline_adjustment": 0
+        },
+        "alternative_1_easier_company": {
+          "copy": "Stay in service companies but target better ones (higher pay, better tech, global teams). This is your natural home base where you can grow faster.",
+          "goal": "Get your target role at a better service company with modern tech and global presence.",
+          "action_items": [
+            "Deepen your Java/.NET expertise",
+            "Learn modern service company tech (cloud, microservices)",
+            "Practice service company interview style"
+          ],
+          "milestones": [
+            "Month 1-2: Foundation building - Strengthen core technical skills with focused practice",
+            "Month 3: Interview preparation - Prepare for company-specific interview patterns",
+            "Month 4+: Apply and negotiate - Submit applications and work through interview rounds"
+          ],
+          "timeline_adjustment": -2
+        },
+        "alternative_2_different_role": {
+          "copy": "Explore different specializations within service companies. If you're backend, try full-stack or DevOps. This broadens your skills.",
+          "goal": "Become versatile within service company engineering.",
+          "action_items": [
+            "Learn the adjacent specialization",
+            "Build projects in new specialization",
+            "Understand how it fits in service architecture"
+          ],
+          "milestones": [
+            "Month 1-2: Learn new specialization - Study fundamentals of the adjacent/alternative role",
+            "Month 3-4: Build cross-specialization projects - Create projects combining both skill sets",
+            "Month 5+: Deepen expertise - Gain depth in new specialization and prepare for interviews"
+          ],
+          "timeline_adjustment": 2
+        }
+      },
+      "role_recommendations": {
+        "target_to_alternative_role": {
+          "backend-sde": "fullstack-sde",
+          "fullstack-sde": "backend-sde",
+          "senior-backend": "senior-fullstack",
+          "senior-fullstack": "senior-backend",
+          "data-ml": "backend-sde",
+          "tech-lead": "senior-backend"
+        }
+      },
+      "timeline_gap_adjustments": {
+        "problem_solving": {
+          "0-10": 4,
+          "11-50": 2,
+          "51-100": 1,
+          "100+": 0
+        },
+        "system_design": {
+          "not-yet": 3,
+          "learning": 2,
+          "once": 1,
+          "multiple": 0
+        },
+        "portfolio": {
+          "none": 3,
+          "inactive": 2,
+          "limited-1-5": 1,
+          "active-5+": 0
+        }
+      }
+    },
+    "swe_service_mid1": {
+      "id": "swe_service_mid1",
+      "label": "Service SWE - Mid (2-3 years)",
+      "domain": "tech",
+      "matching_criteria": {
+        "background": "tech",
+        "currentRole": "swe-service",
+        "experience": [
+          "2-3"
+        ]
+      },
+      "base_timeline_months": 7,
+      "description": "Mid-level service engineer. Your path: either transition to product companies or stay and grow in service.",
+      "cards": {
+        "target": {
+          "copy": "With 2-3 years in service companies, you can either transition to product (requires learning new stacks) or grow within service. Both paths are viable. Choose based on your interests.",
+          "goal": "Achieve your target role, either by transitioning to product company or growing in service domain.",
+          "action_items": [
+            "If transitioning: Learn product company tech stacks deeply",
+            "If staying in service: Deepen expertise in Java/.NET and enterprise patterns",
+            "System design practice at your target level",
+            "Build portfolio projects"
+          ],
+          "milestones": [
+            "Month 1-2: Deep technical preparation - Master your specialization fundamentals",
+            "Month 3-4: Build portfolio projects - Create 1-2 substantial projects showcasing your target skills",
+            "Month 5+: Interview readiness - Polish profile, network, practice interviews, and apply to target roles"
+          ],
+          "timeline_adjustment": 0
+        },
+        "alternative_1_easier_company": {
+          "copy": "Service companies in tier-2 cities or smaller companies are easier to crack. Get experience there, then move to better service companies or product companies.",
+          "goal": "Get your target role at a tier-2 service company or smaller firm.",
+          "action_items": [
+            "Target tier-2 service companies",
+            "Prepare for less rigorous interviews",
+            "Negotiate for roles that will help you transition later"
+          ],
+          "milestones": [
+            "Month 1-2: Foundation building - Strengthen core technical skills with focused practice",
+            "Month 3: Interview preparation - Prepare for company-specific interview patterns",
+            "Month 4+: Apply and negotiate - Submit applications and work through interview rounds"
+          ],
+          "timeline_adjustment": -2
+        },
+        "alternative_2_different_role": {
+          "copy": "Expand your skill set to adjacent roles. Full-stack, DevOps, or architectural roles are great for service engineers.",
+          "goal": "Become versatile across multiple specializations in service domain.",
+          "action_items": [
+            "Learn the adjacent specialization",
+            "Build projects combining specializations",
+            "Study how they integrate in enterprise systems"
+          ],
+          "milestones": [
+            "Month 1-2: Learn new specialization - Study fundamentals of the adjacent/alternative role",
+            "Month 3-4: Build cross-specialization projects - Create projects combining both skill sets",
+            "Month 5+: Deepen expertise - Gain depth in new specialization and prepare for interviews"
+          ],
+          "timeline_adjustment": 2
+        }
+      },
+      "role_recommendations": {
+        "target_to_alternative_role": {
+          "backend-sde": "fullstack-sde",
+          "fullstack-sde": "backend-sde",
+          "senior-backend": "senior-fullstack",
+          "senior-fullstack": "senior-backend",
+          "data-ml": "backend-sde",
+          "tech-lead": "senior-backend"
+        }
+      },
+      "timeline_gap_adjustments": {
+        "problem_solving": {
+          "0-10": 3,
+          "11-50": 2,
+          "51-100": 1,
+          "100+": 0
+        },
+        "system_design": {
+          "not-yet": 2,
+          "learning": 1,
+          "once": 0,
+          "multiple": 0
+        },
+        "portfolio": {
+          "none": 2,
+          "inactive": 1,
+          "limited-1-5": 0,
+          "active-5+": 0
+        }
+      }
+    },
+    "swe_service_mid2": {
+      "id": "swe_service_mid2",
+      "label": "Service SWE - Mid (3-5 years)",
+      "domain": "tech",
+      "matching_criteria": {
+        "background": "tech",
+        "currentRole": "swe-service",
+        "experience": [
+          "3-5"
+        ]
+      },
+      "base_timeline_months": 6,
+      "description": "Senior mid-level. Time to decide: stay in service or transition to product? Both have good paths.",
+      "cards": {
+        "target": {
+          "copy": "At 3-5 years in service companies, you have strong fundamentals. Decide: Deep expertise in enterprise domain or transition to product company innovation? Both lead to senior/staff roles.",
+          "goal": "Become senior engineer in your chosen path: enterprise excellence or product innovation.",
+          "action_items": [
+            "If staying: Deepen enterprise architecture and leadership skills",
+            "If transitioning: Intensely learn product tech stacks and system design",
+            "Lead significant projects",
+            "Network in your target community"
+          ],
+          "milestones": [
+            "Month 1-2: Deep technical preparation - Master your specialization fundamentals",
+            "Month 3-4: Build portfolio projects - Create 1-2 substantial projects showcasing your target skills",
+            "Month 5+: Interview readiness - Polish profile, network, practice interviews, and apply to target roles"
+          ],
+          "timeline_adjustment": 0
+        },
+        "alternative_1_easier_company": {
+          "copy": "Service companies value your 3-5 years of experience. Move to a top-tier service company for better pay and growth without the FAANG complexity.",
+          "goal": "Get a senior role at a top service company.",
+          "action_items": [
+            "Target Tier-1 service companies",
+            "Emphasize your enterprise architecture skills",
+            "Prepare for service company interview style"
+          ],
+          "milestones": [
+            "Month 1-2: Foundation building - Strengthen core technical skills with focused practice",
+            "Month 3: Interview preparation - Prepare for company-specific interview patterns",
+            "Month 4+: Apply and negotiate - Submit applications and work through interview rounds"
+          ],
+          "timeline_adjustment": -2
+        },
+        "alternative_2_different_role": {
+          "copy": "With 3-5 years of experience, you can pivot to architectural or leadership roles. Staff engineer or tech lead paths are available.",
+          "goal": "Transition to architectural or leadership specialization.",
+          "action_items": [
+            "Study technical leadership and system design deeply",
+            "Lead architectural decisions on your team",
+            "Build portfolio of major architectural projects"
+          ],
+          "milestones": [
+            "Month 1-2: Learn new specialization - Study fundamentals of the adjacent/alternative role",
+            "Month 3-4: Build cross-specialization projects - Create projects combining both skill sets",
+            "Month 5+: Deepen expertise - Gain depth in new specialization and prepare for interviews"
+          ],
+          "timeline_adjustment": 1
+        }
+      },
+      "role_recommendations": {
+        "target_to_alternative_role": {
+          "backend-sde": "fullstack-sde",
+          "fullstack-sde": "backend-sde",
+          "senior-backend": "senior-fullstack",
+          "senior-fullstack": "senior-backend",
+          "data-ml": "backend-sde",
+          "tech-lead": "senior-backend"
+        }
+      },
+      "timeline_gap_adjustments": {
+        "problem_solving": {
+          "0-10": 2,
+          "11-50": 1,
+          "51-100": 0,
+          "100+": 0
+        },
+        "system_design": {
+          "not-yet": 2,
+          "learning": 1,
+          "once": 0,
+          "multiple": 0
+        },
+        "portfolio": {
+          "none": 1,
+          "inactive": 0,
+          "limited-1-5": 0,
+          "active-5+": 0
+        }
+      }
+    },
+    "swe_service_senior": {
+      "id": "swe_service_senior",
+      "label": "Service SWE - Senior (5-8 years)",
+      "domain": "tech",
+      "matching_criteria": {
+        "background": "tech",
+        "currentRole": "swe-service",
+        "experience": [
+          "5-8"
+        ]
+      },
+      "base_timeline_months": 5,
+      "description": "Senior service engineer. You're valuable at any company. Decide: Stay and grow to staff? Or move to product for different challenge?",
+      "cards": {
+        "target": {
+          "copy": "At 5-8 years in service companies, you have real power in the job market. You can transition to product companies at senior level, or become staff/principal in service. Choose your path.",
+          "goal": "Land your ideal senior/staff role, either staying in service or transitioning to product.",
+          "action_items": [
+            "If transitioning: Learn product company culture and tech stacks",
+            "If staying: Develop staff engineer skills and strategic thinking",
+            "System design at FAANG level",
+            "Network strategically"
+          ],
+          "milestones": [
+            "Month 1-2: Deep technical preparation - Master your specialization fundamentals",
+            "Month 3-4: Build portfolio projects - Create 1-2 substantial projects showcasing your target skills",
+            "Month 5+: Interview readiness - Polish profile, network, practice interviews, and apply to target roles"
+          ],
+          "timeline_adjustment": 0
+        },
+        "alternative_1_easier_company": {
+          "copy": "Service companies will promote you quickly to staff/principal level. It's a strategic play: get the title, then move to FAANG or startups with more leverage.",
+          "goal": "Get staff or principal role at service company, then leverage for FAANG move.",
+          "action_items": [
+            "Network with hiring managers at top service companies",
+            "Emphasize your leadership and strategic impact",
+            "Prepare for executive-level interviews"
+          ],
+          "milestones": [
+            "Month 1-2: Foundation building - Strengthen core technical skills with focused practice",
+            "Month 3: Interview preparation - Prepare for company-specific interview patterns",
+            "Month 4+: Apply and negotiate - Submit applications and work through interview rounds"
+          ],
+          "timeline_adjustment": -2
+        },
+        "alternative_2_different_role": {
+          "copy": "With 5-8 years of experience, you can move to specialized roles (Principal, Architect, Staff) or new specializations from a position of strength.",
+          "goal": "Transition to specialized or leadership role with broader organizational impact.",
+          "action_items": [
+            "Develop strategic technical thinking",
+            "Lead organization-wide initiatives",
+            "Network with other architects and principals"
+          ],
+          "milestones": [
+            "Month 1-2: Learn new specialization - Study fundamentals of the adjacent/alternative role",
+            "Month 3-4: Build cross-specialization projects - Create projects combining both skill sets",
+            "Month 5+: Deepen expertise - Gain depth in new specialization and prepare for interviews"
+          ],
+          "timeline_adjustment": 1
+        }
+      },
+      "role_recommendations": {
+        "target_to_alternative_role": {
+          "backend-sde": "fullstack-sde",
+          "fullstack-sde": "backend-sde",
+          "senior-backend": "senior-fullstack",
+          "senior-fullstack": "senior-backend",
+          "data-ml": "backend-sde",
+          "tech-lead": "senior-backend"
+        }
+      },
+      "timeline_gap_adjustments": {
+        "problem_solving": {
+          "0-10": 1,
+          "11-50": 0,
+          "51-100": 0,
+          "100+": 0
+        },
+        "system_design": {
+          "not-yet": 1,
+          "learning": 0,
+          "once": 0,
+          "multiple": 0
+        },
+        "portfolio": {
+          "none": 0,
+          "inactive": 0,
+          "limited-1-5": 0,
+          "active-5+": 0
+        }
+      }
+    },
+    "swe_service_expert": {
+      "id": "swe_service_expert",
+      "label": "Service SWE - Expert (8+ years)",
+      "domain": "tech",
+      "matching_criteria": {
+        "background": "tech",
+        "currentRole": "swe-service",
+        "experience": [
+          "8+"
+        ]
+      },
+      "base_timeline_months": 4,
+      "description": "You're at the top in service companies. You can go anywhere: FAANG, startup, CTO, or principal.",
+      "cards": {
+        "target": {
+          "copy": "With 8+ years in service companies, you understand enterprise-scale systems better than most FAANG engineers. Use this as your leverage. Target roles that value this expertise.",
+          "goal": "Land your ideal role: principal engineer, CTO, or FAANG leadership position.",
+          "action_items": [
+            "Clarify your long-term career vision",
+            "Network at executive levels",
+            "Emphasize your unique enterprise expertise",
+            "Prepare for strategic technical discussions"
+          ],
+          "milestones": [
+            "Month 1-2: Deep technical preparation - Master your specialization fundamentals",
+            "Month 3-4: Build portfolio projects - Create 1-2 substantial projects showcasing your target skills",
+            "Month 5+: Interview readiness - Polish profile, network, practice interviews, and apply to target roles"
+          ],
+          "timeline_adjustment": 0
+        },
+        "alternative_1_easier_company": {
+          "copy": "Startups will offer you equity and founding engineer roles. Service company experience is invaluable for building scalable systems from scratch.",
+          "goal": "Join high-growth startup as founding or senior engineer with equity upside.",
+          "action_items": [
+            "Network with startup founders and VCs",
+            "Discuss technical vision and equity terms",
+            "Research startup opportunities"
+          ],
+          "milestones": [
+            "Month 1-2: Foundation building - Strengthen core technical skills with focused practice",
+            "Month 3: Interview preparation - Prepare for company-specific interview patterns",
+            "Month 4+: Apply and negotiate - Submit applications and work through interview rounds"
+          ],
+          "timeline_adjustment": -1
+        },
+        "alternative_2_different_role": {
+          "copy": "Consider founding your own company, moving to CTO roles, or pursuing principal/architect paths. Your expertise is too valuable for just IC roles.",
+          "goal": "Transition to founding, CTO, or principal/architecture role with broader impact.",
+          "action_items": [
+            "Develop business and leadership mindset",
+            "Network with other founders and CTOs",
+            "Explore startup/founder opportunities"
+          ],
+          "milestones": [
+            "Month 1-2: Learn new specialization - Study fundamentals of the adjacent/alternative role",
+            "Month 3-4: Build cross-specialization projects - Create projects combining both skill sets",
+            "Month 5+: Deepen expertise - Gain depth in new specialization and prepare for interviews"
+          ],
+          "timeline_adjustment": 0
+        }
+      },
+      "role_recommendations": {
+        "target_to_alternative_role": {
+          "backend-sde": "fullstack-sde",
+          "fullstack-sde": "backend-sde",
+          "senior-backend": "senior-fullstack",
+          "senior-fullstack": "senior-backend",
+          "data-ml": "backend-sde",
+          "tech-lead": "senior-backend"
+        }
+      },
+      "timeline_gap_adjustments": {
+        "problem_solving": {
+          "0-10": 0,
+          "11-50": 0,
+          "51-100": 0,
+          "100+": 0
+        },
+        "system_design": {
+          "not-yet": 0,
+          "learning": 0,
+          "once": 0,
+          "multiple": 0
+        },
+        "portfolio": {
+          "none": 0,
+          "inactive": 0,
+          "limited-1-5": 0,
+          "active-5+": 0
+        }
+      }
+    },
+    "devops_junior": {
+      "id": "devops_junior",
+      "label": "DevOps Engineer - Junior (0-2 years)",
+      "domain": "tech",
+      "matching_criteria": {
+        "background": "tech",
+        "currentRole": "devops",
+        "experience": [
+          "0-2"
+        ]
+      },
+      "base_timeline_months": 8,
+      "description": "You're in DevOps. Your path: Stay in DevOps and grow, or transition to SWE for broader opportunities.",
+      "cards": {
+        "target": {
+          "copy": "DevOps is specialized and valuable. Stay here and become a cloud/infrastructure expert, or transition to SWE for more options. Both are viable paths.",
+          "goal": "Become expert in your target specialization (stay in DevOps or transition to SWE).",
+          "action_items": [
+            "If staying in DevOps: Master Kubernetes, cloud platforms, infrastructure as code",
+            "If transitioning to SWE: Learn core SWE fundamentals and system design",
+            "Practice coding (Python, Go, or your preferred language)",
+            "Build projects showcasing your skills"
+          ],
+          "milestones": [
+            "Month 1-2: Deep technical preparation - Master your specialization fundamentals",
+            "Month 3-4: Build portfolio projects - Create 1-2 substantial projects showcasing your target skills",
+            "Month 5+: Interview readiness - Polish profile, network, practice interviews, and apply to target roles"
+          ],
+          "timeline_adjustment": 0
+        },
+        "alternative_1_easier_company": {
+          "copy": "Service companies value DevOps engineers more than product companies. It's an easier path in service companies with more stable projects.",
+          "goal": "Get your target role at a service company.",
+          "action_items": [
+            "Target service companies hiring DevOps",
+            "Prepare for service company interview style",
+            "Emphasize infrastructure stability focus"
+          ],
+          "milestones": [
+            "Month 1-2: Foundation building - Strengthen core technical skills with focused practice",
+            "Month 3: Interview preparation - Prepare for company-specific interview patterns",
+            "Month 4+: Apply and negotiate - Submit applications and work through interview rounds"
+          ],
+          "timeline_adjustment": -2
+        },
+        "alternative_2_different_role": {
+          "copy": "Transition to SWE from DevOps. You have infrastructure skills\u2014add SWE fundamentals and you'll be more versatile than pure SWEs.",
+          "goal": "Transition to backend/full-stack engineering from DevOps foundation.",
+          "action_items": [
+            "Learn core SWE fundamentals (data structures, algorithms)",
+            "Practice coding problems and system design",
+            "Build full application projects (not just infrastructure)"
+          ],
+          "milestones": [
+            "Month 1-2: Learn new specialization - Study fundamentals of the adjacent/alternative role",
+            "Month 3-4: Build cross-specialization projects - Create projects combining both skill sets",
+            "Month 5+: Deepen expertise - Gain depth in new specialization and prepare for interviews"
+          ],
+          "timeline_adjustment": 2
+        }
+      },
+      "role_recommendations": {
+        "target_to_alternative_role": {
+          "devops": "backend-sde",
+          "backend-sde": "devops"
+        }
+      },
+      "timeline_gap_adjustments": {
+        "problem_solving": {
+          "0-10": 3,
+          "11-50": 2,
+          "51-100": 1,
+          "100+": 0
+        },
+        "system_design": {
+          "not-yet": 2,
+          "learning": 1,
+          "once": 0,
+          "multiple": 0
+        },
+        "portfolio": {
+          "none": 2,
+          "inactive": 1,
+          "limited-1-5": 0,
+          "active-5+": 0
+        }
+      }
+    },
+    "devops_mid1": {
+      "id": "devops_mid1",
+      "label": "DevOps Engineer - Mid (2-3 years)",
+      "domain": "tech",
+      "matching_criteria": {
+        "background": "tech",
+        "currentRole": "devops",
+        "experience": [
+          "2-3"
+        ]
+      },
+      "base_timeline_months": 7,
+      "description": "Mid-level DevOps. You're valuable. Stay and grow deep, or leverage for SWE transition.",
+      "cards": {
+        "target": {
+          "copy": "With 2-3 years in DevOps, you have cloud expertise. Double down as a platform engineer or transition to SWE with infrastructure knowledge.",
+          "goal": "Become expert in your specialization: cloud/infrastructure or full-stack SWE.",
+          "action_items": [
+            "If staying in DevOps: Deepen Kubernetes, terraform, cloud platform expertise",
+            "If transitioning: Add SWE fundamentals and system design",
+            "Lead infrastructure projects",
+            "Build portfolio of significant projects"
+          ],
+          "milestones": [
+            "Month 1-2: Deep technical preparation - Master your specialization fundamentals",
+            "Month 3-4: Build portfolio projects - Create 1-2 substantial projects showcasing your target skills",
+            "Month 5+: Interview readiness - Polish profile, network, practice interviews, and apply to target roles"
+          ],
+          "timeline_adjustment": 0
+        },
+        "alternative_1_easier_company": {
+          "copy": "Service companies have more complex infrastructure. Move there for growth with less competition than product companies.",
+          "goal": "Get senior DevOps or platform role at service company.",
+          "action_items": [
+            "Target service companies",
+            "Prepare for service company infrastructure challenges",
+            "Emphasize enterprise scalability"
+          ],
+          "milestones": [
+            "Month 1-2: Foundation building - Strengthen core technical skills with focused practice",
+            "Month 3: Interview preparation - Prepare for company-specific interview patterns",
+            "Month 4+: Apply and negotiate - Submit applications and work through interview rounds"
+          ],
+          "timeline_adjustment": -2
+        },
+        "alternative_2_different_role": {
+          "copy": "Transition to backend SWE. You already understand infrastructure\u2014add core SWE skills and you're highly valuable.",
+          "goal": "Become full-stack backend engineer with infrastructure expertise.",
+          "action_items": [
+            "Learn backend development deeply",
+            "Practice system design at application level",
+            "Build full backend applications"
+          ],
+          "milestones": [
+            "Month 1-2: Learn new specialization - Study fundamentals of the adjacent/alternative role",
+            "Month 3-4: Build cross-specialization projects - Create projects combining both skill sets",
+            "Month 5+: Deepen expertise - Gain depth in new specialization and prepare for interviews"
+          ],
+          "timeline_adjustment": 1
+        }
+      },
+      "role_recommendations": {
+        "target_to_alternative_role": {
+          "devops": "backend-sde",
+          "backend-sde": "devops"
+        }
+      },
+      "timeline_gap_adjustments": {
+        "problem_solving": {
+          "0-10": 2,
+          "11-50": 1,
+          "51-100": 0,
+          "100+": 0
+        },
+        "system_design": {
+          "not-yet": 1,
+          "learning": 0,
+          "once": 0,
+          "multiple": 0
+        },
+        "portfolio": {
+          "none": 1,
+          "inactive": 0,
+          "limited-1-5": 0,
+          "active-5+": 0
+        }
+      }
+    },
+    "devops_mid2": {
+      "id": "devops_mid2",
+      "label": "DevOps Engineer - Mid (3-5 years)",
+      "domain": "tech",
+      "matching_criteria": {
+        "background": "tech",
+        "currentRole": "devops",
+        "experience": [
+          "3-5"
+        ]
+      },
+      "base_timeline_months": 6,
+      "description": "Senior mid-level DevOps. Become principal/staff or transition to SWE with leverage.",
+      "cards": {
+        "target": {
+          "copy": "At 3-5 years in DevOps, you're a valuable specialist. Become a platform engineer/SRE/principal, or leverage your infrastructure expertise to transition to full-stack SWE at senior level.",
+          "goal": "Become principal/staff engineer or senior full-stack engineer with infrastructure expertise.",
+          "action_items": [
+            "If staying: Study platform engineering, SRE, and system reliability",
+            "If transitioning: Master full-stack development and system design",
+            "Lead major initiatives",
+            "Network with other principals and architects"
+          ],
+          "milestones": [
+            "Month 1-2: Deep technical preparation - Master your specialization fundamentals",
+            "Month 3-4: Build portfolio projects - Create 1-2 substantial projects showcasing your target skills",
+            "Month 5+: Interview readiness - Polish profile, network, practice interviews, and apply to target roles"
+          ],
+          "timeline_adjustment": 0
+        },
+        "alternative_1_easier_company": {
+          "copy": "FAANG companies pay premium for experienced DevOps/SRE engineers. This is your advantage point.",
+          "goal": "Get senior/staff SRE or platform engineer role at FAANG.",
+          "action_items": [
+            "Network at FAANG companies",
+            "Prepare for FAANG-level system design",
+            "Emphasize your reliability and scale expertise"
+          ],
+          "milestones": [
+            "Month 1-2: Foundation building - Strengthen core technical skills with focused practice",
+            "Month 3: Interview preparation - Prepare for company-specific interview patterns",
+            "Month 4+: Apply and negotiate - Submit applications and work through interview rounds"
+          ],
+          "timeline_adjustment": -1
+        },
+        "alternative_2_different_role": {
+          "copy": "Transition to full-stack SWE from your DevOps foundation. You understand systems deeply\u2014add application-level SWE and you're unstoppable.",
+          "goal": "Become senior full-stack engineer with infrastructure and system design expertise.",
+          "action_items": [
+            "Master application-level SWE",
+            "Practice system design at FAANG level",
+            "Build full-stack projects"
+          ],
+          "milestones": [
+            "Month 1-2: Learn new specialization - Study fundamentals of the adjacent/alternative role",
+            "Month 3-4: Build cross-specialization projects - Create projects combining both skill sets",
+            "Month 5+: Deepen expertise - Gain depth in new specialization and prepare for interviews"
+          ],
+          "timeline_adjustment": 0
+        }
+      },
+      "role_recommendations": {
+        "target_to_alternative_role": {
+          "devops": "backend-sde",
+          "backend-sde": "devops"
+        }
+      },
+      "timeline_gap_adjustments": {
+        "problem_solving": {
+          "0-10": 1,
+          "11-50": 0,
+          "51-100": 0,
+          "100+": 0
+        },
+        "system_design": {
+          "not-yet": 1,
+          "learning": 0,
+          "once": 0,
+          "multiple": 0
+        },
+        "portfolio": {
+          "none": 0,
+          "inactive": 0,
+          "limited-1-5": 0,
+          "active-5+": 0
+        }
+      }
+    },
+    "devops_senior": {
+      "id": "devops_senior",
+      "label": "DevOps Engineer - Senior (5-8 years)",
+      "domain": "tech",
+      "matching_criteria": {
+        "background": "tech",
+        "currentRole": "devops",
+        "experience": [
+          "5-8"
+        ]
+      },
+      "base_timeline_months": 5,
+      "description": "Senior DevOps/SRE engineer. You're highly valuable. Principal roles or full-stack senior positions await.",
+      "cards": {
+        "target": {
+          "copy": "With 5-8 years in DevOps/SRE/Platform engineering, you're in high demand. FAANG companies actively recruit at your level. Go for principal/staff or senior full-stack roles.",
+          "goal": "Land your ideal role: principal engineer, staff SRE, or senior full-stack at top company.",
+          "action_items": [
+            "Perfect your system design and reliability thinking",
+            "Network strategically at target companies",
+            "Prepare for executive-level technical discussions",
+            "Showcase your impact on scale and reliability"
+          ],
+          "milestones": [
+            "Month 1-2: Deep technical preparation - Master your specialization fundamentals",
+            "Month 3-4: Build portfolio projects - Create 1-2 substantial projects showcasing your target skills",
+            "Month 5+: Interview readiness - Polish profile, network, practice interviews, and apply to target roles"
+          ],
+          "timeline_adjustment": 0
+        },
+        "alternative_1_easier_company": {
+          "copy": "Service companies or startups will offer you CTO or principal engineer roles. Equity and impact are huge.",
+          "goal": "Get CTO or principal engineer role at high-growth startup.",
+          "action_items": [
+            "Network with startup founders",
+            "Discuss technical vision and equity",
+            "Research startup opportunities"
+          ],
+          "milestones": [
+            "Month 1-2: Foundation building - Strengthen core technical skills with focused practice",
+            "Month 3: Interview preparation - Prepare for company-specific interview patterns",
+            "Month 4+: Apply and negotiate - Submit applications and work through interview rounds"
+          ],
+          "timeline_adjustment": -1
+        },
+        "alternative_2_different_role": {
+          "copy": "Consider founding your company or moving to CTO roles. Your expertise is too valuable for just IC roles.",
+          "goal": "Transition to CTO, founder, or architecture leadership.",
+          "action_items": [
+            "Develop business mindset",
+            "Network with founders and investors",
+            "Explore startup/founder opportunities"
+          ],
+          "milestones": [
+            "Month 1-2: Learn new specialization - Study fundamentals of the adjacent/alternative role",
+            "Month 3-4: Build cross-specialization projects - Create projects combining both skill sets",
+            "Month 5+: Deepen expertise - Gain depth in new specialization and prepare for interviews"
+          ],
+          "timeline_adjustment": 0
+        }
+      },
+      "role_recommendations": {
+        "target_to_alternative_role": {
+          "devops": "backend-sde",
+          "backend-sde": "devops"
+        }
+      },
+      "timeline_gap_adjustments": {
+        "problem_solving": {
+          "0-10": 0,
+          "11-50": 0,
+          "51-100": 0,
+          "100+": 0
+        },
+        "system_design": {
+          "not-yet": 0,
+          "learning": 0,
+          "once": 0,
+          "multiple": 0
+        },
+        "portfolio": {
+          "none": 0,
+          "inactive": 0,
+          "limited-1-5": 0,
+          "active-5+": 0
+        }
+      }
+    },
+    "devops_expert": {
+      "id": "devops_expert",
+      "label": "DevOps Engineer - Expert (8+ years)",
+      "domain": "tech",
+      "matching_criteria": {
+        "background": "tech",
+        "currentRole": "devops",
+        "experience": [
+          "8+"
+        ]
+      },
+      "base_timeline_months": 4,
+      "description": "You're at the top. Principal, CTO, or founding engineer roles.",
+      "cards": {
+        "target": {
+          "copy": "With 8+ years, you're in the top 1% of engineers. Your infrastructure and reliability expertise is invaluable. Target principal/staff roles or CTO positions.",
+          "goal": "Land your ideal role: principal engineer, CTO, or founding engineer.",
+          "action_items": [
+            "Clarify your vision: FAANG principal or startup CTO?",
+            "Network at executive levels",
+            "Prepare for strategic discussions",
+            "Showcase your impact on company reliability and scale"
+          ],
+          "milestones": [
+            "Month 1-2: Deep technical preparation - Master your specialization fundamentals",
+            "Month 3-4: Build portfolio projects - Create 1-2 substantial projects showcasing your target skills",
+            "Month 5+: Interview readiness - Polish profile, network, practice interviews, and apply to target roles"
+          ],
+          "timeline_adjustment": 0
+        },
+        "alternative_1_easier_company": {
+          "copy": "Startups will offer you founding engineer or CTO roles with significant equity. This is your best financial upside.",
+          "goal": "Join high-growth startup as CTO or founding engineer.",
+          "action_items": [
+            "Network with startup founders and VCs",
+            "Discuss equity and technical vision",
+            "Research funding-stage startups"
+          ],
+          "milestones": [
+            "Month 1-2: Foundation building - Strengthen core technical skills with focused practice",
+            "Month 3: Interview preparation - Prepare for company-specific interview patterns",
+            "Month 4+: Apply and negotiate - Submit applications and work through interview rounds"
+          ],
+          "timeline_adjustment": -1
+        },
+        "alternative_2_different_role": {
+          "copy": "You've mastered DevOps. Consider expanding into full-stack architecture, founding, or technical strategy roles.",
+          "goal": "Transition to founder, CTO, or technical strategy role.",
+          "action_items": [
+            "Develop business and founder mindset",
+            "Network with other founders",
+            "Explore startup or founding opportunities"
+          ],
+          "milestones": [
+            "Month 1-2: Learn new specialization - Study fundamentals of the adjacent/alternative role",
+            "Month 3-4: Build cross-specialization projects - Create projects combining both skill sets",
+            "Month 5+: Deepen expertise - Gain depth in new specialization and prepare for interviews"
+          ],
+          "timeline_adjustment": 0
+        }
+      },
+      "role_recommendations": {
+        "target_to_alternative_role": {
+          "devops": "backend-sde",
+          "backend-sde": "devops"
+        }
+      },
+      "timeline_gap_adjustments": {
+        "problem_solving": {
+          "0-10": 0,
+          "11-50": 0,
+          "51-100": 0,
+          "100+": 0
+        },
+        "system_design": {
+          "not-yet": 0,
+          "learning": 0,
+          "once": 0,
+          "multiple": 0
+        },
+        "portfolio": {
+          "none": 0,
+          "inactive": 0,
+          "limited-1-5": 0,
+          "active-5+": 0
+        }
+      }
+    },
+    "qa_support_junior": {
+      "id": "qa_support_junior",
+      "label": "QA/Support Engineer - Junior (0-2 years)",
+      "domain": "tech",
+      "matching_criteria": {
+        "background": "tech",
+        "currentRole": "qa-support",
+        "experience": [
+          "0-2"
+        ]
+      },
+      "base_timeline_months": 8,
+      "description": "You're in QA/support. Your path: Stay and master QA automation, or transition to SWE for broader opportunities.",
+      "cards": {
+        "target": {
+          "copy": "QA is a great foundation. You can become a test automation expert, or transition to SWE with real testing knowledge. Both paths are valuable.",
+          "goal": "Master your target specialization: QA automation or full-stack SWE.",
+          "action_items": [
+            "If staying in QA: Master test automation frameworks and methodologies",
+            "If transitioning to SWE: Learn core SWE fundamentals and system design",
+            "Practice coding and problem-solving",
+            "Build automation or application projects"
+          ],
+          "milestones": [
+            "Month 1-2: Deep technical preparation - Master your specialization fundamentals",
+            "Month 3-4: Build portfolio projects - Create 1-2 substantial projects showcasing your target skills",
+            "Month 5+: Interview readiness - Polish profile, network, practice interviews, and apply to target roles"
+          ],
+          "timeline_adjustment": 0
+        },
+        "alternative_1_easier_company": {
+          "copy": "Service companies have more complex testing needs. They'll hire QA engineers faster than product companies.",
+          "goal": "Get your target role at service company.",
+          "action_items": [
+            "Target service companies with large QA teams",
+            "Emphasize your testing and quality focus",
+            "Prepare for service company testing strategies"
+          ],
+          "milestones": [
+            "Month 1-2: Foundation building - Strengthen core technical skills with focused practice",
+            "Month 3: Interview preparation - Prepare for company-specific interview patterns",
+            "Month 4+: Apply and negotiate - Submit applications and work through interview rounds"
+          ],
+          "timeline_adjustment": -2
+        },
+        "alternative_2_different_role": {
+          "copy": "Transition to backend SWE from QA foundation. You understand quality and testing\u2014add SWE fundamentals and you'll write better code than most.",
+          "goal": "Become full-stack engineer with strong testing and quality expertise.",
+          "action_items": [
+            "Learn core SWE fundamentals",
+            "Practice coding and system design",
+            "Build full application projects"
+          ],
+          "milestones": [
+            "Month 1-2: Learn new specialization - Study fundamentals of the adjacent/alternative role",
+            "Month 3-4: Build cross-specialization projects - Create projects combining both skill sets",
+            "Month 5+: Deepen expertise - Gain depth in new specialization and prepare for interviews"
+          ],
+          "timeline_adjustment": 2
+        }
+      },
+      "role_recommendations": {
+        "target_to_alternative_role": {
+          "qa-support": "backend-sde",
+          "backend-sde": "fullstack-sde"
+        }
+      },
+      "timeline_gap_adjustments": {
+        "problem_solving": {
+          "0-10": 4,
+          "11-50": 2,
+          "51-100": 1,
+          "100+": 0
+        },
+        "system_design": {
+          "not-yet": 2,
+          "learning": 1,
+          "once": 0,
+          "multiple": 0
+        },
+        "portfolio": {
+          "none": 3,
+          "inactive": 2,
+          "limited-1-5": 1,
+          "active-5+": 0
+        }
+      }
+    },
+    "qa_support_mid1": {
+      "id": "qa_support_mid1",
+      "label": "QA/Support Engineer - Mid (2-3 years)",
+      "domain": "tech",
+      "matching_criteria": {
+        "background": "tech",
+        "currentRole": "qa-support",
+        "experience": [
+          "2-3"
+        ]
+      },
+      "base_timeline_months": 7,
+      "description": "Mid-level QA/support. Specialize or transition to SWE.",
+      "cards": {
+        "target": {
+          "copy": "With 2-3 years in QA, you can become a test automation expert, or leverage quality insights to transition to SWE. Both are viable.",
+          "goal": "Become expert in your specialization: QA automation or full-stack SWE.",
+          "action_items": [
+            "If staying: Master advanced test automation and frameworks",
+            "If transitioning: Learn SWE fundamentals and system design",
+            "Practice coding and architecture thinking",
+            "Build significant projects"
+          ],
+          "milestones": [
+            "Month 1-2: Deep technical preparation - Master your specialization fundamentals",
+            "Month 3-4: Build portfolio projects - Create 1-2 substantial projects showcasing your target skills",
+            "Month 5+: Interview readiness - Polish profile, network, practice interviews, and apply to target roles"
+          ],
+          "timeline_adjustment": 0
+        },
+        "alternative_1_easier_company": {
+          "copy": "Service companies need QA expertise more than product companies. Move there for faster growth.",
+          "goal": "Get QA or automation role at service company.",
+          "action_items": [
+            "Target service companies",
+            "Prepare for service company testing challenges",
+            "Emphasize quality and reliability"
+          ],
+          "milestones": [
+            "Month 1-2: Foundation building - Strengthen core technical skills with focused practice",
+            "Month 3: Interview preparation - Prepare for company-specific interview patterns",
+            "Month 4+: Apply and negotiate - Submit applications and work through interview rounds"
+          ],
+          "timeline_adjustment": -2
+        },
+        "alternative_2_different_role": {
+          "copy": "Transition to full-stack SWE. Your quality mindset will make you a better engineer than most developers.",
+          "goal": "Become full-stack engineer with strong quality and testing expertise.",
+          "action_items": [
+            "Learn full-stack SWE fundamentals",
+            "Practice system design",
+            "Build full application projects"
+          ],
+          "milestones": [
+            "Month 1-2: Learn new specialization - Study fundamentals of the adjacent/alternative role",
+            "Month 3-4: Build cross-specialization projects - Create projects combining both skill sets",
+            "Month 5+: Deepen expertise - Gain depth in new specialization and prepare for interviews"
+          ],
+          "timeline_adjustment": 1
+        }
+      },
+      "role_recommendations": {
+        "target_to_alternative_role": {
+          "qa-support": "backend-sde",
+          "backend-sde": "fullstack-sde"
+        }
+      },
+      "timeline_gap_adjustments": {
+        "problem_solving": {
+          "0-10": 3,
+          "11-50": 2,
+          "51-100": 1,
+          "100+": 0
+        },
+        "system_design": {
+          "not-yet": 2,
+          "learning": 1,
+          "once": 0,
+          "multiple": 0
+        },
+        "portfolio": {
+          "none": 2,
+          "inactive": 1,
+          "limited-1-5": 0,
+          "active-5+": 0
+        }
+      }
+    },
+    "qa_support_mid2": {
+      "id": "qa_support_mid2",
+      "label": "QA/Support Engineer - Mid (3-5 years)",
+      "domain": "tech",
+      "matching_criteria": {
+        "background": "tech",
+        "currentRole": "qa-support",
+        "experience": [
+          "3-5"
+        ]
+      },
+      "base_timeline_months": 6,
+      "description": "Senior mid-level QA. Become QA lead/architect or transition to SWE senior.",
+      "cards": {
+        "target": {
+          "copy": "With 3-5 years in QA, you can become a QA architect/lead, or transition to senior SWE with deep quality expertise.",
+          "goal": "Become senior engineer: QA architect or full-stack SWE with quality focus.",
+          "action_items": [
+            "If staying: Learn QA strategy and architecture",
+            "If transitioning: Master system design and full-stack development",
+            "Lead significant initiatives",
+            "Network in your target community"
+          ],
+          "milestones": [
+            "Month 1-2: Deep technical preparation - Master your specialization fundamentals",
+            "Month 3-4: Build portfolio projects - Create 1-2 substantial projects showcasing your target skills",
+            "Month 5+: Interview readiness - Polish profile, network, practice interviews, and apply to target roles"
+          ],
+          "timeline_adjustment": 0
+        },
+        "alternative_1_easier_company": {
+          "copy": "Service companies will promote QA engineers quickly. Move there for senior/lead title and growth.",
+          "goal": "Get senior QA or lead role at service company.",
+          "action_items": [
+            "Target service companies with large QA teams",
+            "Prepare for leadership-level discussions",
+            "Emphasize your quality strategy expertise"
+          ],
+          "milestones": [
+            "Month 1-2: Foundation building - Strengthen core technical skills with focused practice",
+            "Month 3: Interview preparation - Prepare for company-specific interview patterns",
+            "Month 4+: Apply and negotiate - Submit applications and work through interview rounds"
+          ],
+          "timeline_adjustment": -2
+        },
+        "alternative_2_different_role": {
+          "copy": "Transition to full-stack SWE senior. Your quality thinking makes you a better architect than pure SWEs.",
+          "goal": "Become senior full-stack engineer with quality and architecture expertise.",
+          "action_items": [
+            "Master full-stack system design",
+            "Study architectural patterns",
+            "Build significant full-stack projects"
+          ],
+          "milestones": [
+            "Month 1-2: Learn new specialization - Study fundamentals of the adjacent/alternative role",
+            "Month 3-4: Build cross-specialization projects - Create projects combining both skill sets",
+            "Month 5+: Deepen expertise - Gain depth in new specialization and prepare for interviews"
+          ],
+          "timeline_adjustment": 1
+        }
+      },
+      "role_recommendations": {
+        "target_to_alternative_role": {
+          "qa-support": "backend-sde",
+          "backend-sde": "fullstack-sde"
+        }
+      },
+      "timeline_gap_adjustments": {
+        "problem_solving": {
+          "0-10": 2,
+          "11-50": 1,
+          "51-100": 0,
+          "100+": 0
+        },
+        "system_design": {
+          "not-yet": 1,
+          "learning": 0,
+          "once": 0,
+          "multiple": 0
+        },
+        "portfolio": {
+          "none": 1,
+          "inactive": 0,
+          "limited-1-5": 0,
+          "active-5+": 0
+        }
+      }
+    },
+    "qa_support_senior": {
+      "id": "qa_support_senior",
+      "label": "QA/Support Engineer - Senior (5-8 years)",
+      "domain": "tech",
+      "matching_criteria": {
+        "background": "tech",
+        "currentRole": "qa-support",
+        "experience": [
+          "5-8"
+        ]
+      },
+      "base_timeline_months": 5,
+      "description": "Senior QA engineer. You're valuable. QA director/architect or senior SWE with quality expertise.",
+      "cards": {
+        "target": {
+          "copy": "With 5-8 years in QA, you're a recognized expert. Become a QA director/principal, or transition to senior SWE at a company that values quality.",
+          "goal": "Land senior/principal role: QA architect or quality-focused full-stack engineer.",
+          "action_items": [
+            "If staying: Develop QA strategy and leadership thinking",
+            "If transitioning: Perfect system design and technical leadership",
+            "Network at executive levels",
+            "Showcase your quality impact on company success"
+          ],
+          "milestones": [
+            "Month 1-2: Deep technical preparation - Master your specialization fundamentals",
+            "Month 3-4: Build portfolio projects - Create 1-2 substantial projects showcasing your target skills",
+            "Month 5+: Interview readiness - Polish profile, network, practice interviews, and apply to target roles"
+          ],
+          "timeline_adjustment": 0
+        },
+        "alternative_1_easier_company": {
+          "copy": "Service companies will fast-track you to QA director or principal level. Use this for negotiating with FAANG later.",
+          "goal": "Get QA director or principal role at service company.",
+          "action_items": [
+            "Network with service company leaders",
+            "Prepare for director-level discussions",
+            "Discuss technical vision and impact"
+          ],
+          "milestones": [
+            "Month 1-2: Foundation building - Strengthen core technical skills with focused practice",
+            "Month 3: Interview preparation - Prepare for company-specific interview patterns",
+            "Month 4+: Apply and negotiate - Submit applications and work through interview rounds"
+          ],
+          "timeline_adjustment": -1
+        },
+        "alternative_2_different_role": {
+          "copy": "Transition to senior full-stack or staff engineer. Your quality expertise is rare and valuable for system design.",
+          "goal": "Become senior/staff engineer with quality and architecture focus.",
+          "action_items": [
+            "Master technical architecture and leadership",
+            "Lead organization-wide quality initiatives",
+            "Network with architects and staff engineers"
+          ],
+          "milestones": [
+            "Month 1-2: Learn new specialization - Study fundamentals of the adjacent/alternative role",
+            "Month 3-4: Build cross-specialization projects - Create projects combining both skill sets",
+            "Month 5+: Deepen expertise - Gain depth in new specialization and prepare for interviews"
+          ],
+          "timeline_adjustment": 0
+        }
+      },
+      "role_recommendations": {
+        "target_to_alternative_role": {
+          "qa-support": "backend-sde",
+          "backend-sde": "fullstack-sde"
+        }
+      },
+      "timeline_gap_adjustments": {
+        "problem_solving": {
+          "0-10": 1,
+          "11-50": 0,
+          "51-100": 0,
+          "100+": 0
+        },
+        "system_design": {
+          "not-yet": 0,
+          "learning": 0,
+          "once": 0,
+          "multiple": 0
+        },
+        "portfolio": {
+          "none": 0,
+          "inactive": 0,
+          "limited-1-5": 0,
+          "active-5+": 0
+        }
+      }
+    },
+    "qa_support_expert": {
+      "id": "qa_support_expert",
+      "label": "QA/Support Engineer - Expert (8+ years)",
+      "domain": "tech",
+      "matching_criteria": {
+        "background": "tech",
+        "currentRole": "qa-support",
+        "experience": [
+          "8+"
+        ]
+      },
+      "base_timeline_months": 4,
+      "description": "You're at the top. QA principal, engineering director, or CTO roles.",
+      "cards": {
+        "target": {
+          "copy": "With 8+ years in QA, you're a thought leader. Target QA director/principal, engineering director, or CTO roles. Your quality expertise is invaluable.",
+          "goal": "Land your ideal executive or principal role: QA director, engineering director, or CTO.",
+          "action_items": [
+            "Clarify your vision: Stay in QA leadership or broaden to CTO/VP Engineering?",
+            "Network at executive and investor levels",
+            "Prepare for strategic discussions",
+            "Showcase your impact on company reliability and success"
+          ],
+          "milestones": [
+            "Month 1-2: Deep technical preparation - Master your specialization fundamentals",
+            "Month 3-4: Build portfolio projects - Create 1-2 substantial projects showcasing your target skills",
+            "Month 5+: Interview readiness - Polish profile, network, practice interviews, and apply to target roles"
+          ],
+          "timeline_adjustment": 0
+        },
+        "alternative_1_easier_company": {
+          "copy": "Service companies will offer you director or CTO roles with significant responsibility. Startups will offer you equity and founding CTO positions.",
+          "goal": "Join high-growth startup or scale-up as CTO or VP Engineering.",
+          "action_items": [
+            "Network with founders and investors",
+            "Discuss equity, vision, and impact",
+            "Research funding-stage startups"
+          ],
+          "milestones": [
+            "Month 1-2: Foundation building - Strengthen core technical skills with focused practice",
+            "Month 3: Interview preparation - Prepare for company-specific interview patterns",
+            "Month 4+: Apply and negotiate - Submit applications and work through interview rounds"
+          ],
+          "timeline_adjustment": -1
+        },
+        "alternative_2_different_role": {
+          "copy": "Transition to full-stack/architecture leadership or found your own company. Your expertise is too valuable for just IC roles.",
+          "goal": "Transition to founder, CTO, or VP Engineering role.",
+          "action_items": [
+            "Develop founder and business mindset",
+            "Network with other founders and VCs",
+            "Explore startup or consulting opportunities"
+          ],
+          "milestones": [
+            "Month 1-2: Learn new specialization - Study fundamentals of the adjacent/alternative role",
+            "Month 3-4: Build cross-specialization projects - Create projects combining both skill sets",
+            "Month 5+: Deepen expertise - Gain depth in new specialization and prepare for interviews"
+          ],
+          "timeline_adjustment": 0
+        }
+      },
+      "role_recommendations": {
+        "target_to_alternative_role": {
+          "qa-support": "backend-sde",
+          "backend-sde": "fullstack-sde"
+        }
+      },
+      "timeline_gap_adjustments": {
+        "problem_solving": {
+          "0-10": 0,
+          "11-50": 0,
+          "51-100": 0,
+          "100+": 0
+        },
+        "system_design": {
+          "not-yet": 0,
+          "learning": 0,
+          "once": 0,
+          "multiple": 0
+        },
+        "portfolio": {
+          "none": 0,
+          "inactive": 0,
+          "limited-1-5": 0,
+          "active-5+": 0
+        }
+      }
+    },
+    "_NON_TECH_PERSONAS": {
+      "description": "5 personas (1 per target role): experience adjustments applied dynamically"
+    },
+    "nontech_frontend": {
+      "id": "nontech_frontend",
+      "label": "Non-Tech \u2192 Frontend Engineer",
+      "domain": "non-tech",
+      "matching_criteria": {
+        "background": "non-tech",
+        "targetRole": "frontend"
+      },
+      "base_timeline_months": 12,
+      "description": "You're transitioning to frontend. HTML/CSS/JS is your foundation. Easier specialization compared to backend.",
+      "cards": {
+        "target": {
+          "copy": "You're transitioning to frontend development. Good news: frontend is the most beginner-friendly path. HTML, CSS, and JavaScript are intuitive. Focus on building projects and you'll be ready in 8-10 months.",
+          "goal": "Land your first frontend engineer role at a tech company.",
+          "action_items": [
+            "Master HTML, CSS, and JavaScript fundamentals",
+            "Learn a framework (React, Vue, or Angular)",
+            "Build 3-5 frontend projects (portfolio-worthy)",
+            "Understand responsive design and UI/UX basics"
+          ],
+          "milestones": [
+            "Month 1-2: Deep technical preparation - Master your specialization fundamentals",
+            "Month 3-4: Build portfolio projects - Create 1-2 substantial projects showcasing your target skills",
+            "Month 5+: Interview readiness - Polish profile, network, practice interviews, and apply to target roles"
+          ],
+          "timeline_adjustment": 0
+        },
+        "alternative_1_easier_company": {
+          "copy": "Service companies or smaller startups are easier entry points. They're hiring frontend developers but with lower interview bars than FAANG.",
+          "goal": "Get your first frontend role at a service company or small startup.",
+          "action_items": [
+            "Master React/Vue fundamentals",
+            "Build 2-3 practical projects",
+            "Prepare for frontend interviews (not too hard)"
+          ],
+          "milestones": [
+            "Month 1-2: Foundation building - Strengthen core technical skills with focused practice",
+            "Month 3: Interview preparation - Prepare for company-specific interview patterns",
+            "Month 4+: Apply and negotiate - Submit applications and work through interview rounds"
+          ],
+          "timeline_adjustment": -2
+        },
+        "alternative_2_different_role": {
+          "copy": "Explore full-stack instead. You'll learn frontend + backend and be more versatile.",
+          "goal": "Become full-stack engineer, starting with frontend.",
+          "action_items": [
+            "Master frontend (React/Vue)",
+            "Learn backend basics (Node.js or Python)",
+            "Build full-stack projects",
+            "Understand databases and APIs"
+          ],
+          "milestones": [
+            "Month 1-2: Learn new specialization - Study fundamentals of the adjacent/alternative role",
+            "Month 3-4: Build cross-specialization projects - Create projects combining both skill sets",
+            "Month 5+: Deepen expertise - Gain depth in new specialization and prepare for interviews"
+          ],
+          "timeline_adjustment": 2
+        }
+      },
+      "role_recommendations": {
+        "target_to_alternative_role": {
+          "frontend": "fullstack"
+        }
+      },
+      "experience_adjustments": {
+        "0": 4,
+        "0-2": 2,
+        "2-3": 1,
+        "3-5": 0,
+        "5+": -1
+      }
+    },
+    "nontech_fullstack": {
+      "id": "nontech_fullstack",
+      "label": "Non-Tech \u2192 Full-Stack Engineer",
+      "domain": "non-tech",
+      "matching_criteria": {
+        "background": "non-tech",
+        "targetRole": "fullstack"
+      },
+      "base_timeline_months": 14,
+      "description": "You're transitioning to full-stack. More complex than frontend alone, but very marketable.",
+      "cards": {
+        "target": {
+          "copy": "Full-stack is your goal. You'll learn both frontend and backend, making you more valuable than specialists. It's harder, but the payoff is worth it. 10-12 months to your first role.",
+          "goal": "Land your first full-stack engineer role.",
+          "action_items": [
+            "Master frontend (HTML, CSS, JavaScript, React)",
+            "Master backend (Node.js/Python and databases)",
+            "Build 2-3 full-stack projects",
+            "Understand APIs and system design basics"
+          ],
+          "milestones": [
+            "Month 1-2: Deep technical preparation - Master your specialization fundamentals",
+            "Month 3-4: Build portfolio projects - Create 1-2 substantial projects showcasing your target skills",
+            "Month 5+: Interview readiness - Polish profile, network, practice interviews, and apply to target roles"
+          ],
+          "timeline_adjustment": 0
+        },
+        "alternative_1_easier_company": {
+          "copy": "Service companies or startups are easier for full-stack roles. You'll get hired faster and build real products.",
+          "goal": "Get your first full-stack role at service company or startup.",
+          "action_items": [
+            "Master one tech stack (MERN or similar)",
+            "Build 2-3 projects end-to-end",
+            "Focus on practical skills over theory"
+          ],
+          "milestones": [
+            "Month 1-2: Foundation building - Strengthen core technical skills with focused practice",
+            "Month 3: Interview preparation - Prepare for company-specific interview patterns",
+            "Month 4+: Apply and negotiate - Submit applications and work through interview rounds"
+          ],
+          "timeline_adjustment": -2
+        },
+        "alternative_2_different_role": {
+          "copy": "Focus on backend instead. Backend is more fundamental and marketable for career growth.",
+          "goal": "Become backend engineer instead, then learn frontend later.",
+          "action_items": [
+            "Master backend (Node.js/Python)",
+            "Learn databases, APIs, system design basics",
+            "Build backend projects",
+            "Understand frontend at high level"
+          ],
+          "milestones": [
+            "Month 1-2: Learn new specialization - Study fundamentals of the adjacent/alternative role",
+            "Month 3-4: Build cross-specialization projects - Create projects combining both skill sets",
+            "Month 5+: Deepen expertise - Gain depth in new specialization and prepare for interviews"
+          ],
+          "timeline_adjustment": -1
+        }
+      },
+      "role_recommendations": {
+        "target_to_alternative_role": {
+          "fullstack": "backend"
+        }
+      },
+      "experience_adjustments": {
+        "0": 4,
+        "0-2": 2,
+        "2-3": 1,
+        "3-5": 0,
+        "5+": -1
+      }
+    },
+    "nontech_backend": {
+      "id": "nontech_backend",
+      "label": "Non-Tech \u2192 Backend Engineer",
+      "domain": "non-tech",
+      "matching_criteria": {
+        "background": "non-tech",
+        "targetRole": "backend"
+      },
+      "base_timeline_months": 14,
+      "description": "You're transitioning to backend. Harder than frontend, but more valuable long-term.",
+      "cards": {
+        "target": {
+          "copy": "Backend engineering is harder but more valuable. You'll master APIs, databases, and system design. It's the most in-demand specialization. 10-12 months of focused work gets you there.",
+          "goal": "Land your first backend engineer role.",
+          "action_items": [
+            "Master one backend language (Python or Node.js recommended)",
+            "Learn databases, APIs, and REST architecture",
+            "Practice coding problems and data structures",
+            "Build 3-4 backend projects"
+          ],
+          "milestones": [
+            "Month 1-2: Deep technical preparation - Master your specialization fundamentals",
+            "Month 3-4: Build portfolio projects - Create 1-2 substantial projects showcasing your target skills",
+            "Month 5+: Interview readiness - Polish profile, network, practice interviews, and apply to target roles"
+          ],
+          "timeline_adjustment": 0
+        },
+        "alternative_1_easier_company": {
+          "copy": "Service companies need backend engineers more than product companies. It's an easier path to your first backend role.",
+          "goal": "Get your first backend role at service company.",
+          "action_items": [
+            "Master one backend language and framework",
+            "Learn relational databases and enterprise patterns",
+            "Build 2-3 practical backend projects",
+            "Focus on reliability and stability (service company values)"
+          ],
+          "milestones": [
+            "Month 1-2: Foundation building - Strengthen core technical skills with focused practice",
+            "Month 3: Interview preparation - Prepare for company-specific interview patterns",
+            "Month 4+: Apply and negotiate - Submit applications and work through interview rounds"
+          ],
+          "timeline_adjustment": -2
+        },
+        "alternative_2_different_role": {
+          "copy": "Frontend might be faster. You'll learn HTML/CSS/JavaScript, build projects, and get hired quicker. Then move to full-stack or backend later.",
+          "goal": "Start with frontend, transition to backend for higher pay later.",
+          "action_items": [
+            "Master frontend (React)",
+            "Build 2-3 frontend projects",
+            "Get hired as frontend engineer",
+            "Then learn backend and transition"
+          ],
+          "milestones": [
+            "Month 1-2: Learn new specialization - Study fundamentals of the adjacent/alternative role",
+            "Month 3-4: Build cross-specialization projects - Create projects combining both skill sets",
+            "Month 5+: Deepen expertise - Gain depth in new specialization and prepare for interviews"
+          ],
+          "timeline_adjustment": -1
+        }
+      },
+      "role_recommendations": {
+        "target_to_alternative_role": {
+          "backend": "frontend"
+        }
+      },
+      "experience_adjustments": {
+        "0": 4,
+        "0-2": 2,
+        "2-3": 1,
+        "3-5": 0,
+        "5+": -1
+      }
+    },
+    "nontech_dataml": {
+      "id": "nontech_dataml",
+      "label": "Non-Tech \u2192 Data/ML Engineer",
+      "domain": "non-tech",
+      "matching_criteria": {
+        "background": "non-tech",
+        "targetRole": "data-ml"
+      },
+      "base_timeline_months": 16,
+      "description": "You're transitioning to data/ML. Hardest path, but most cutting-edge and lucrative.",
+      "cards": {
+        "target": {
+          "copy": "Data/ML engineering is the hardest path but also the most cutting-edge. You need Python, statistics, ML algorithms, and data engineering skills. 12-15 months of consistent work gets you there.",
+          "goal": "Land your first data/ML engineer role.",
+          "action_items": [
+            "Master Python deeply",
+            "Learn statistics and probability fundamentals",
+            "Master ML algorithms and libraries (scikit-learn, TensorFlow)",
+            "Learn data engineering (SQL, ETL, pipelines)",
+            "Build 2-3 ML projects for portfolio"
+          ],
+          "milestones": [
+            "Month 1-2: Deep technical preparation - Master your specialization fundamentals",
+            "Month 3-4: Build portfolio projects - Create 1-2 substantial projects showcasing your target skills",
+            "Month 5+: Interview readiness - Polish profile, network, practice interviews, and apply to target roles"
+          ],
+          "timeline_adjustment": 0
+        },
+        "alternative_1_easier_company": {
+          "copy": "Data roles at service companies or data-focused startups are easier entry points. Less ML theory, more practical data engineering.",
+          "goal": "Get first data engineer role at service company.",
+          "action_items": [
+            "Master Python and SQL deeply",
+            "Learn ETL and data pipelines",
+            "Build data pipeline projects",
+            "Focus on data engineering over ML algorithms"
+          ],
+          "milestones": [
+            "Month 1-2: Foundation building - Strengthen core technical skills with focused practice",
+            "Month 3: Interview preparation - Prepare for company-specific interview patterns",
+            "Month 4+: Apply and negotiate - Submit applications and work through interview rounds"
+          ],
+          "timeline_adjustment": -2
+        },
+        "alternative_2_different_role": {
+          "copy": "Backend engineering might be faster and more immediately hireable. You can specialize in data/ML later.",
+          "goal": "Start with backend, transition to data/ML for specialization.",
+          "action_items": [
+            "Master backend first (Python + APIs)",
+            "Get hired as backend engineer",
+            "Learn ML on the job",
+            "Transition to ML engineer role"
+          ],
+          "milestones": [
+            "Month 1-2: Learn new specialization - Study fundamentals of the adjacent/alternative role",
+            "Month 3-4: Build cross-specialization projects - Create projects combining both skill sets",
+            "Month 5+: Deepen expertise - Gain depth in new specialization and prepare for interviews"
+          ],
+          "timeline_adjustment": -2
+        }
+      },
+      "role_recommendations": {
+        "target_to_alternative_role": {
+          "data-ml": "backend"
+        }
+      },
+      "experience_adjustments": {
+        "0": 4,
+        "0-2": 2,
+        "2-3": 1,
+        "3-5": 0,
+        "5+": -1
+      }
+    },
+    "nontech_exploring": {
+      "id": "nontech_exploring",
+      "label": "Non-Tech \u2192 Exploring (Test Intern Roles)",
+      "domain": "non-tech",
+      "matching_criteria": {
+        "background": "non-tech",
+        "targetRole": "not-sure"
+      },
+      "base_timeline_months": 10,
+      "description": "You're exploring. Try intern roles to figure out what you like before committing.",
+      "cards": {
+        "target": {
+          "copy": "Exploring is smart! Try these intern roles to figure out what you enjoy. Frontend and backend are fundamentally different. 3-6 months in intern roles helps you decide.",
+          "goal": "Complete intern projects in frontend and backend to decide your path.",
+          "action_items": [
+            "Build 2 small projects: 1 frontend, 1 backend",
+            "Understand the differences in day-to-day work",
+            "Talk to engineers in both fields",
+            "Decide based on what excites you"
+          ],
+          "milestones": [
+            "Month 1-2: Deep technical preparation - Master your specialization fundamentals",
+            "Month 3-4: Build portfolio projects - Create 1-2 substantial projects showcasing your target skills",
+            "Month 5+: Interview readiness - Polish profile, network, practice interviews, and apply to target roles"
+          ],
+          "timeline_adjustment": 0
+        },
+        "alternative_1_easier_company": {
+          "copy": "If you don't like frontend, try backend instead. Backend is more complex but more rewarding.",
+          "goal": "Try backend intern projects to see if that's your passion.",
+          "action_items": [
+            "Build a simple API",
+            "Learn database basics",
+            "See if backend excites you more than frontend"
+          ],
+          "milestones": [
+            "Month 1-2: Foundation building - Strengthen core technical skills with focused practice",
+            "Month 3: Interview preparation - Prepare for company-specific interview patterns",
+            "Month 4+: Apply and negotiate - Submit applications and work through interview rounds"
+          ],
+          "timeline_adjustment": 0
+        },
+        "alternative_2_different_role": {
+          "copy": "Or try full-stack to experience both frontend and backend together.",
+          "goal": "Try full-stack to see both sides together.",
+          "action_items": [
+            "Build 1 full-stack project",
+            "Experience frontend + backend together",
+            "Decide if full-stack is for you"
+          ],
+          "milestones": [
+            "Month 1-2: Learn new specialization - Study fundamentals of the adjacent/alternative role",
+            "Month 3-4: Build cross-specialization projects - Create projects combining both skill sets",
+            "Month 5+: Deepen expertise - Gain depth in new specialization and prepare for interviews"
+          ],
+          "timeline_adjustment": 1
+        }
+      },
+      "role_recommendations": {
+        "target_to_alternative_role": {
+          "not-sure": "frontend"
+        }
+      },
+      "experience_adjustments": {
+        "0": 0,
+        "0-2": 0,
+        "2-3": 0,
+        "3-5": 0,
+        "5+": 0
+      }
+    }
+  }
+}

@@ -62,7 +62,10 @@ const HeroContainer = styled.div`
 `;
 
 const LeftPanel = styled.div`
-  background: ${(props) => (props.score >= 50 ? "#064e3b" : "#1f2937")};
+  background: ${(props) => {
+    if (props.score >= 60) return "#059669"; // Green for high score
+    return "#0F2B48"; // Dark blue for low/medium score
+  }};
   color: #ffffff;
   padding: ${(props) =>
     props.score >= 60 ? "48px 120px 48px 60px" : "48px 80px 48px 40px"};
@@ -76,7 +79,7 @@ const LeftPanel = styled.div`
   overflow-y: visible;
   border-right: none;
   border-bottom: 2px solid
-    ${(props) => (props.score >= 50 ? "#065f46" : "#374151")};
+    ${(props) => (props.score >= 60 ? "#065f46" : "#1a3a52")};
 
   @media (max-width: 1024px) {
     position: relative;
@@ -151,6 +154,16 @@ const ScoreSection = styled.div`
   text-align: center;
   padding: ${(props) => (props.hasOliveBranches ? "24px 0" : "12px 0")};
   position: relative;
+
+  @media (max-width: 768px) {
+    ${(props) =>
+      !props.hasOliveBranches
+        ? `
+      align-items: flex-start;
+      text-align: left;
+    `
+        : ""}
+  }
 `;
 
 const OliveBranch = styled.img`
@@ -1439,6 +1452,13 @@ const ProfileMatchHeroV2 = ({
     return "Your Profile Needs Work";
   };
 
+  // Helper: Filter generic company labels and format display title
+  const formatDisplayTitle = (roleTitle, companyLabel) => {
+    const genericCompanies = ["Any tech company", "Not sure", "Tech Companies"];
+    const isGeneric = companyLabel && genericCompanies.some(g => companyLabel.includes(g));
+    return isGeneric ? roleTitle : (companyLabel ? `${roleTitle} - ${companyLabel}` : roleTitle);
+  };
+
   // Generate personalized, conversational summary
   const getPersonalizedSummary = () => {
     const experience = quizResponses?.experience || "";
@@ -1477,7 +1497,7 @@ const ProfileMatchHeroV2 = ({
 
     // Build conversational message
     const greeting =
-      "Congratulations on taking the first step to evaluate your profile.\n\n";
+      "Congratulations on taking the first step to evaluate your profile. 🎉\n\n";
 
     let profileAnalysis = "";
     if (experience && currentRole) {
@@ -1485,47 +1505,55 @@ const ProfileMatchHeroV2 = ({
 
       // Add validation based on experience
       if (experience === "0-2") {
-        profileAnalysis += "That's a great foundation to build upon! ";
+        profileAnalysis += "That's a great foundation to build upon! 💪 ";
       } else if (experience === "3-5") {
-        profileAnalysis += "That's solid experience that positions you well! ";
+        profileAnalysis += "That's solid experience that positions you well! ✨ ";
       } else if (experience === "5-8" || experience === "8+") {
         profileAnalysis +=
-          "That's substantial experience that gives you a strong edge! ";
+          "That's substantial experience that gives you a strong edge! 🌟 ";
       }
     }
 
     let goalStatement = "";
     if (targetRole || targetCompany) {
-      const goalTarget = targetCompany || targetRoleName;
+      // Filter out generic company labels like "Any tech company (experience first)"
+      const genericCompanies = ["Any tech company", "Not sure", "Tech Companies"];
+      let goalTarget = targetCompany || targetRoleName;
+
+      // If target is a generic company, use role instead
+      if (targetCompany && genericCompanies.some(g => targetCompany.includes(g))) {
+        goalTarget = targetRoleName || "a tech role";
+      }
+
       goalStatement = `You've expressed interest in moving to ${goalTarget}—and I have good news: that goal is absolutely reachable! 🎯\n\n`;
     }
 
     // Extract quick wins or key actions from backend notes
     let keyActions =
-      "Here are the 3 most impactful things you should focus on:\n";
+      "Here are the 3 most impactful things you should focus on: 🔥\n";
 
     if (problemSolving === "0-10" || problemSolving === "11-50") {
       keyActions +=
-        "1. Strengthen your problem-solving skills (aim for 100+ problems)\n";
+        "1. 💻 Strengthen your problem-solving skills (aim for 100+ problems)\n";
     } else {
       keyActions +=
-        "1. Master advanced problem-solving patterns and practice consistently\n";
+        "1. 💻 Master advanced problem-solving patterns and practice consistently\n";
     }
 
     if (systemDesign === "never-done" || systemDesign === "participated") {
       keyActions +=
-        "2. Lead system design discussions and study real-world architectures\n";
+        "2. 🏗️ Lead system design discussions and study real-world architectures\n";
     } else {
       keyActions +=
-        "2. Deepen your system design expertise with scalability patterns\n";
+        "2. 🏗️ Deepen your system design expertise with scalability patterns\n";
     }
 
     if (portfolio === "none" || portfolio === "1-2") {
       keyActions +=
-        "3. Build an active portfolio with meaningful projects on GitHub\n";
+        "3. 🚀 Build an active portfolio with meaningful projects on GitHub\n";
     } else {
       keyActions +=
-        "3. Showcase your technical depth through blogs or contributions\n";
+        "3. 🚀 Showcase your technical depth through blogs or contributions\n";
     }
 
     keyActions +=
@@ -1678,26 +1706,18 @@ const ProfileMatchHeroV2 = ({
                     const baseTimeline =
                       role.timeline_text ||
                       `${role.min_months || 4}-${role.max_months || 6} months`;
-                    let displayTimeline = baseTimeline;
-                    let cardType = "target";
-                    let label = "Target Role";
 
-                    if (index === 1) {
-                      displayTimeline = calculateAlternateTimeline(
-                        baseTimeline,
-                        1
-                      );
-                      cardType = "alternate";
-                      label = "Alternate Path 1";
-                    } else if (index === 2) {
-                      displayTimeline = calculateAlternateTimeline(
-                        baseTimeline,
-                        2
-                      );
-                      cardType = "alternate";
-                      label = "Alternate Path 2";
-                    } else {
-                      label = "Your Target Role";
+                    let cardType = role.card_type || "target";
+                    let label = "Your Target Role";
+
+                    if (cardType === "alternative_1_easier_company") {
+                      label = "Easier Path";
+                    } else if (cardType === "alternative_2_different_role") {
+                      label = "Alternative Path";
+                    } else if (cardType === "intern_explore_1") {
+                      label = "Explore Path 1";
+                    } else if (cardType === "intern_explore_2") {
+                      label = "Explore Path 2";
                     }
 
                     return (
@@ -1709,7 +1729,7 @@ const ProfileMatchHeroV2 = ({
                         <CategoryLabel type={cardType}>{label}</CategoryLabel>
                         <CategoryTimeline>
                           <Clock size={16} weight="bold" />
-                          {displayTimeline}
+                          {baseTimeline}
                         </CategoryTimeline>
                       </CategoryCard>
                     );
@@ -1721,14 +1741,8 @@ const ProfileMatchHeroV2 = ({
                     const isPrimary = index === 0;
                     const formattedSalary = formatSalary(role.salary_range_usd);
 
-                    const targetCompanyLabel =
-                      quizResponses?.targetCompanyLabel ||
-                      goals?.targetCompany ||
-                      "";
-                    const roleTitle = role.title || role.role;
-                    const displayTitle = targetCompanyLabel
-                      ? `${roleTitle} - ${targetCompanyLabel}`
-                      : roleTitle;
+                    // Use title directly - backend already includes company type
+                    const displayTitle = role.title;
 
                     return (
                       <RoleCard
@@ -1741,7 +1755,81 @@ const ProfileMatchHeroV2 = ({
                           <RoleHeader>
                             <RoleTitle>{displayTitle}</RoleTitle>
                           </RoleHeader>
-                          {role.key_gap && (
+
+                          {/* Card-specific copy from v3 */}
+                          {role.copy && (
+                            <RoleDescription
+                              style={{
+                                display: "flex",
+                                alignItems: "flex-start",
+                                marginBottom: "12px",
+                                fontStyle: "italic",
+                                color: "#475569",
+                              }}
+                            >
+                              <span>{role.copy}</span>
+                            </RoleDescription>
+                          )}
+
+                          {/* Card-specific goal from v3 */}
+                          {role.goal && (
+                            <RoleDescription
+                              style={{
+                                display: "flex",
+                                alignItems: "flex-start",
+                                marginBottom: "12px",
+                                fontWeight: "600",
+                                color: "#1e293b",
+                              }}
+                            >
+                              <Target
+                                size={16}
+                                weight="regular"
+                                color="#059669"
+                                style={{
+                                  marginRight: "6px",
+                                  marginTop: "2px",
+                                  flexShrink: 0,
+                                }}
+                              />
+                              <span>{role.goal}</span>
+                            </RoleDescription>
+                          )}
+
+                          {/* Action items from v3 */}
+                          {role.action_items && role.action_items.length > 0 && (
+                            <>
+                              <RoleDescription style={{ fontWeight: "600", marginBottom: "8px" }}>
+                                Next Steps:
+                              </RoleDescription>
+                              {role.action_items.map((item, itemIndex) => (
+                                <RoleDescription
+                                  key={itemIndex}
+                                  style={{
+                                    display: "flex",
+                                    alignItems: "flex-start",
+                                    marginBottom: "6px",
+                                    marginLeft: "0px",
+                                  }}
+                                >
+                                  <CheckCircle
+                                    size={14}
+                                    weight="fill"
+                                    color="#10b981"
+                                    style={{
+                                      marginRight: "8px",
+                                      marginTop: "3px",
+                                      flexShrink: 0,
+                                    }}
+                                  />
+                                  <span style={{ fontSize: "0.95rem" }}>{item}</span>
+                                </RoleDescription>
+                              ))}
+                            </>
+                          )}
+
+                          {/* Key focus (fallback to old field) */}
+                          {!role.copy && role.key_gap && (
                             <RoleDescription
                               style={{
                                 display: "flex",
@@ -1763,6 +1851,8 @@ const ProfileMatchHeroV2 = ({
                               </span>
                             </RoleDescription>
                           )}
+
+                          {/* Milestones */}
                           {role.milestones && role.milestones.length > 0 && (
                             <>
                               {role.milestones.map((milestone, mIndex) => (
@@ -1878,9 +1968,7 @@ const ProfileMatchHeroV2 = ({
                     goals?.targetCompany ||
                     "";
                   const roleTitle = role.title || role.role;
-                  const displayTitle = targetCompanyLabel
-                    ? `${roleTitle} - ${targetCompanyLabel}`
-                    : roleTitle;
+                  const displayTitle = formatDisplayTitle(roleTitle, targetCompanyLabel);
 
                   return (
                     <div key={index}>
@@ -2116,7 +2204,7 @@ const ProfileMatchHeroV2 = ({
                 Get personalized guidance from our career advisors
               </CTAText>
             </CTAContent>
-            <CTAButton onClick={handleRCBClick}>Request Callback</CTAButton>
+            <CTAButton onClick={handleRCBClick}>Book Free 1:1 Career Call</CTAButton>
           </CTASection>
         </>
       </RightPanel>

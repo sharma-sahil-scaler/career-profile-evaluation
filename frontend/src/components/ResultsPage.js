@@ -465,7 +465,7 @@ const ResultsPage = () => {
       </Container>
       <FloatingCTA onClick={handleRCBClick}>
         <Phone size={20} weight="bold" />
-        Request Callback
+        Book Free 1:1 Career Call
       </FloatingCTA>
     </ResultsContainer>
   );
