@@ -21,7 +21,12 @@ export const [createEventFetcherStore] = nanoquery({
       `/api/v4/events/${slug}/trackable-social-link`,
       {
         provider: 'whatsapp',
-        track_for: 'redirect_link'
+        track_for: 'redirect_link',
+        tracking_attributes: {
+          product: 'free_product',
+          sub_product: 'mentee-dashboard',
+          element: 'QR Code Scan Onboarding FLC'
+        }
       },
       {
         headers: {
