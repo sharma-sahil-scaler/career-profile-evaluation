@@ -30,7 +30,7 @@ const MasterclassNudge = ({ eventId }) => {
   const whatsappQrLink = fetchWhatsappData(allSocialProfiles)?.[0]?.link;
   const handleAddToCalendar = useCallback(() => {
     addToCalendar(slug, title, timezone, startTime, endTime);
-  }, []);
+  }, [slug, title, timezone, startTime, endTime]);
 
   const handleEventGroupComplete = useCallback(() => {
     window.open(whatsappQrLink, '_blank');
