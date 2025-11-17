@@ -35,6 +35,9 @@ export const [createEventFetcherStore] = nanoquery({
       }
     );
 
+    console.log('qrLinkResponse', qrLinkResponse);
+    console.log('qrLink', qrLinkResponse.data);
+
     return {
       ...attributes,
       qrLink: qrLinkResponse.data

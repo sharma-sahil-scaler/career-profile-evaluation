@@ -48,10 +48,6 @@ const MasterclassNudge = ({ eventId }) => {
     console.log('unlockClick');
   }, []);
 
-  const handleClose = useCallback(() => {
-    console.log('close');
-  }, []);
-
   if (isEventLoading) {
     return <div>Loading...</div>;
   }
@@ -72,7 +68,7 @@ const MasterclassNudge = ({ eventId }) => {
         onEventGroupComplete={handleEventGroupComplete}
         onRedirect={handleRedirection}
         onJoinPc={handleJoinPc}
-        whatsappQrLink={qrLink}
+        whatsappQrLink=""
         onUnlockClick={handleUnlockClick}
       />
     </div>
