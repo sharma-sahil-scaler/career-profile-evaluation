@@ -40,7 +40,7 @@ export const [createEventFetcherStore] = nanoquery({
 
     return {
       ...attributes,
-      qrLink: qrLinkResponse.data
+      qrLink: qrLinkResponse?.data?.link
     };
   },
   onError: (error) => {
