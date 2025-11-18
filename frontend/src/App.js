@@ -20,8 +20,6 @@ function AppContent() {
   const [quizMode, setQuizMode] = useState('final');
   const { error, loading } = useStore($initialData);
   const location = useLocation();
-
-  // Initialize GTM section tracking
   useGTMSectionTracking();
   const shouldShowNav = !(
     quizMode === 'final' && location.pathname === '/quiz'

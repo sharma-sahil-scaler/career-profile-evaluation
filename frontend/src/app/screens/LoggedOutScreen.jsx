@@ -34,7 +34,7 @@ const LoggedOutScreen = ({
   actionLabel
 }) => (
   <StatusScreen
-    icon={<WarningCircle size={42} weight="duotone" color="#f1f5f9" />}
+    icon={<WarningCircle size={42} weight="duotone" color="#c71f69" />}
     title={title}
     description={description}
     actions={

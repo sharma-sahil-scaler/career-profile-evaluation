@@ -18,9 +18,8 @@ const Screen = styled.div`
   align-items: center;
   justify-content: center;
   min-height: 100vh;
-  background: #0f172a;
+  background: #f8fafc;
   padding: 32px;
-  color: #f8fafc;
 `;
 
 const Card = styled.div`
@@ -29,27 +28,28 @@ const Card = styled.div`
   align-items: center;
   gap: 16px;
   padding: 40px 32px;
-  background: rgba(15, 23, 42, 0.65);
-  border: 1px solid rgba(148, 163, 184, 0.35);
-  border-radius: 16px;
-  max-width: 360px;
+  background: #ffffff;
+  border: 1px solid #e2e8f0;
+  border-radius: 4px;
+  max-width: 400px;
   text-align: center;
-  box-shadow: 0 24px 48px rgba(15, 23, 42, 0.4);
-  backdrop-filter: blur(12px);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
   animation: ${fadeIn} 200ms ease-out;
 `;
 
 const Title = styled.h2`
   margin: 0;
   font-size: 1.375rem;
-  font-weight: 700;
-  letter-spacing: 0.02em;
+  font-weight: 600;
+  letter-spacing: -0.01em;
+  color: #1e293b;
 `;
 
 const Description = styled.p`
   margin: 0;
   font-size: 0.95rem;
-  color: rgba(226, 232, 240, 0.9);
+  color: #64748b;
+  line-height: 1.5;
 `;
 
 const Actions = styled.div`

@@ -14,7 +14,7 @@ const Spinner = styled.div`
   width: 56px;
   height: 56px;
   border-radius: 50%;
-  border: 4px solid rgba(249, 250, 251, 0.35);
+  border: 4px solid #e2e8f0;
   border-top-color: #c71f69;
   animation: ${spin} 0.9s linear infinite;
 `;

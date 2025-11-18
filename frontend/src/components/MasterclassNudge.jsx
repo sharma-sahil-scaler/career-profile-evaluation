@@ -8,19 +8,32 @@ import { $initialData } from '../store/initial-data';
 import { addToCalendar } from '../utils/calendar';
 import { fetchEventTime, fetchWhatsappData } from '../utils/mcNudge';
 import { markNudgeAsShown } from '../utils/url';
+import StatusScreen from '../app/components/StatusScreen';
+import { WarningCircle } from 'phosphor-react';
+import styled, { keyframes } from 'styled-components';
+
+const spin = keyframes`
+  to {
+    transform: rotate(360deg);
+  }
+`;
+
+const Spinner = styled.div`
+  width: 56px;
+  height: 56px;
+  border-radius: 50%;
+  border: 4px solid #e2e8f0;
+  border-top-color: #c71f69;
+  animation: ${spin} 0.9s linear infinite;
+`;
 
 const MasterclassNudge = ({ eventId }) => {
   const [$eventStore] = useState(createEventStore(eventId));
 
-  const {
-    data: eventData,
-    loading: isEventLoading
-  } = useStore($eventStore);
+  const { data: eventData, loading: isEventLoading } = useStore($eventStore);
   const { data } = useStore($initialData);
   const { userData: { timezone } = {} } = data?.userData ?? {};
   const navigate = useNavigate();
-
-  console.log('eventData', eventData);
 
   const {
     all_social_profiles: allSocialProfiles,
@@ -46,7 +59,6 @@ const MasterclassNudge = ({ eventId }) => {
     setTimeout(() => {
       navigate(0);
     }, 2000);
-
   }, [whatsappLink, id]);
 
   const handleRedirection = useCallback(() => {
@@ -61,12 +73,14 @@ const MasterclassNudge = ({ eventId }) => {
     console.log('unlockClick');
   }, []);
 
-  const handleClose = useCallback(() => {
-    console.log('close');
-  }, []);
-
   if (isEventLoading) {
-    return <div>Loading...</div>;
+    return (
+      <StatusScreen
+        icon={<Spinner size={42} weight="duotone" color="#c71f69" />}
+        title={title}
+        description="Loading Event Details......."
+      />
+    );
   }
 
   return (
@@ -74,9 +88,6 @@ const MasterclassNudge = ({ eventId }) => {
       <ThankyouPage
         visible
         flow="slideFlow"
-        onClose={handleClose}
-        wrapperClassName=""
-        containerClassName=""
         eventTitle={title}
         eventDate={startTime}
         eventTime={eventTime}
