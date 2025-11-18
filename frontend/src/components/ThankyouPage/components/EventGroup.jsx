@@ -1,6 +1,6 @@
 import { Text, Icon, Button, View } from '@vectord/ui';
 import QRCode from 'react-qr-code';
-import React, { useEffect, useRef } from 'react';
+import React, { useCallback, useEffect, useRef } from 'react';
 
 const HEADER = 'Event Group';
 
@@ -16,6 +16,13 @@ const EventGroup = ({ onComplete, onJoinPc, whatsappQrLink }) => {
       return () => clearTimeout(timeoutId);
     }
   }, []);
+
+  const handleComplete = useCallback(() => {
+    onComplete && onComplete();
+    setTimeout(() => {
+      window.location.href = '/career-profile-tool/';
+    }, 1000);
+  }, [onComplete]);
 
   return (
     <View className="vd-flex vd-flex-col vd-gap-4 vd-border-[1px] vd-border-solid vd-border-border-neutral-subtle vd-w-full">
@@ -65,7 +72,7 @@ const EventGroup = ({ onComplete, onJoinPc, whatsappQrLink }) => {
         upperCase={false}
         buttonType="solid"
         iconLeft={'whatsapp-logo'}
-        onClick={onComplete}
+        onClick={handleComplete}
       />
       <Text
         className="vd-text-center vd-my-8"
