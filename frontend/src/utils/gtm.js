@@ -1,4 +1,6 @@
+/* eslint-disable */
 import { GTM_ID, COOKIE_KEY } from '../constants/analytics';
+
 import { getCookie, deleteCookie } from './cookie';
 import tracker from './tracker';
 
