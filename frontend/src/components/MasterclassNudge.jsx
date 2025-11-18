@@ -1,4 +1,4 @@
-import { useCallback, useState } from 'react';
+import { useCallback, useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { createEventStore } from '../store/event';
 import { useStore } from '@nanostores/react';
@@ -28,7 +28,7 @@ const Spinner = styled.div`
 const MasterclassNudge = ({ eventId }) => {
   const [$eventStore] = useState(createEventStore(eventId));
 
-  const { data: eventData, loading: isEventLoading } = useStore($eventStore);
+  const { data: eventData, loading: isEventLoading, error } = useStore($eventStore);
   const navigate = useNavigate();
 
   const {
@@ -53,6 +53,15 @@ const MasterclassNudge = ({ eventId }) => {
       navigate(0);
     }, 2000);
   }, [whatsappLink, id]);
+
+  useEffect(() => {
+    if(error) {
+      tracker.click({
+        click_type: 'mc_nudge_error',
+        click_text: error
+      });
+    }
+  }, [error]);
 
   const handleJoinPc = useCallback(() => {
     tracker.click({
