@@ -40,11 +40,12 @@ const AppRoutes = ({ quizMode, onQuizProgressChange }) => {
     }
   }, [nudgeId]);
 
-  if (shouldShowNudge) {
-    return <MasterclassNudge eventId={nudgeId} />;
-  } else {
-    return <RoutesComponent {...{ quizMode, onQuizProgressChange }} />;
-  }
+  return (
+    <>
+      {shouldShowNudge && <MasterclassNudge eventId={nudgeId} />}
+      <RoutesComponent {...{ quizMode, onQuizProgressChange }} />;
+    </>
+  );
 };
 
 export default AppRoutes;

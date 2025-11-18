@@ -4,7 +4,7 @@ import React, { useCallback, useEffect, useRef } from 'react';
 
 const HEADER = 'Event Group';
 
-const EventGroup = ({ onComplete, onJoinPc, whatsappQrLink }) => {
+const EventGroup = ({ onComplete, onJoinPc, whatsappQrLink, eventTitle }) => {
   const audioRef = useRef(null);
 
   useEffect(() => {
@@ -25,9 +25,14 @@ const EventGroup = ({ onComplete, onJoinPc, whatsappQrLink }) => {
     <View className="vd-flex vd-flex-col vd-gap-4 vd-border-[1px] vd-border-solid vd-border-border-neutral-subtle vd-w-full">
       <View className="vd-flex vd-flex-row vd-gap-4 vd-items-center vd-bg-background-neutral-disabled  vd-p-8">
         <Icon name={'link'} />
-        <Text fontSize="b1" weight="semibold">
-          {HEADER}
-        </Text>
+        <View className="vd-flex vd-flex-col">
+          <Text fontSize="b1" weight="semibold">
+            {HEADER}
+          </Text>
+          <Text fontSize="b3">
+            {eventTitle}
+          </Text>
+        </View>
       </View>
       <View className="vd-flex-col vd-gap-16 vd-py-24 vd-px-16">
         <View className="vd-flex-row vd-gap-4  sm:vd-flex vd-hidden">
