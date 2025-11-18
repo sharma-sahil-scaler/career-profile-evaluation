@@ -19,9 +19,6 @@ const EventGroup = ({ onComplete, onJoinPc, whatsappQrLink }) => {
 
   const handleComplete = useCallback(() => {
     onComplete && onComplete();
-    setTimeout(() => {
-      window.location.href = '/career-profile-tool/';
-    }, 1000);
   }, [onComplete]);
 
   return (

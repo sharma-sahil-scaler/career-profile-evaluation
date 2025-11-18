@@ -4,7 +4,7 @@ import { useProfile } from '../context/ProfileContext';
 import FinalModeQuiz from './quiz/FinalModeQuiz';
 import attribution from '../utils/attribution';
 import { apiRequest, generateJWT } from '../utils/api';
-import { getURLWithUTMParams } from '../utils/url';
+import { getURLWithUTMParams, getPathWithQueryParams } from '../utils/url';
 
 function QuizPage({ onProgressChange }) {
   const navigate = useNavigate();
@@ -47,7 +47,8 @@ function QuizPage({ onProgressChange }) {
 
   useEffect(() => {
     if (evaluationResults) {
-      navigate('/results', { replace: true });
+      
+      navigate(getPathWithQueryParams('/results'), { replace: true });
     } else {
       trackVisit();
     }

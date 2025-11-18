@@ -6,14 +6,14 @@ import { ThankyouPage } from './ThankyouPage';
 import { $initialData } from '../store/initial-data';
 import { addToCalendar } from '../utils/calendar';
 import { fetchEventTime, fetchWhatsappData } from '../utils/mcNudge';
+import { markNudgeAsShown } from '../utils/url';
 
 const MasterclassNudge = ({ eventId }) => {
   const [$eventStore] = useState(createEventStore(eventId));
 
   const {
     data: eventData,
-    loading: isEventLoading,
-    error: eventError
+    loading: isEventLoading
   } = useStore($eventStore);
   const { data } = useStore($initialData);
   const { userData: { timezone } = {} } = data?.userData ?? {};
@@ -23,11 +23,13 @@ const MasterclassNudge = ({ eventId }) => {
   const {
     all_social_profiles: allSocialProfiles,
     slug,
+    id,
     title,
     start_time: startTime,
     end_time: endTime,
     qrLink
   } = eventData || {};
+
   const eventTime = fetchEventTime(startTime, endTime);
   const whatsappLink = fetchWhatsappData(allSocialProfiles)?.[0]?.link;
   const handleAddToCalendar = useCallback(() => {
@@ -36,7 +38,12 @@ const MasterclassNudge = ({ eventId }) => {
 
   const handleEventGroupComplete = useCallback(() => {
     window.open(whatsappLink, '_blank');
-  }, [whatsappLink]);
+    markNudgeAsShown(id);
+    setTimeout(() => {
+      window.location.href = '/career-profile-tool/';
+    }, 2000);
+
+  }, [whatsappLink, id]);
 
   const handleRedirection = useCallback(() => {
     window.location.href = '/academy/mentee-dashboard/todos';
@@ -56,10 +63,6 @@ const MasterclassNudge = ({ eventId }) => {
 
   if (isEventLoading) {
     return <div>Loading...</div>;
-  }
-
-  if (eventError) {
-    return <div>Error...</div>;
   }
 
   return (

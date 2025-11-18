@@ -15,6 +15,7 @@ import { useProfile } from '../context/ProfileContext';
 import { evaluateProfile } from '../utils/evaluationLogic';
 import ProfileMatchHeroV2 from './results/ProfileMatchHeroV2';
 import tracker from '../utils/tracker';
+import { getPathWithQueryParams } from '../utils/url';
 
 const PrintStyles = createGlobalStyle`
   @media print {
@@ -302,7 +303,7 @@ const ResultsPage = () => {
 
   useEffect(() => {
     if (!quizResponses || !goals || !background) {
-      navigate('/', { replace: true });
+      navigate(getPathWithQueryParams('/'), { replace: true });
       return;
     }
   }, [quizResponses, goals, background, navigate]);
@@ -386,7 +387,7 @@ const ResultsPage = () => {
 
   const handleReEvaluate = () => {
     setEvaluationResults(null);
-    navigate('/');
+    navigate(getPathWithQueryParams('/'));
   };
 
   const handleRCBClick = useCallback(() => {
