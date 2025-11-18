@@ -1,4 +1,5 @@
 import { useCallback, useState } from 'react';
+import { useNavigate } from 'react-router-dom';
 import { createEventStore } from '../store/event';
 import { useStore } from '@nanostores/react';
 
@@ -17,6 +18,7 @@ const MasterclassNudge = ({ eventId }) => {
   } = useStore($eventStore);
   const { data } = useStore($initialData);
   const { userData: { timezone } = {} } = data?.userData ?? {};
+  const navigate = useNavigate();
 
   console.log('eventData', eventData);
 
@@ -38,9 +40,11 @@ const MasterclassNudge = ({ eventId }) => {
 
   const handleEventGroupComplete = useCallback(() => {
     window.open(whatsappLink, '_blank');
+
     markNudgeAsShown(id);
+
     setTimeout(() => {
-      window.location.href = '/career-profile-tool/';
+      navigate(0);
     }, 2000);
 
   }, [whatsappLink, id]);
