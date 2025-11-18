@@ -22,16 +22,14 @@ const EventGroup = ({ onComplete, onJoinPc, whatsappQrLink, eventTitle }) => {
   }, [onComplete]);
 
   return (
-    <View className="vd-flex vd-flex-col vd-gap-4 vd-border-[1px] vd-border-solid vd-border-border-neutral-subtle vd-w-full">
+    <View className="vd-flex vd-flex-col vd-gap-4 vd-w-full">
       <View className="vd-flex vd-flex-row vd-gap-4 vd-items-center vd-bg-background-neutral-disabled  vd-p-8">
         <Icon name={'link'} />
         <View className="vd-flex vd-flex-col">
           <Text fontSize="b1" weight="semibold">
             {HEADER}
           </Text>
-          <Text fontSize="b3">
-            {eventTitle}
-          </Text>
+          <Text fontSize="b3">{eventTitle}</Text>
         </View>
       </View>
       <View className="vd-flex-col vd-gap-16 vd-py-24 vd-px-16">

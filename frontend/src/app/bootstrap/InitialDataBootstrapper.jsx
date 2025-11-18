@@ -6,7 +6,7 @@ import {
   getUTMPropagationParams,
   initializeUtmPropagation
 } from '../../utils/analytics';
-import { lazyLoadGtm, pushServerEvents } from '../../utils/gtm';
+import lazyLoadGtm, { pushServerEvents } from '../../utils/gtm';
 import tracker from '../../utils/tracker';
 import { getURLWithUTMParams } from '../../utils/url';
 import attribution from '../../utils/attribution';
