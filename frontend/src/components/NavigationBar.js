@@ -346,7 +346,7 @@ const NavigationBar = ({
   const showProgress =
     location.pathname === '/quiz' || location.pathname === '/goals';
   const showModeToggle = location.pathname === '/quiz';
-  const isResultsPage = ['/results/', '/result'].includes(location.pathname);
+  const isResultsPage = ['/results/', '/results'].includes(location.pathname);
 
   const [showCSATBanner, setShowCSATBanner] = useState(true);
   const lastScrollYRef = useRef(0);
