@@ -4,7 +4,6 @@ import { createEventStore } from '../store/event';
 import { useStore } from '@nanostores/react';
 
 import { ThankyouPage } from './ThankyouPage';
-import { $initialData } from '../store/initial-data';
 import { fetchEventTime, fetchWhatsappData } from '../utils/mcNudge';
 import { markNudgeAsShown } from '../utils/url';
 import StatusScreen from '../app/components/StatusScreen';
@@ -46,10 +45,7 @@ const MasterclassNudge = ({ eventId }) => {
 
   const handleEventGroupComplete = useCallback(() => {
     tracker.click({
-      click_type: 'mc_nudge_open_whatapp_calendar',
-      custom: {
-        event_id: id
-      }
+      click_type: 'mc_nudge_open_whatapp_calendar'
     });
     window.open(whatsappLink, '_blank');
     markNudgeAsShown(id);
@@ -60,13 +56,16 @@ const MasterclassNudge = ({ eventId }) => {
 
   const handleJoinPc = useCallback(() => {
     tracker.click({
-      click_type: 'mc_nudge_join_via_pc',
-      custom: {
-        event_id: id
-      }
+      click_type: 'mc_nudge_join_via_pc'
     });
     window.open(whatsappLink, '_blank');
   }, [whatsappLink]);
+
+  const handleOnClose = useCallback(() => {
+    tracker.click({
+      click_type: 'mc_nudge_close_btn_click'
+    });
+  }, []);
 
   if (isEventLoading) {
     return (
@@ -79,12 +78,13 @@ const MasterclassNudge = ({ eventId }) => {
   }
 
   return (
-    <div className="scaler">
+    <div className="scaler gtm-section-view" data-gtm-section-name="MC Nudge">
       <ThankyouPage
         visible
         flow="slideFlow"
         eventTitle={title}
         eventDate={startTime}
+        onClose={handleOnClose}
         eventTime={eventTime}
         onEventGroupComplete={handleEventGroupComplete}
         onJoinPc={handleJoinPc}
@@ -95,3 +95,4 @@ const MasterclassNudge = ({ eventId }) => {
 };
 
 export default MasterclassNudge;
+
