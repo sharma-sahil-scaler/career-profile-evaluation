@@ -1,6 +1,6 @@
 export function fetchWhatsappData(allSocialProfiles = []) {
   return (
-    allSocialProfiles?.filter((profile) => profile.socialType === 'whatsapp') ||
+    allSocialProfiles?.filter((profile) => profile.social_type === 'whatsapp') ||
     null
   );
 }
