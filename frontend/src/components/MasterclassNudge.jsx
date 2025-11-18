@@ -2,7 +2,7 @@ import { useCallback, useState } from 'react';
 import { createEventStore } from '../store/event';
 import { useStore } from '@nanostores/react';
 
-import { ThankyouPage } from '@vectord/thankyou-page';
+import { ThankyouPage } from './ThankyouPage';
 import { $initialData } from '../store/initial-data';
 import { addToCalendar } from '../utils/calendar';
 import { fetchEventTime, fetchWhatsappData } from '../utils/mcNudge';
@@ -50,6 +50,10 @@ const MasterclassNudge = ({ eventId }) => {
     console.log('unlockClick');
   }, []);
 
+  const handleClose = useCallback(() => {
+    console.log('close');
+  }, []);
+
   if (isEventLoading) {
     return <div>Loading...</div>;
   }
@@ -63,6 +67,9 @@ const MasterclassNudge = ({ eventId }) => {
       <ThankyouPage
         visible
         flow="slideFlow"
+        onClose={handleClose}
+        wrapperClassName=""
+        containerClassName=""
         eventTitle={title}
         eventDate={startTime}
         eventTime={eventTime}
@@ -70,7 +77,7 @@ const MasterclassNudge = ({ eventId }) => {
         onEventGroupComplete={handleEventGroupComplete}
         onRedirect={handleRedirection}
         onJoinPc={handleJoinPc}
-        whatsappQrLink={qrLink}
+        whatsappQrLink={qrLink || ''}
         onUnlockClick={handleUnlockClick}
       />
     </div>

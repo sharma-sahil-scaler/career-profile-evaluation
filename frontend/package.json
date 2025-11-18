@@ -18,7 +18,7 @@
     "@nanostores/react": "^1.0.0",
     "@vectord/fp-styles": "^0.2.0-alpha.66",
     "@vectord/thankyou-page": "^1.2.2-alpha.20",
-    "@vectord/ui": "^1.4.6-alpha.7",
+    "@vectord/ui": "^1.4.6-alpha.6",
     "axios": "^1.13.1",
     "framer-motion": "^7.6.12",
     "http-proxy-middleware": "^2.0.6",
