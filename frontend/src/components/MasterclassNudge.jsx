@@ -28,7 +28,11 @@ const Spinner = styled.div`
 const MasterclassNudge = ({ eventId }) => {
   const [$eventStore] = useState(createEventStore(eventId));
 
-  const { data: eventData, loading: isEventLoading, error } = useStore($eventStore);
+  const {
+    data: eventData,
+    loading: isEventLoading,
+    error
+  } = useStore($eventStore);
   const navigate = useNavigate();
 
   const {
@@ -47,6 +51,7 @@ const MasterclassNudge = ({ eventId }) => {
     tracker.click({
       click_type: 'mc_nudge_open_whatapp_calendar'
     });
+    console.log(whatsappLink);
     window.open(whatsappLink, '_blank');
     markNudgeAsShown(id);
     setTimeout(() => {
@@ -55,7 +60,7 @@ const MasterclassNudge = ({ eventId }) => {
   }, [whatsappLink, id]);
 
   useEffect(() => {
-    if(error) {
+    if (error) {
       tracker.click({
         click_type: 'mc_nudge_error',
         click_text: error
@@ -104,4 +109,3 @@ const MasterclassNudge = ({ eventId }) => {
 };
 
 export default MasterclassNudge;
-
