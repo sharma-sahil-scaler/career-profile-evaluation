@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useCallback, useEffect, useState } from 'react';
 import Modal from '@vectord/modal';
 import SlideFlow from './views/SlideFlow';
 import { cx } from '@vectord/ui';
@@ -17,13 +17,13 @@ export const ThankyouPage = ({
   whatsappQrLink
 }) => {
   const [showExitIntent, setShowExitIntent] = useState(visible);
-  const onCloseHandler = () => {
+  const onCloseHandler = useCallback(() => {
     setShowExitIntent(false);
     onClose && onClose();
-  };
+  }, []);
 
   useEffect(() => {
-    if(showExitIntent) {
+    if (showExitIntent) {
       const scrollY = window.scrollY;
 
       document.body.style.overflow = 'hidden';
@@ -50,7 +50,6 @@ export const ThankyouPage = ({
         'vd-bg-surface-neutral-base/[0.9] vd-pt-64 vd-opacity-100 vd-items-center sm:vd-p-0 vd-p-8',
         wrapperClassName
       )}
-
     >
       <SlideFlow
         {...{
