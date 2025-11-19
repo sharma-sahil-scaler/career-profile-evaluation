@@ -17,10 +17,11 @@ export const ThankyouPage = ({
   whatsappQrLink
 }) => {
   const [showExitIntent, setShowExitIntent] = useState(visible);
-  const onCloseHandler = useCallback(() => {
+
+  const onCloseHandler = () => {
     setShowExitIntent(false);
-    onClose && onClose();
-  }, []);
+    onClose?.();
+  };
 
   useEffect(() => {
     if (showExitIntent) {

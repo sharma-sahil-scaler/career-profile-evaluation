@@ -46,10 +46,6 @@ const MasterclassNudge = ({ eventId }) => {
 
   const eventTime = fetchEventTime(startTime, endTime);
   const whatsappLink = fetchWhatsappData(allSocialProfiles)?.[0]?.link;
-
-  console.log('whatsappLink', whatsappLink);
-  console.log('eventData', eventData);
-  console.log('allSocialProfiles', allSocialProfiles);
   const handleEventGroupComplete = useCallback(() => {
     tracker.click({
       click_type: 'mc_nudge_open_whatapp_calendar'

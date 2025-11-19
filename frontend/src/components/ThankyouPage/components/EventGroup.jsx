@@ -23,11 +23,11 @@ const EventGroup = ({ onComplete, onJoinPc, whatsappQrLink, eventTitle }) => {
 
   return (
     <View className="vd-flex vd-flex-col vd-gap-4 vd-w-full">
-      <View className="vd-flex vd-flex-row vd-gap-4 vd-items-center vd-bg-background-neutral-disabled  vd-p-8">
+      <View className="vd-flex vd-flex-row vd-gap-8 vd-items-center vd-bg-background-neutral-disabled  vd-p-8">
         <Icon name={'link'} />
         <View className="vd-flex vd-flex-col">
           <Text fontSize="b1" weight="semibold">
-            {HEADER}
+            JOIN EVENT WHATSAPP GROUP
           </Text>
           <Text fontSize="b3">{eventTitle}</Text>
         </View>
