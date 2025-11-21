@@ -16,6 +16,9 @@
   "dependencies": {
     "@nanostores/query": "^0.3.4",
     "@nanostores/react": "^1.0.0",
+    "@vectord/fp-styles": "^0.2.0-alpha.66",
+    "@vectord/thankyou-page": "^1.2.2-alpha.20",
+    "@vectord/ui": "^1.4.6-alpha.6",
     "axios": "^1.13.1",
     "framer-motion": "^7.6.12",
     "http-proxy-middleware": "^2.0.6",
@@ -23,8 +26,9 @@
     "phosphor-react": "^1.4.1",
     "react": "^18.2.0",
     "react-dom": "^18.2.0",
+    "react-qr-code": "^2.0.12",
     "react-router-dom": "^6.8.1",
-    "react-scripts": "5.0.1",
+    "react-scripts": "^5.0.1",
     "react-xarrows": "^2.0.2",
     "styled-components": "^5.3.6"
   },

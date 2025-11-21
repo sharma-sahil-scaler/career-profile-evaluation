@@ -1,7 +1,15 @@
-FROM node:18-alpine AS build
+FROM node:24-alpine AS build
 WORKDIR /app
+
+ARG NPM_TOKEN
 COPY package.json package-lock.json ./
-RUN npm install --silent
+
+RUN if [ -n "$NPM_TOKEN" ]; then \
+      echo "//registry.npmjs.org/:_authToken=${NPM_TOKEN}" > .npmrc; \
+      echo "@interviewbit:registry=https://registry.npmjs.org/" >> .npmrc; \
+    fi
+
+RUN npm install
 COPY . .
 ARG REACT_APP_API_BASE_URL=http://localhost:8000
 ENV REACT_APP_API_BASE_URL=$REACT_APP_API_BASE_URL

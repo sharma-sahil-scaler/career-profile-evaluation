@@ -27,6 +27,8 @@ services:
     build:
       context: ./frontend
       dockerfile: Dockerfile
+      args:
+        NPM_TOKEN: ${NPM_TOKEN}
     container_name: cpe-frontend
     restart: unless-stopped
     ports:

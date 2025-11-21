@@ -1,53 +1,71 @@
+/* eslint-disable */
 import { GTM_ID, COOKIE_KEY } from '../constants/analytics';
-import { getCookie } from './cookie';
+
+import { getCookie, deleteCookie } from './cookie';
+import tracker from './tracker';
 
 /**
  * Lazy loads Google Tag Manager by injecting the GTM script
  */
-export function lazyLoadGtm() {
-  if (typeof window === 'undefined') return;
+export default function lazyLoadGtm() {
+  if (GTM_ID) {
+    let isGTMLoaded = false;
+    const loadGTM = () => {
+      if(!isGTMLoaded) {
+        isGTMLoaded = true;
 
-  // Initialize dataLayer
-  window.dataLayer = window.dataLayer || [];
+        // @ts-ignore
+        (function(w,d,s,l,i){w[l]=w[l]||[];w[l].push({'gtm.start':
+          new Date().getTime(),event:'gtm.js'});const f=d.getElementsByTagName(s)[0],
+          // @ts-expect-error
+          j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.defer=true;j.src=
+          'https://www.googletagmanager.com/gtm.js?id='+i+dl;
+        j.addEventListener('load', function() {
+          const _ge = new CustomEvent('initializedGTM', { bubbles: true });
+          d.dispatchEvent(_ge);
+        });
+        f.parentNode?.insertBefore(j,f);
+        })(window,document,'script','dataLayer', GTM_ID);
 
-  // Check if GTM is already loaded
-  if (window.dataLayer.find((item) => item['gtm.start'])) {
-    return;
-  }
+        // @ts-expect-error
+        (function(a,s,y,n,c,h,i,d,e){s.className+=' '+y;h.start=1*new Date();
+          // @ts-expect-error
+          h.end=i=function(){s.className=s.className.replace(RegExp(' ?'+y),'');};
+          // @ts-expect-error
+          (a[n]=a[n]||[]).hide=h;setTimeout(function(){i();h.end=null;},c);h.timeout=c;
+        })(window,document.documentElement,'async-hide','dataLayer',4000,
+          // @ts-expect-error
+          {[GTM_ID]:true});
 
-  // Push GTM start event
-  window.dataLayer.push({
-    'gtm.start': new Date().getTime(),
-    event: 'gtm.js'
-  });
-
-  const script = document.createElement('script');
-  script.async = true;
-  script.src = `https://www.googletagmanager.com/gtm.js?id=${GTM_ID}`;
-
-  const firstScript = document.getElementsByTagName('script')[0];
-  if (firstScript && firstScript.parentNode) {
-    firstScript.parentNode.insertBefore(script, firstScript);
+        window.removeEventListener('mousemove',loadGTM);
+        window.removeEventListener('click',loadGTM);
+        window.removeEventListener('scroll',loadGTM);
+        window.removeEventListener('touchstart',loadGTM);
+        window.removeEventListener('bypass_gtm_optimisation', loadGTM);
+      }
+    };
+    window.addEventListener('mousemove',loadGTM);
+    window.addEventListener('click',loadGTM);
+    window.addEventListener('scroll',loadGTM);
+    window.addEventListener('touchstart',loadGTM);
+    window.addEventListener('bypass_gtm_optimisation', loadGTM);
   }
 }
 
 export function pushServerEvents() {
   if (typeof window === 'undefined') return;
 
-  const serverEvents = getCookie(COOKIE_KEY);
+  const cookieData = getCookie(COOKIE_KEY);
+  if (!cookieData) return;
 
-  if (serverEvents) {
-    try {
-      const events = JSON.parse(serverEvents);
+  const decodedCookieData = decodeURIComponent(
+    cookieData.replace(/\+/g, '%20')
+  );
+  const events = JSON.parse(decodedCookieData);
+  if (!Array.isArray(events)) return;
 
-      if (Array.isArray(events)) {
-        window.dataLayer = window.dataLayer || [];
-        events.forEach((event) => {
-          window.dataLayer.push(event);
-        });
-      }
-    } catch (error) {
-      console.error('Error parsing server events:', error);
-    }
-  }
+  events.forEach((event) => {
+    tracker.pushRawEvent(JSON.parse(event));
+  });
+  deleteCookie(COOKIE_KEY);
 }

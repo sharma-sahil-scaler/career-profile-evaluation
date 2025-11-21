@@ -1,9 +1,9 @@
-import React from "react";
-import PropTypes from "prop-types";
-import styled from "styled-components";
-import { WarningCircle } from "phosphor-react";
+import React from 'react';
+import PropTypes from 'prop-types';
+import styled from 'styled-components';
+import { WarningCircle } from 'phosphor-react';
 
-import StatusScreen from "../components/StatusScreen";
+import StatusScreen from '../components/StatusScreen';
 
 const ActionButton = styled.button`
   padding: 10px 22px;
@@ -31,10 +31,10 @@ const LoggedOutScreen = ({
   onRetry,
   title,
   description,
-  actionLabel,
+  actionLabel
 }) => (
   <StatusScreen
-    icon={<WarningCircle size={42} weight="duotone" color="#f1f5f9" />}
+    icon={<WarningCircle size={42} weight="duotone" color="#c71f69" />}
     title={title}
     description={description}
     actions={
@@ -49,13 +49,13 @@ LoggedOutScreen.propTypes = {
   onRetry: PropTypes.func.isRequired,
   title: PropTypes.string,
   description: PropTypes.string,
-  actionLabel: PropTypes.string,
+  actionLabel: PropTypes.string
 };
 
 LoggedOutScreen.defaultProps = {
-  title: "You are logged out",
-  description: "Please sign in again to continue. Redirecting to the login page…",
-  actionLabel: "Go to sign in",
+  title: 'You are logged out',
+  description: 'Please sign in again to continue. Redirecting to the login page…',
+  actionLabel: 'Go to sign in'
 };
 
 export default LoggedOutScreen;

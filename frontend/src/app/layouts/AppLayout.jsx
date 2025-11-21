@@ -1,8 +1,8 @@
-import React from "react";
-import PropTypes from "prop-types";
-import styled from "styled-components";
+import React from 'react';
+import PropTypes from 'prop-types';
+import styled from 'styled-components';
 
-import NavigationBar from "../../components/NavigationBar";
+import NavigationBar from '../../components/NavigationBar';
 
 const PageShell = styled.div`
   min-height: 100vh;
@@ -14,11 +14,7 @@ const ContentRegion = styled.main`
   flex: 1;
 `;
 
-const AppLayout = ({
-  showNavigation,
-  navigationProps,
-  children,
-}) => (
+const AppLayout = ({ showNavigation, navigationProps, children }) => (
   <PageShell>
     {showNavigation && navigationProps && (
       <NavigationBar {...navigationProps} />
@@ -32,15 +28,15 @@ AppLayout.propTypes = {
   navigationProps: PropTypes.shape({
     progress: PropTypes.number,
     quizMode: PropTypes.string,
-    onQuizModeChange: PropTypes.func,
+    onQuizModeChange: PropTypes.func
   }),
-  children: PropTypes.node,
+  children: PropTypes.node
 };
 
 AppLayout.defaultProps = {
   showNavigation: false,
   navigationProps: undefined,
-  children: null,
+  children: null
 };
 
 export default AppLayout;
